@@ -26,22 +26,30 @@ export const NarrativeView: React.FC<NarrativeViewProps> = ({ text }) => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-8 bg-paper dark:bg-night min-h-full">
-      <div className="bg-white dark:bg-night-light p-12 shadow-sm border border-stone-200 dark:border-gold/20">
-        <h2 className="text-4xl font-display font-bold text-ink dark:text-paper mb-8 text-center border-b pb-6 border-stone-100 dark:border-gold/20">Historical Narrative</h2>
+    <div className="max-w-4xl mx-auto p-8 bg-paper dark:bg-night min-h-full relative">
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] dark:bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-30 dark:opacity-10 pointer-events-none"></div>
 
-        <div className="prose prose-lg prose-stone dark:prose-invert max-w-none font-serif text-slate dark:text-stone-300 leading-loose">
+      <div className="bg-paper-cream dark:bg-night-light p-12 shadow-archive border-manuscript relative z-10 animate-page-turn">
+        {/* Decorative header flourish */}
+        <div className="text-center mb-8">
+          <div className="gold-strip w-24 mx-auto mb-4"></div>
+          <h2 className="text-4xl font-display font-bold text-ink dark:text-paper text-embossed tracking-wide animate-ink-fade">Historical Narrative</h2>
+          <div className="gold-strip w-24 mx-auto mt-4"></div>
+        </div>
+
+        <div className="prose prose-lg prose-stone dark:prose-invert max-w-none font-elegant text-sepia dark:text-stone-300 leading-loose text-justify">
           {paragraphs.map((para, idx) => (
-            <p key={idx} className="mb-6 first-letter:text-5xl first-letter:font-display first-letter:text-gold first-letter:float-left first-letter:mr-3 first-letter:mt-[-10px]">
+            <p key={idx} className="mb-6 first-letter:text-6xl first-letter:font-display first-letter:text-gold first-letter:float-left first-letter:mr-4 first-letter:mt-[-5px] first-letter:leading-none animate-ink-fade" style={{ animationDelay: `${idx * 0.1}s` }}>
               {para}
             </p>
           ))}
         </div>
 
-        <div className="mt-12 pt-8 border-t border-stone-200 dark:border-gold/20 text-center">
-             <p className="text-sm text-stone-400 italic">
-               Generated based on structured event data. Always verify with primary sources.
-             </p>
+        <div className="mt-12 pt-8 border-t border-gold/30 text-center">
+          <div className="gold-strip w-16 mx-auto mb-4"></div>
+          <p className="text-sm text-sepia/70 dark:text-stone-500 font-elegant italic">
+            Generated based on structured event data. Always verify with primary sources.
+          </p>
         </div>
       </div>
     </div>

@@ -23,7 +23,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lato:wght@300;400;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=IM+Fell+English+SC&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -36,26 +36,58 @@
         theme: {
           extend: {
             colors: {
-              paper: '#f4f1ea',
+              paper: {
+                DEFAULT: '#f4f1ea',
+                dark: '#e6e2d6',
+                cream: '#faf8f3',
+                aged: '#d4cfc4',
+              },
               'paper-dark': '#e6e2d6',
-              ink: '#2b2622',
+              ink: {
+                DEFAULT: '#2b2622',
+                light: '#4a443f',
+                deep: '#1a1714',
+              },
               'ink-light': '#4a443f',
-              gold: '#c5a059',
+              gold: {
+                DEFAULT: '#c5a059',
+                dark: '#8a6b32',
+                light: '#e6c88a',
+                glow: '#d4b36a',
+                muted: '#a08550',
+              },
               'gold-dark': '#8a6b32',
               'gold-light': '#e6c88a',
-              sepia: '#5c4d3c',
-              crimson: '#8a2c2c',
-              // Dark mode colors
-              'night': '#0f0f0f',
+              sepia: {
+                DEFAULT: '#5c4d3c',
+                light: '#7a6b58',
+                dark: '#3d3228',
+              },
+              crimson: {
+                DEFAULT: '#8a2c2c',
+                light: '#a84040',
+                muted: '#6b2424',
+              },
+              mahogany: '#4a2c2a',
+              burgundy: '#722f37',
+              night: {
+                DEFAULT: '#0f0f0f',
+                light: '#1a1a1a',
+                lighter: '#252525',
+                warm: '#1a1815',
+              },
               'night-light': '#1a1a1a',
               'night-lighter': '#252525',
               'parchment-dark': '#2a2520',
+              slate: '#64748b',
             },
             fontFamily: {
               sans: ['Lato', 'sans-serif'],
               serif: ['Merriweather', 'serif'],
               display: ['Cinzel', 'serif'],
               antique: ['"IM Fell English SC"', 'serif'],
+              elegant: ['"Cormorant Garamond"', 'serif'],
+              dramatic: ['"Playfair Display"', 'serif'],
             },
             backgroundImage: {
               'parchment': "url('https://www.transparenttextures.com/patterns/aged-paper.png')",
@@ -125,6 +157,207 @@
       }
       html.dark ::-webkit-scrollbar-thumb:hover {
         background: #e6c88a;
+      }
+
+      /* === DARK ACADEMIA STYLING === */
+
+      /* Decorative Borders */
+      .border-manuscript {
+        border: 1px solid rgba(138, 107, 50, 0.4);
+        position: relative;
+      }
+      .border-manuscript::before,
+      .border-manuscript::after {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border: 2px solid rgba(197, 160, 89, 0.6);
+      }
+      .border-manuscript::before {
+        top: -3px;
+        left: -3px;
+        border-right: none;
+        border-bottom: none;
+      }
+      .border-manuscript::after {
+        bottom: -3px;
+        right: -3px;
+        border-left: none;
+        border-top: none;
+      }
+      html.dark .border-manuscript {
+        border-color: rgba(197, 160, 89, 0.3);
+      }
+      html.dark .border-manuscript::before,
+      html.dark .border-manuscript::after {
+        border-color: rgba(197, 160, 89, 0.4);
+      }
+
+      .border-gilded {
+        border: 1px solid;
+        border-image: linear-gradient(135deg, #8a6b32, #e6c88a, #8a6b32) 1;
+      }
+
+      /* Shadows */
+      .shadow-tome {
+        box-shadow:
+          0 4px 6px rgba(0, 0, 0, 0.1),
+          0 10px 20px rgba(0, 0, 0, 0.15),
+          0 1px 3px rgba(0, 0, 0, 0.08);
+      }
+      html.dark .shadow-tome {
+        box-shadow:
+          0 4px 6px rgba(0, 0, 0, 0.3),
+          0 10px 20px rgba(0, 0, 0, 0.4),
+          0 0 0 1px rgba(197, 160, 89, 0.1);
+      }
+
+      .shadow-archive {
+        box-shadow:
+          0 25px 50px rgba(0, 0, 0, 0.25),
+          0 10px 20px rgba(0, 0, 0, 0.2),
+          0 0 0 1px rgba(197, 160, 89, 0.1);
+      }
+      html.dark .shadow-archive {
+        box-shadow:
+          0 25px 50px rgba(0, 0, 0, 0.5),
+          0 10px 20px rgba(0, 0, 0, 0.4),
+          0 0 0 1px rgba(197, 160, 89, 0.2);
+      }
+
+      .card-inset {
+        box-shadow:
+          inset 2px 2px 4px rgba(0, 0, 0, 0.08),
+          inset -1px -1px 2px rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(0, 0, 0, 0.06);
+      }
+      html.dark .card-inset {
+        box-shadow:
+          inset 2px 2px 6px rgba(0, 0, 0, 0.3),
+          inset -1px -1px 2px rgba(197, 160, 89, 0.05);
+        border-color: rgba(197, 160, 89, 0.15);
+      }
+
+      /* Text Effects */
+      .text-embossed {
+        text-shadow:
+          1px 1px 0 rgba(255, 255, 255, 0.3),
+          -1px -1px 0 rgba(0, 0, 0, 0.1);
+      }
+      html.dark .text-embossed {
+        text-shadow:
+          1px 1px 0 rgba(197, 160, 89, 0.15),
+          -1px -1px 0 rgba(0, 0, 0, 0.4);
+      }
+
+      /* Gold Glow */
+      .glow-gold {
+        transition: box-shadow 0.3s ease;
+      }
+      .glow-gold:hover {
+        box-shadow: 0 0 20px rgba(197, 160, 89, 0.4);
+      }
+
+      /* Animations */
+      @keyframes page-turn {
+        0% {
+          transform: rotateY(-5deg) scale(0.98);
+          opacity: 0;
+        }
+        100% {
+          transform: rotateY(0) scale(1);
+          opacity: 1;
+        }
+      }
+      .animate-page-turn {
+        animation: page-turn 0.4s ease-out;
+        transform-origin: left center;
+      }
+
+      @keyframes ink-fade {
+        0% {
+          opacity: 0;
+          filter: blur(2px);
+        }
+        100% {
+          opacity: 1;
+          filter: blur(0);
+        }
+      }
+      .animate-ink-fade {
+        animation: ink-fade 0.5s ease-out;
+      }
+
+      @keyframes scroll-unroll {
+        0% {
+          max-height: 0;
+          opacity: 0;
+        }
+        100% {
+          max-height: 500px;
+          opacity: 1;
+        }
+      }
+      .animate-scroll-unroll {
+        animation: scroll-unroll 0.6s ease-out;
+        overflow: hidden;
+      }
+
+      @keyframes candle-flicker {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.95; }
+      }
+      .animate-candle {
+        animation: candle-flicker 4s ease-in-out infinite;
+      }
+
+      /* Hover Effects */
+      .hover-lift {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .hover-lift:hover {
+        transform: translateY(-4px);
+      }
+      .hover-lift:hover.shadow-tome {
+        box-shadow:
+          0 8px 12px rgba(0, 0, 0, 0.15),
+          0 16px 32px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Decorative Dividers */
+      .gold-strip {
+        background: linear-gradient(
+          90deg,
+          transparent 0%,
+          rgba(197, 160, 89, 0.3) 20%,
+          rgba(197, 160, 89, 0.6) 50%,
+          rgba(197, 160, 89, 0.3) 80%,
+          transparent 100%
+        );
+        height: 1px;
+      }
+
+      /* Vignette Effect */
+      .vignette {
+        box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.2);
+      }
+      html.dark .vignette {
+        box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Sepia Image Filter */
+      .img-sepia {
+        filter: sepia(20%) contrast(1.05);
+        transition: filter 0.3s ease;
+      }
+      .img-sepia:hover {
+        filter: sepia(0%) contrast(1);
+      }
+
+      /* Transition Utilities */
+      .transition-archival {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
     </style>
   <script type="importmap">

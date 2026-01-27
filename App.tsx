@@ -284,15 +284,17 @@ const App: React.FC = () => {
           {/* Main App Layout */}
           
           {/* Header Bar */}
-          <header className="bg-paper-dark dark:bg-night-light border-b-2 border-gold-dark/30 px-6 py-3 flex justify-between items-center shadow-lg z-20 relative">
-             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/aged-paper.png')] dark:bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-50 dark:opacity-30 pointer-events-none"></div>
-            
+          <header className="bg-paper-dark dark:bg-night-light border-b border-gold/30 px-6 py-3 flex justify-between items-center shadow-tome z-20 relative">
+             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/aged-paper.png')] dark:bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-40 dark:opacity-20 pointer-events-none"></div>
+             {/* Gold strip at bottom */}
+             <div className="absolute bottom-0 left-0 right-0 gold-strip"></div>
+
             <div className="flex items-center gap-4 relative z-10 ml-12 md:ml-0">
-              <h1 className="font-display font-bold text-xl text-ink dark:text-gold hidden md:block tracking-widest">CHRONOS</h1>
-              <div className="h-6 w-px bg-gold-dark hidden md:block"></div>
+              <h1 className="font-display font-bold text-xl text-ink dark:text-gold hidden md:block tracking-[0.2em] text-embossed animate-candle">CHRONOS</h1>
+              <div className="h-8 w-px bg-gradient-to-b from-transparent via-gold to-transparent hidden md:block"></div>
               <div>
-                <span className="block font-serif font-bold text-ink dark:text-paper text-lg leading-none">{activeData.region}</span>
-                <span className="text-xs text-gold-dark dark:text-gold-light font-bold tracking-widest uppercase font-antique">
+                <span className="block font-dramatic font-bold text-ink dark:text-paper text-lg leading-none">{activeData.region}</span>
+                <span className="text-xs text-gold-dark dark:text-gold font-bold tracking-widest uppercase font-antique">
                     {formatYearRange(activeData.timeRange.start, activeData.timeRange.end)}
                 </span>
               </div>
@@ -309,7 +311,7 @@ const App: React.FC = () => {
               <button
                 onClick={() => setIsShareOpen(true)}
                 aria-label="Share & Export"
-                className="p-3 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center bg-stone-200 dark:bg-night-lighter text-slate dark:text-paper hover:bg-stone-300 dark:hover:bg-night"
+                className="p-3 rounded-full transition-archival min-w-[44px] min-h-[44px] flex items-center justify-center bg-paper dark:bg-night-lighter text-sepia dark:text-paper border border-gold/30 hover:border-gold hover:text-gold glow-gold"
               >
                 <Share2 className="w-5 h-5" />
               </button>
@@ -318,7 +320,7 @@ const App: React.FC = () => {
                 onClick={() => setIsChatOpen(!isChatOpen)}
                 aria-label="Ask Historian"
                 aria-pressed={isChatOpen}
-                className={`p-3 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${isChatOpen ? 'bg-gold text-ink shadow-lg ring-2 ring-gold-light' : 'bg-stone-200 dark:bg-night-lighter text-slate dark:text-paper hover:bg-stone-300 dark:hover:bg-night'}`}
+                className={`p-3 rounded-full transition-archival min-w-[44px] min-h-[44px] flex items-center justify-center border ${isChatOpen ? 'bg-gold text-ink shadow-lg border-gold-light glow-gold' : 'bg-paper dark:bg-night-lighter text-sepia dark:text-paper border-gold/30 hover:border-gold hover:text-gold glow-gold'}`}
               >
                 <MessageCircle className="w-5 h-5" />
               </button>

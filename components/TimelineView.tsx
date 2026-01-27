@@ -61,10 +61,15 @@ export const TimelineView: React.FC<TimelineViewProps> = ({ eras, events, onEven
   });
 
   return (
-    <div className="p-6 space-y-8 bg-paper dark:bg-night min-h-full">
-      <h2 className="text-3xl font-display font-bold text-ink dark:text-paper border-b-2 border-gold pb-2 inline-block">Chronological Eras</h2>
+    <div className="p-6 space-y-8 bg-paper dark:bg-night min-h-full relative">
+      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] dark:bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-30 dark:opacity-10 pointer-events-none"></div>
 
-      <div className="space-y-6">
+      <div className="relative z-10">
+        <h2 className="text-3xl font-display font-bold text-ink dark:text-paper text-embossed tracking-wide">Chronological Eras</h2>
+        <div className="gold-strip mt-2 w-48"></div>
+      </div>
+
+      <div className="space-y-8 relative z-10">
         {eras.map((era) => {
           // Only show events assigned to THIS era
           const eraEvents = events
@@ -72,20 +77,20 @@ export const TimelineView: React.FC<TimelineViewProps> = ({ eras, events, onEven
             .sort((a,b) => a.year - b.year);
 
           return (
-            <div key={era.id} className="relative pl-8 border-l-4 border-stone-300 dark:border-stone-700 hover:border-gold transition-colors">
-              {/* Era Header */}
-              <div className="absolute -left-[1.35rem] top-0 bg-paper dark:bg-night p-1 border border-stone-300 dark:border-stone-700 rounded-full shadow-sm">
-                <div className="w-6 h-6 bg-gold rounded-full flex items-center justify-center text-xs text-white font-bold">
+            <div key={era.id} className="relative pl-8 border-l-4 border-gold/30 dark:border-gold/20 hover:border-gold transition-colors">
+              {/* Era Header - Wax Seal Style */}
+              <div className="absolute -left-[1.35rem] top-0 bg-paper dark:bg-night p-1 rounded-full shadow-tome">
+                <div className="w-7 h-7 bg-gradient-to-br from-gold to-gold-dark rounded-full flex items-center justify-center text-xs text-white font-bold shadow-inner border border-gold-light/50">
                   {era.startYear.toString().slice(0, 2)}
                 </div>
               </div>
 
-              <div className="mb-6">
-                <h3 className="text-2xl font-serif text-ink dark:text-paper font-bold">{era.title}</h3>
-                <span className="text-sm font-bold text-gold-dark dark:text-gold uppercase tracking-wide">
+              <div className="mb-6 animate-ink-fade">
+                <h3 className="text-2xl font-dramatic text-ink dark:text-paper font-bold">{era.title}</h3>
+                <span className="text-sm font-bold text-gold-dark dark:text-gold uppercase tracking-widest font-antique">
                   {formatYearRange(era.startYear, era.endYear)}
                 </span>
-                <p className="mt-2 text-slate dark:text-stone-400 leading-relaxed">{era.summary}</p>
+                <p className="mt-2 text-sepia dark:text-stone-400 leading-relaxed font-elegant">{era.summary}</p>
               </div>
 
               {/* Event Stream within Era */}
@@ -94,7 +99,7 @@ export const TimelineView: React.FC<TimelineViewProps> = ({ eras, events, onEven
                   <div
                     key={evt.id}
                     onClick={() => onEventClick(evt)}
-                    className="group cursor-pointer bg-white dark:bg-night-light rounded border border-stone-200 dark:border-gold/20 shadow-sm hover:shadow-md hover:border-gold transition-all overflow-hidden flex flex-col"
+                    className="group cursor-pointer bg-paper-cream dark:bg-night-light rounded border border-gold/20 dark:border-gold/30 shadow-tome hover-lift transition-archival overflow-hidden flex flex-col border-manuscript"
                   >
                     {/* Event Image Banner */}
                     <div className="h-32 w-full relative">
@@ -114,7 +119,7 @@ export const TimelineView: React.FC<TimelineViewProps> = ({ eras, events, onEven
 
                     <div className="p-4 flex-1 flex flex-col">
                         <div className="flex justify-between items-start mb-2">
-                        <span className="text-sm font-bold text-slate dark:text-stone-300 bg-stone-100 dark:bg-night px-2 py-0.5 rounded">{formatYear(evt.year)}</span>
+                        <span className="text-sm font-bold text-ink dark:text-gold bg-gold/20 dark:bg-gold/10 px-2 py-0.5 rounded font-antique">[{formatYear(evt.year)}]</span>
                         <div className="flex gap-1">
                           {evt.isOutOfRange && (
                               <span className="text-[10px] font-bold text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/30 px-1 rounded uppercase tracking-tighter flex items-center gap-1">
@@ -122,16 +127,16 @@ export const TimelineView: React.FC<TimelineViewProps> = ({ eras, events, onEven
                               </span>
                           )}
                           {evt.isDisputed && (
-                              <span className="text-[10px] font-bold text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/30 px-1 rounded uppercase tracking-tighter flex items-center gap-1">
+                              <span className="text-[10px] font-bold text-crimson dark:text-crimson-light border border-crimson/30 dark:border-crimson/50 bg-crimson/10 dark:bg-crimson/20 px-1 rounded uppercase tracking-tighter flex items-center gap-1">
                                   <AlertTriangle className="w-3 h-3" /> Disputed
                               </span>
                           )}
                         </div>
                         </div>
-                        <h4 className="font-serif font-bold text-ink dark:text-paper group-hover:text-gold-dark dark:group-hover:text-gold mb-1 leading-tight">{evt.title}</h4>
-                        <p className="text-sm text-slate dark:text-stone-400 line-clamp-3 mb-2 flex-1">{evt.summary}</p>
-                        <div className="mt-auto pt-2 flex items-center text-xs text-stone-400 group-hover:text-gold font-bold transition-colors">
-                            Read more <ChevronRight className="w-3 h-3 ml-1" />
+                        <h4 className="font-dramatic font-bold text-ink dark:text-paper group-hover:text-gold-dark dark:group-hover:text-gold mb-1 leading-tight transition-colors">{evt.title}</h4>
+                        <p className="text-sm text-sepia dark:text-stone-400 line-clamp-3 mb-2 flex-1 font-elegant">{evt.summary}</p>
+                        <div className="mt-auto pt-2 flex items-center text-xs text-sepia dark:text-stone-500 group-hover:text-gold font-elegant italic transition-colors">
+                            Continue reading... <ChevronRight className="w-3 h-3 ml-1" />
                         </div>
                     </div>
                   </div>
