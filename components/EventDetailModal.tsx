@@ -20,14 +20,14 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
   }[event.confidenceScore] || HelpCircle;
 
   const confidenceColor = {
-    'High': 'text-green-600 bg-green-50 border-green-200',
-    'Medium': 'text-yellow-600 bg-yellow-50 border-yellow-200',
-    'Low': 'text-red-600 bg-red-50 border-red-200',
+    'High': 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800',
+    'Medium': 'text-yellow-600 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800',
+    'Low': 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800',
   }[event.confidenceScore];
 
   return (
     <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
-      <div className="bg-white rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto flex flex-col border border-stone-300">
+      <div className="bg-paper dark:bg-night-light rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto flex flex-col border border-stone-300 dark:border-gold/20">
         
         {/* Banner Image */}
         <div className="w-full h-48 relative shrink-0">
@@ -52,8 +52,8 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
         <div className="p-6 space-y-6">
           
           {/* Summary */}
-          <div className="prose prose-stone first-letter:text-3xl first-letter:font-serif first-letter:text-gold first-letter:float-left first-letter:mr-2">
-             <p className="text-lg leading-relaxed">{event.summary}</p>
+          <div className="prose prose-stone dark:prose-invert first-letter:text-3xl first-letter:font-serif first-letter:text-gold first-letter:float-left first-letter:mr-2">
+             <p className="text-lg leading-relaxed text-ink dark:text-paper">{event.summary}</p>
           </div>
 
           {/* Action: Ask Historian */}
@@ -78,29 +78,29 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
 
           {/* Dispute Handling */}
           {event.isDisputed && (
-            <div className="bg-red-50 border border-red-100 rounded-lg p-5">
-              <h3 className="text-red-800 font-bold flex items-center gap-2 mb-3">
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 rounded-lg p-5">
+              <h3 className="text-red-800 dark:text-red-400 font-bold flex items-center gap-2 mb-3">
                 <AlertTriangle className="w-5 h-5" />
                 Historical Dispute
               </h3>
-              <p className="text-sm text-red-700 mb-4">
+              <p className="text-sm text-red-700 dark:text-red-300 mb-4">
                 Sources disagree on key details of this event.
               </p>
-              
+
               <div className="space-y-3">
                  {(event.disputeClaims || []).map((claim, idx) => (
-                   <div key={idx} className="bg-white p-3 rounded border border-red-100 shadow-sm">
-                      <p className="text-sm text-ink mb-2">{claim.summary}</p>
-                      <div className="flex gap-2 text-xs text-slate">
+                   <div key={idx} className="bg-white dark:bg-night p-3 rounded border border-red-100 dark:border-red-800 shadow-sm">
+                      <p className="text-sm text-ink dark:text-paper mb-2">{claim.summary}</p>
+                      <div className="flex gap-2 text-xs text-slate dark:text-paper/60">
                          <span className="font-bold">Sources:</span>
                          {(claim.citations || []).map((c, i) => (
-                           <span key={i} className="bg-stone-100 px-1 rounded">{c.source}</span>
+                           <span key={i} className="bg-stone-100 dark:bg-night-lighter px-1 rounded">{c.source}</span>
                          ))}
                       </div>
                    </div>
                  ))}
                  {(!event.disputeClaims || event.disputeClaims.length === 0) && (
-                    <p className="text-sm italic text-red-600">Specific dispute claims were not detailed in the summary, but consensus is weak.</p>
+                    <p className="text-sm italic text-red-600 dark:text-red-400">Specific dispute claims were not detailed in the summary, but consensus is weak.</p>
                  )}
               </div>
             </div>
@@ -108,14 +108,14 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
 
           {/* Citations */}
           <div>
-            <h3 className="font-bold text-sm text-slate uppercase tracking-wider mb-3">Encyclopedic Citations</h3>
+            <h3 className="font-bold text-sm text-slate dark:text-paper/60 uppercase tracking-wider mb-3">Encyclopedic Citations</h3>
             <ul className="space-y-2">
               {(event.citations || []).map((cit, idx) => (
-                <li key={idx} className="flex items-start gap-2 text-sm text-ink bg-stone-50 p-2 rounded">
+                <li key={idx} className="flex items-start gap-2 text-sm text-ink dark:text-paper bg-stone-50 dark:bg-night p-2 rounded">
                   <ExternalLink className="w-4 h-4 mt-0.5 text-gold-dark flex-shrink-0" />
                   <span>
                     <span className="font-semibold">{cit.source}</span>
-                    {cit.url && <a href={cit.url} target="_blank" rel="noreferrer" className="ml-2 text-gold-dark underline">Reference Link</a>}
+                    {cit.url && <a href={cit.url} target="_blank" rel="noreferrer" className="ml-2 text-gold-dark dark:text-gold underline">Reference Link</a>}
                   </span>
                 </li>
               ))}
