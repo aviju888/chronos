@@ -187,32 +187,34 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-paper-dark shadow-2xl rounded-lg overflow-hidden border-double-archival mt-10 mb-10 relative">
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-50"></div>
-      
-      <div className="bg-ink p-8 text-paper text-center relative overflow-hidden">
+    <div className="max-w-3xl mx-auto bg-paper-dark dark:bg-night-light shadow-archive rounded-lg overflow-hidden border-manuscript mt-10 mb-10 relative animate-page-turn">
+      <div className="absolute top-0 left-0 w-full gold-strip"></div>
+
+      <div className="bg-ink p-8 text-paper text-center relative overflow-hidden vignette">
          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-20"></div>
-        <h1 className="text-5xl font-display font-bold text-gold mb-2 tracking-widest relative z-10">CHRONOS</h1>
-        <p className="text-gold-light/60 font-antique text-lg tracking-widest relative z-10">Deep History Explorer</p>
+        <h1 className="text-5xl font-display font-bold text-gold mb-2 tracking-[0.25em] relative z-10 text-embossed animate-candle">CHRONOS</h1>
+        <p className="text-gold-light/70 font-antique text-lg tracking-widest relative z-10">Deep History Explorer</p>
 
         {/* Surprise Me Button */}
         <button
           type="button"
           onClick={handleSurpriseMe}
           disabled={isLoading}
-          className="relative z-10 mt-4 px-6 py-2 bg-gold/20 hover:bg-gold/40 border border-gold/50 rounded-full text-gold font-bold text-sm uppercase tracking-widest transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 mx-auto"
+          className="relative z-10 mt-4 px-6 py-2 bg-gold/20 hover:bg-gold/40 border border-gold/50 rounded-full text-gold font-bold text-sm uppercase tracking-widest transition-archival hover:scale-105 glow-gold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 mx-auto"
         >
           <Shuffle className="w-4 h-4" />
           Surprise Me
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-8 space-y-8 bg-paper dark:bg-night-light">
+      <form onSubmit={handleSubmit} className="p-8 space-y-8 bg-paper dark:bg-night-light relative">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] dark:bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-30 dark:opacity-10 pointer-events-none"></div>
+
         {/* Region Section */}
-        <div className="space-y-4">
-          <label className="block text-ink font-serif font-bold text-lg flex items-center justify-between border-b border-gold/30 pb-2">
+        <div className="space-y-4 relative z-10">
+          <label className="block text-ink dark:text-paper font-dramatic font-bold text-lg flex items-center justify-between border-b border-gold/30 pb-2">
             <div className="flex items-center gap-2">
-               <MapIcon className="w-5 h-5 text-gold-dark" />
+               <MapIcon className="w-5 h-5 text-gold" />
                Select Region or Topic
             </div>
             <button
@@ -276,10 +278,10 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
                 type="button"
                 onClick={() => handlePresetClick(r)}
                 disabled={isLoading}
-                className={`text-sm px-3 py-2 rounded border transition-all font-serif ${
-                  region === r 
-                    ? 'bg-ink text-gold border-gold shadow-md' 
-                    : 'bg-white text-ink-light hover:bg-stone-100 border-stone-300'
+                className={`text-sm px-3 py-2.5 rounded border transition-archival font-elegant ${
+                  region === r
+                    ? 'bg-ink dark:bg-gold text-gold dark:text-ink border-gold shadow-tome'
+                    : 'bg-paper-cream dark:bg-night-lighter text-sepia dark:text-paper hover:bg-paper-dark dark:hover:bg-night border-gold/30 hover:border-gold card-inset hover-lift'
                 } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 {r}
@@ -295,7 +297,7 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
               onChange={(e) => { setRegion(e.target.value); setShowSuggestions(true); }}
               onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true); }}
               disabled={isLoading}
-              className="w-full p-4 border border-stone-400 rounded focus:ring-2 focus:ring-gold focus:outline-none bg-white font-serif text-lg shadow-inner disabled:opacity-50"
+              className="w-full p-4 border-2 border-gold/40 rounded focus:ring-2 focus:ring-gold focus:border-gold focus:outline-none bg-paper-cream dark:bg-night font-elegant text-lg card-inset disabled:opacity-50 text-ink dark:text-paper placeholder:text-sepia/50 dark:placeholder:text-stone-500"
               required
             />
             {isSuggestionsLoading && (
@@ -325,10 +327,10 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
         </div>
 
         {/* Time Range Section */}
-        <div className="space-y-4">
+        <div className="space-y-4 relative z-10">
           <div className="flex justify-between items-center border-b border-gold/30 pb-2">
-            <label className="block text-ink font-serif font-bold text-lg flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-gold-dark" />
+            <label className="block text-ink dark:text-paper font-dramatic font-bold text-lg flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-gold" />
               Time Range
             </label>
             <div className="flex gap-3">
@@ -377,40 +379,40 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
 
         {/* Mode Selection */}
         <div className="space-y-4">
-          <label className="block text-ink font-serif font-bold text-lg border-b border-gold/30 pb-2">Investigation Depth</label>
+          <label className="block text-ink dark:text-paper font-dramatic font-bold text-lg border-b border-gold/30 pb-2">Investigation Depth</label>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <button
               type="button"
               onClick={() => setMode(GenerationMode.QUICK)}
               disabled={isLoading}
-              className={`p-4 rounded border-2 text-left transition-all ${
+              className={`p-5 rounded border-2 text-left transition-archival hover-lift ${
                 mode === GenerationMode.QUICK
-                  ? 'border-gold bg-amber-50/50 shadow-inner'
-                  : 'border-stone-300 hover:border-gold-dark/50 bg-white'
+                  ? 'border-gold bg-gold/10 dark:bg-gold/20 shadow-tome'
+                  : 'border-gold/30 hover:border-gold bg-paper-cream dark:bg-night card-inset'
               } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               <div className="flex items-center gap-2 mb-2">
-                <Zap className={`w-5 h-5 ${mode === GenerationMode.QUICK ? 'text-gold-dark' : 'text-stone-400'}`} />
-                <span className="font-display font-bold text-ink">Quick Overview</span>
+                <Zap className={`w-5 h-5 ${mode === GenerationMode.QUICK ? 'text-gold' : 'text-sepia dark:text-stone-400'}`} />
+                <span className="font-display font-bold text-ink dark:text-paper">Quick Overview</span>
               </div>
-              <p className="text-sm text-stone-600 font-serif">Faster generation. Good for broad strokes. Single-pass verification.</p>
+              <p className="text-sm text-sepia dark:text-stone-400 font-elegant">Faster generation. Good for broad strokes. Single-pass verification.</p>
             </button>
 
             <button
               type="button"
               onClick={() => setMode(GenerationMode.DEEP)}
               disabled={isLoading}
-              className={`p-4 rounded border-2 text-left transition-all ${
+              className={`p-5 rounded border-2 text-left transition-archival hover-lift ${
                 mode === GenerationMode.DEEP
-                  ? 'border-gold bg-amber-50/50 shadow-inner'
-                  : 'border-stone-300 hover:border-gold-dark/50 bg-white'
+                  ? 'border-gold bg-gold/10 dark:bg-gold/20 shadow-tome'
+                  : 'border-gold/30 hover:border-gold bg-paper-cream dark:bg-night card-inset'
               } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               <div className="flex items-center gap-2 mb-2">
-                <BookOpen className={`w-5 h-5 ${mode === GenerationMode.DEEP ? 'text-gold-dark' : 'text-stone-400'}`} />
-                <span className="font-display font-bold text-ink">Deep Archive Search</span>
+                <BookOpen className={`w-5 h-5 ${mode === GenerationMode.DEEP ? 'text-gold' : 'text-sepia dark:text-stone-400'}`} />
+                <span className="font-display font-bold text-ink dark:text-paper">Deep Archive Search</span>
               </div>
-              <p className="text-sm text-stone-600 font-serif">Thorough analysis. Multiple sources. Detailed dispute resolution. Slower.</p>
+              <p className="text-sm text-sepia dark:text-stone-400 font-elegant">Thorough analysis. Multiple sources. Detailed dispute resolution. Slower.</p>
             </button>
           </div>
         </div>
@@ -421,7 +423,7 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
             <button
               type="submit"
               disabled={!region || isLoading}
-              className={`w-full py-5 text-xl font-display font-bold text-paper-dark tracking-[0.2em] uppercase transition-all transform active:scale-[0.99] rounded shadow-lg bg-ink hover:bg-ink-light hover:shadow-2xl border-2 border-ink hover:border-gold`}
+              className={`w-full py-5 text-xl font-display font-bold text-gold dark:text-ink tracking-[0.2em] uppercase transition-archival transform active:scale-[0.99] rounded shadow-tome bg-ink dark:bg-gold hover:shadow-archive border-2 border-gold glow-gold disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               Construct Timeline
             </button>

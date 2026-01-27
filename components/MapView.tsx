@@ -2,9 +2,10 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import { HistoricalEvent } from '../types';
-import { ChevronLeft, ChevronRight, Play, Pause, Book, MapPinOff } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, Pause, Book, MapPinOff, Globe2, Map } from 'lucide-react';
 import { EventImage } from './EventImage';
-import { formatYear } from '../utils';
+import { formatYear, isWebGLSupported } from '../utils';
+import { GlobeCanvas, GlobeErrorBoundary, GlobeFallbackUI } from './globe';
 
 // Fix for default Leaflet marker icons in React
 const DefaultIcon = L.icon({
@@ -147,6 +148,38 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
   const [isPlaying, setIsPlaying] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(2);
 
+  // 2D/3D toggle state - persisted to localStorage
+  const [viewMode, setViewMode] = useState<'2d' | '3d'>(() => {
+    // Check localStorage for saved preference
+    const saved = localStorage.getItem('chronos-map-mode');
+    if (saved === '2d' || saved === '3d') return saved;
+    // Default to 3D if WebGL is supported
+    return isWebGLSupported() ? '3d' : '2d';
+  });
+
+  // Detect dark mode
+  const [isDarkMode, setIsDarkMode] = useState(() =>
+    document.documentElement.classList.contains('dark')
+  );
+
+  // Watch for dark mode changes
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDarkMode(document.documentElement.classList.contains('dark'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
+
+  // Save view mode preference
+  useEffect(() => {
+    localStorage.setItem('chronos-map-mode', viewMode);
+  }, [viewMode]);
+
+  const toggleViewMode = useCallback(() => {
+    setViewMode(prev => prev === '2d' ? '3d' : '2d');
+  }, []);
+
   const handleZoomChange = useCallback((zoom: number) => {
     setZoomLevel(zoom);
   }, []);
@@ -236,12 +269,48 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
   };
 
   return (
-    <div className="h-full flex flex-col relative bg-stone-100">
+    <div className="h-full flex flex-col relative bg-stone-100 dark:bg-night">
+      {/* 2D/3D Toggle Button */}
+      <div className="absolute top-4 right-4 z-[600]">
+        <button
+          onClick={toggleViewMode}
+          className="flex items-center gap-2 px-4 py-2 bg-paper dark:bg-night-light border-2 border-gold/50 rounded-lg shadow-tome hover:border-gold transition-all glow-gold"
+          aria-label={viewMode === '3d' ? 'Switch to 2D Map' : 'Switch to 3D Globe'}
+        >
+          {viewMode === '3d' ? (
+            <>
+              <Map className="w-4 h-4 text-gold" />
+              <span className="text-sm font-bold text-ink dark:text-paper hidden md:inline">2D Map</span>
+            </>
+          ) : (
+            <>
+              <Globe2 className="w-4 h-4 text-gold" />
+              <span className="text-sm font-bold text-ink dark:text-paper hidden md:inline">3D Globe</span>
+            </>
+          )}
+        </button>
+      </div>
+
       <div className="flex-1 z-0 relative">
-        <MapContainer 
-            center={[20, 0]} 
-            zoom={2} 
-            scrollWheelZoom={true} 
+        {/* 3D Globe View */}
+        {viewMode === '3d' && (
+          <GlobeErrorBoundary
+            fallback={<GlobeFallbackUI onSwitch2D={() => setViewMode('2d')} />}
+          >
+            <GlobeCanvas
+              events={visibleEvents}
+              onEventClick={onEventClick}
+              isDarkMode={isDarkMode}
+            />
+          </GlobeErrorBoundary>
+        )}
+
+        {/* 2D Leaflet Map View */}
+        {viewMode === '2d' && (
+        <MapContainer
+            center={[20, 0]}
+            zoom={2}
+            scrollWheelZoom={true}
             style={{ height: "100%", width: "100%", background: '#e6e2d6' }}
             zoomControl={false}
         >
@@ -324,9 +393,12 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
             );
           })}
         </MapContainer>
-        
-        {/* Overlay Gradient for vintage look */}
-        <div className="absolute inset-0 pointer-events-none z-[400] bg-[radial-gradient(circle_at_center,transparent_0%,rgba(92,77,60,0.1)_100%)]"></div>
+        )}
+
+        {/* Overlay Gradient for vintage look (2D map only) */}
+        {viewMode === '2d' && (
+          <div className="absolute inset-0 pointer-events-none z-[400] bg-[radial-gradient(circle_at_center,transparent_0%,rgba(92,77,60,0.1)_100%)]"></div>
+        )}
 
         {/* Empty State Overlay - no location data */}
         {!hasAnyLocations && (

@@ -26,43 +26,44 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
   }[event.confidenceScore];
 
   return (
-    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-ink/50 backdrop-blur-sm">
-      <div className="bg-paper dark:bg-night-light rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto flex flex-col border border-stone-300 dark:border-gold/20">
-        
+    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-ink/60 backdrop-blur-sm">
+      <div className="bg-paper dark:bg-night-light rounded-lg shadow-archive w-full max-w-2xl max-h-[90vh] overflow-y-auto flex flex-col border-manuscript animate-page-turn">
+
         {/* Banner Image */}
         <div className="w-full h-48 relative shrink-0">
-             <EventImage 
-                query={event.imageQuery || event.title} 
-                alt={event.title} 
+             <EventImage
+                query={event.imageQuery || event.title}
+                alt={event.title}
                 className="w-full h-full"
              />
-             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-             <button onClick={onClose} className="absolute top-4 right-4 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full transition-colors backdrop-blur-sm">
+             <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/30 to-transparent vignette"></div>
+             <button onClick={onClose} className="absolute top-4 right-4 p-2 bg-ink/50 hover:bg-ink/70 text-gold rounded-full transition-archival backdrop-blur-sm border border-gold/30 glow-gold">
                 <X className="w-6 h-6" />
              </button>
              <div className="absolute bottom-4 left-6 text-white">
-                <span className="inline-block text-xs font-bold tracking-wider uppercase bg-gold px-2 py-0.5 rounded text-ink mb-2 shadow-sm">
-                   {formatYear(event.year)} • {event.category}
+                <span className="inline-block text-xs font-bold tracking-widest uppercase bg-gradient-to-r from-gold to-gold-dark px-3 py-1 rounded text-ink mb-2 shadow-lg font-antique">
+                   [{formatYear(event.year)}] • {event.category}
                 </span>
-                <h2 className="text-3xl font-serif font-bold leading-none shadow-black drop-shadow-md">{event.title}</h2>
+                <h2 className="text-3xl font-dramatic font-bold leading-none drop-shadow-lg">{event.title}</h2>
              </div>
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6">
-          
+        <div className="p-6 space-y-6 relative">
+          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] dark:bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-30 dark:opacity-10 pointer-events-none"></div>
+
           {/* Summary */}
-          <div className="prose prose-stone dark:prose-invert first-letter:text-3xl first-letter:font-serif first-letter:text-gold first-letter:float-left first-letter:mr-2">
-             <p className="text-lg leading-relaxed text-ink dark:text-paper">{event.summary}</p>
+          <div className="prose prose-stone dark:prose-invert first-letter:text-4xl first-letter:font-display first-letter:text-gold first-letter:float-left first-letter:mr-3 first-letter:leading-none relative z-10 animate-ink-fade">
+             <p className="text-lg leading-relaxed text-sepia dark:text-stone-300 font-elegant">{event.summary}</p>
           </div>
 
           {/* Action: Ask Historian */}
-          <button 
+          <button
             onClick={() => onAskHistorian(event)}
-            className="w-full py-3 bg-ink hover:bg-ink-light text-gold border border-gold rounded shadow-md transition-all flex items-center justify-center gap-2 group"
+            className="relative z-10 w-full py-3 bg-ink dark:bg-gold hover:bg-ink-light dark:hover:bg-gold-light text-gold dark:text-ink border border-gold rounded shadow-tome transition-archival flex items-center justify-center gap-2 group glow-gold"
           >
             <MessageSquare className="w-5 h-5 group-hover:scale-110 transition-transform" />
-            <span className="font-display font-bold tracking-wide">Discuss this Event with Historian</span>
+            <span className="font-display font-bold tracking-widest text-sm">Discuss with Historian</span>
           </button>
 
           {/* Confidence Badge */}
@@ -120,15 +121,15 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
           )}
 
           {/* Citations */}
-          <div>
-            <h3 className="font-bold text-sm text-slate dark:text-paper/60 uppercase tracking-wider mb-3">Encyclopedic Citations</h3>
+          <div className="relative z-10">
+            <h3 className="font-antique text-sm text-sepia dark:text-stone-400 uppercase tracking-widest mb-3">Encyclopedic Citations</h3>
             <ul className="space-y-2">
               {(event.citations || []).map((cit, idx) => (
-                <li key={idx} className="flex items-start gap-2 text-sm text-ink dark:text-paper bg-stone-50 dark:bg-night p-2 rounded">
-                  <ExternalLink className="w-4 h-4 mt-0.5 text-gold-dark flex-shrink-0" />
-                  <span>
+                <li key={idx} className="flex items-start gap-2 text-sm text-ink dark:text-paper bg-paper-cream dark:bg-night p-3 rounded border border-gold/20 card-inset">
+                  <ExternalLink className="w-4 h-4 mt-0.5 text-gold flex-shrink-0" />
+                  <span className="font-elegant">
                     <span className="font-semibold">{cit.source}</span>
-                    {cit.url && <a href={cit.url} target="_blank" rel="noreferrer" className="ml-2 text-gold-dark dark:text-gold underline">Reference Link</a>}
+                    {cit.url && <a href={cit.url} target="_blank" rel="noreferrer" className="ml-2 text-gold hover:text-gold-light underline transition-colors">Reference</a>}
                   </span>
                 </li>
               ))}
