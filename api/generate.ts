@@ -141,7 +141,7 @@ async function callGroq(
     body: JSON.stringify({
       model,
       messages,
-      temperature: 0.7,
+      temperature: 0.3, // Lower temperature for factual accuracy
       max_tokens: 8192,
       ...(jsonMode ? { response_format: { type: 'json_object' } } : {}),
     }),
@@ -249,24 +249,27 @@ async function generateTimelineData(
   const erasResponse = await callGroq([
     {
       role: 'system',
-      content: 'You are an expert historian. Always respond with valid JSON matching the requested schema exactly.'
+      content: `You are a rigorous academic historian. Use ONLY standard historical periodization that would appear in textbooks and encyclopedias. Do not invent era names - use established historical terminology.`
     },
     {
       role: 'user',
-      content: `We are building a strict, citation-backed timeline for:
-        Region: ${region}
-        Time Period: ${startYear} to ${endYear}
+      content: `Divide the history of ${region} from ${startYear} to ${endYear} into 5-10 standard historical eras.
 
-        Divide this period into 5-10 logical historical eras.
+        REQUIREMENTS:
+        - Use ONLY well-established historical period names (e.g., "Renaissance", "Ming Dynasty", "Victorian Era")
+        - Each era must be a recognized historical period found in academic sources
+        - Do NOT invent creative era names
+        - Eras must have accurate, historically accepted date ranges
+
         Return JSON in format:
         {
           "eras": [
             {
               "id": "string",
-              "title": "string",
+              "title": "string (standard historical name)",
               "startYear": number,
               "endYear": number,
-              "summary": "string"
+              "summary": "string (1-2 sentences)"
             }
           ]
         }`
@@ -285,35 +288,50 @@ async function generateTimelineData(
   const eventsResponse = await callGroq([
     {
       role: 'system',
-      content: 'You are an expert historian. Always respond with valid JSON matching the requested schema exactly.'
+      content: `You are a rigorous academic historian. Your PRIMARY DIRECTIVE is factual accuracy.
+
+CRITICAL RULES:
+1. ONLY include events that are WELL-DOCUMENTED in mainstream historical sources
+2. NEVER invent, fabricate, or guess at historical events
+3. If unsure about an event, DO NOT include it
+4. Prefer FEWER accurate events over MORE questionable ones
+5. Use EXACT dates when known, approximate decades when uncertain
+6. Every event MUST be verifiable in Wikipedia, Britannica, or academic sources
+7. Citations must reference REAL sources that actually discuss the event
+
+Always respond with valid JSON matching the requested schema exactly.`
     },
     {
       role: 'user',
-      content: `Generate ${eventCount} significant historical events for ${region} from ${startYear} to ${endYear}.
+      content: `Generate ${eventCount} VERIFIED historical events for ${region} from ${startYear} to ${endYear}.
 
         The eras are: ${eras.map((e: any) => e.title).join(', ')}
 
-        Requirements:
-        1. Distribute events across the eras.
-        2. Include Lat/Lng for events where specific locations are relevant.
-        3. Categorize each event as one of: Politics, War, Culture, Economy, Religion, Science, Other
-        4. Provide citation sources (encyclopedic) for EVERY event.
-        5. If an event is disputed, set isDisputed=true and list conflicting claims.
-        6. Confidence Score: High/Medium/Low.
-        7. Provide an 'imageQuery' for each event: best 2-4 word phrase to search Wikipedia for an image.
+        STRICT REQUIREMENTS:
+        1. ONLY include events you are CERTAIN are historically accurate
+        2. Each event must be findable in Wikipedia or Encyclopaedia Britannica
+        3. If you cannot verify an event exists, DO NOT include it
+        4. Better to return 20 accurate events than 40 with fabrications
+        5. For ancient history, stick to major well-documented events only
+        6. Include Lat/Lng only for events with KNOWN specific locations
+        7. Categorize: Politics, War, Culture, Economy, Religion, Science, Other
+        8. Citation sources must be REAL encyclopedic sources
+        9. Set confidenceScore="High" only for textbook-level well-known events
+        10. Set confidenceScore="Medium" for events with some scholarly debate on details
+        11. Provide 'imageQuery': 2-4 word Wikipedia search term for the event
 
         Return JSON in format:
         {
           "events": [
             {
               "id": "string",
-              "title": "string",
-              "year": number,
+              "title": "string (use common historical name)",
+              "year": number (exact year, not approximate),
               "category": "Politics" | "War" | "Culture" | "Economy" | "Religion" | "Science" | "Other",
-              "summary": "string",
+              "summary": "string (2-3 sentences, factual only)",
               "imageQuery": "string",
-              "citations": [{"source": "string", "url": "string (optional)"}],
-              "location": {"lat": number, "lng": number, "name": "string"} (optional),
+              "citations": [{"source": "Wikipedia: Article Name" or "Britannica: Article Name", "url": "string (optional)"}],
+              "location": {"lat": number, "lng": number, "name": "string"} (optional, only if location is certain),
               "isDisputed": boolean,
               "disputeClaims": [{"summary": "string", "citations": [{"source": "string"}]}] (optional),
               "confidenceScore": "High" | "Medium" | "Low"
@@ -344,16 +362,22 @@ async function generateTimelineData(
   const narrativeResponse = await callGroq([
     {
       role: 'system',
-      content: 'You are an expert historian. Always respond with valid JSON.'
+      content: `You are a rigorous academic historian writing an encyclopedia-style summary. Include ONLY well-established historical facts. Do not speculate or embellish.`
     },
     {
       role: 'user',
-      content: `Write a cohesive historical narrative (3-5 paragraphs) summarizing ${region} from ${startYear} to ${endYear}.
+      content: `Write a factual historical overview (3-4 paragraphs) of ${region} from ${startYear} to ${endYear}.
 
-        Based on these eras: ${eras.map((e: any) => e.title).join(', ')}
-        And ${events.length} events including: ${events.slice(0, 10).map((e: any) => e.title).join(', ')}...
+        Reference these eras: ${eras.map((e: any) => e.title).join(', ')}
+        Key events include: ${events.slice(0, 10).map((e: any) => e.title).join(', ')}
 
-        Mention key turning points and disputed historical interpretations if any.
+        REQUIREMENTS:
+        - Write in encyclopedia style (factual, neutral tone)
+        - Only state facts that would appear in Britannica or Wikipedia
+        - Mention major turning points
+        - Note any well-known historical debates (with "historians debate..." framing)
+        - Do NOT invent details or dramatize
+
         Return JSON in format: {"narrative": "string"}`
     }
   ], model);
@@ -388,9 +412,17 @@ async function askFollowUp(
   const messages: { role: 'system' | 'user' | 'assistant'; content: string }[] = [
     {
       role: 'system',
-      content: `You are an expert historian assistant. You have access to a generated timeline. Answer questions specifically about this timeline and period. Be academic but accessible. Keep responses concise (under 500 words).
+      content: `You are a rigorous academic historian. Answer questions about history with FACTUAL ACCURACY as your top priority.
 
-Context: ${contextSummary.slice(0, 2000)}`, // Limit context size
+RULES:
+1. Only state facts you are confident are historically accurate
+2. If uncertain, say "Historical records suggest..." or "Some historians believe..."
+3. Clearly distinguish between established facts and scholarly interpretation
+4. If you don't know something, admit it rather than guessing
+5. Keep responses concise (under 400 words)
+6. Cite the type of source (e.g., "According to ancient Roman records..." or "Modern archaeology suggests...")
+
+Context from timeline: ${contextSummary.slice(0, 2000)}`, // Limit context size
     },
     ...limitedHistory.map((h) => ({
       role: (h.role === 'user' ? 'user' : 'assistant') as 'user' | 'assistant',
