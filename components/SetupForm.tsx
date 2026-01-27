@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GenerationMode } from '../types';
-import { Map as MapIcon, Calendar, Zap, BookOpen, Clock, Loader2, CheckCircle2, Hourglass, Wand2, Search, Globe, ChevronDown, ChevronUp } from 'lucide-react';
+import { Map as MapIcon, Calendar, Zap, BookOpen, Clock, Loader2, CheckCircle2, Hourglass, Wand2, Search, Globe, ChevronDown, ChevronUp, Shuffle } from 'lucide-react';
 import { ProgressUpdate, getSearchSuggestions, getSmartTimeRange, getRegionsFromCoordinates } from '../services/apiService';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
@@ -22,8 +22,50 @@ interface SetupFormProps {
 }
 
 const PRESET_REGIONS = [
-  "Ancient Rome", "Feudal Japan", "Victorian England", "The American West", 
+  "Ancient Rome", "Feudal Japan", "Victorian England", "The American West",
   "Ottoman Empire", "Mesoamerica (Aztec/Maya)", "Industrial Revolution Europe", "Modern China"
+];
+
+// Expanded list for "Surprise Me" feature
+const SURPRISE_REGIONS = [
+  // Ancient Civilizations
+  { region: "Ancient Egypt", start: -3100, end: -30 },
+  { region: "Ancient Greece", start: -800, end: -31 },
+  { region: "Ancient Rome", start: -753, end: 476 },
+  { region: "Persian Empire", start: -550, end: -330 },
+  { region: "Han Dynasty China", start: -206, end: 220 },
+  { region: "Maurya Empire India", start: -322, end: -185 },
+  { region: "Phoenicia", start: -1500, end: -300 },
+  { region: "Carthage", start: -814, end: -146 },
+  // Medieval
+  { region: "Byzantine Empire", start: 330, end: 1453 },
+  { region: "Viking Age Scandinavia", start: 793, end: 1066 },
+  { region: "Medieval England", start: 1066, end: 1485 },
+  { region: "Mongol Empire", start: 1206, end: 1368 },
+  { region: "Islamic Golden Age", start: 750, end: 1258 },
+  { region: "Song Dynasty China", start: 960, end: 1279 },
+  { region: "Crusader States", start: 1099, end: 1291 },
+  // Early Modern
+  { region: "Renaissance Italy", start: 1300, end: 1600 },
+  { region: "Spanish Empire", start: 1492, end: 1898 },
+  { region: "Mughal Empire", start: 1526, end: 1857 },
+  { region: "Edo Period Japan", start: 1603, end: 1868 },
+  { region: "Dutch Golden Age", start: 1588, end: 1672 },
+  { region: "French Revolution", start: 1789, end: 1799 },
+  // Modern
+  { region: "Victorian Britain", start: 1837, end: 1901 },
+  { region: "American Civil War Era", start: 1850, end: 1877 },
+  { region: "World War I Europe", start: 1914, end: 1918 },
+  { region: "Weimar Germany", start: 1919, end: 1933 },
+  { region: "Soviet Union", start: 1922, end: 1991 },
+  { region: "Cold War America", start: 1947, end: 1991 },
+  // Unique/Interesting
+  { region: "Silk Road", start: -130, end: 1453 },
+  { region: "Inca Empire", start: 1438, end: 1533 },
+  { region: "Kingdom of Kongo", start: 1390, end: 1914 },
+  { region: "Samurai Japan", start: 1185, end: 1868 },
+  { region: "Ancient Mesopotamia", start: -3500, end: -539 },
+  { region: "Elizabethan England", start: 1558, end: 1603 },
 ];
 
 // Map Click Component
@@ -136,6 +178,14 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
     setEndYear(currentYear);
   };
 
+  const handleSurpriseMe = () => {
+    const randomIndex = Math.floor(Math.random() * SURPRISE_REGIONS.length);
+    const surprise = SURPRISE_REGIONS[randomIndex];
+    setRegion(surprise.region);
+    setStartYear(surprise.start);
+    setEndYear(surprise.end);
+  };
+
   return (
     <div className="max-w-3xl mx-auto bg-paper-dark shadow-2xl rounded-lg overflow-hidden border-double-archival mt-10 mb-10 relative">
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-50"></div>
@@ -144,9 +194,20 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-20"></div>
         <h1 className="text-5xl font-display font-bold text-gold mb-2 tracking-widest relative z-10">CHRONOS</h1>
         <p className="text-gold-light/60 font-antique text-lg tracking-widest relative z-10">Deep History Explorer</p>
+
+        {/* Surprise Me Button */}
+        <button
+          type="button"
+          onClick={handleSurpriseMe}
+          disabled={isLoading}
+          className="relative z-10 mt-4 px-6 py-2 bg-gold/20 hover:bg-gold/40 border border-gold/50 rounded-full text-gold font-bold text-sm uppercase tracking-widest transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 mx-auto"
+        >
+          <Shuffle className="w-4 h-4" />
+          Surprise Me
+        </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-8 space-y-8 bg-paper">
+      <form onSubmit={handleSubmit} className="p-8 space-y-8 bg-paper dark:bg-night-light"
         
         {/* Region Section */}
         <div className="space-y-4">

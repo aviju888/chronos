@@ -9,9 +9,12 @@ import { ChatPanel } from './components/ChatPanel';
 import { HistorySidebar } from './components/HistorySidebar';
 import { OnboardingOverlay, useOnboarding } from './components/OnboardingOverlay';
 import { useToast, parseApiError } from './components/Toast';
+import { ThemeToggle } from './components/ThemeToggle';
+import { ShareExport } from './components/ShareExport';
 import { generateTimeline, ProgressUpdate } from './services/apiService';
 import { TimelineData, GenerationMode, HistoricalEvent } from './types';
-import { Layout, Map, List, BookOpen, MessageCircle, Menu, HelpCircle } from 'lucide-react';
+import { Layout, Map, List, BookOpen, MessageCircle, Menu, HelpCircle, Share2 } from 'lucide-react';
+import { formatYearRange } from './utils';
 
 // URL hash parsing and generation for deep linking
 const parseHash = (): { timelineId?: string; view?: string; eventId?: string } => {
@@ -69,6 +72,7 @@ const App: React.FC = () => {
   const [selectedEvent, setSelectedEvent] = useState<HistoricalEvent | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
   const [pendingChatQuery, setPendingChatQuery] = useState<string | null>(null);
 
   // Toast notifications
@@ -209,7 +213,8 @@ const App: React.FC = () => {
   );
 
   return (
-    <div className="h-screen flex flex-col bg-paper overflow-hidden text-ink">
+    <div className="h-screen flex flex-col bg-paper dark:bg-night overflow-hidden text-ink dark:text-paper transition-colors duration-300">
+      <ThemeToggle />
       <ToastContainer />
 
       {/* Onboarding overlay for first-time users */}
@@ -268,16 +273,16 @@ const App: React.FC = () => {
           {/* Main App Layout */}
           
           {/* Header Bar */}
-          <header className="bg-paper-dark border-b-2 border-gold-dark/30 px-6 py-3 flex justify-between items-center shadow-lg z-20 relative">
-             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/aged-paper.png')] opacity-50 pointer-events-none"></div>
+          <header className="bg-paper-dark dark:bg-night-light border-b-2 border-gold-dark/30 px-6 py-3 flex justify-between items-center shadow-lg z-20 relative">
+             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/aged-paper.png')] dark:bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-50 dark:opacity-30 pointer-events-none"></div>
             
             <div className="flex items-center gap-4 relative z-10 ml-12 md:ml-0">
-              <h1 className="font-display font-bold text-xl text-ink hidden md:block tracking-widest">CHRONOS</h1>
+              <h1 className="font-display font-bold text-xl text-ink dark:text-gold hidden md:block tracking-widest">CHRONOS</h1>
               <div className="h-6 w-px bg-gold-dark hidden md:block"></div>
               <div>
-                <span className="block font-serif font-bold text-ink text-lg leading-none">{activeData.region}</span>
-                <span className="text-xs text-gold-dark font-bold tracking-widest uppercase font-antique">
-                    {activeData.timeRange.start} — {activeData.timeRange.end}
+                <span className="block font-serif font-bold text-ink dark:text-paper text-lg leading-none">{activeData.region}</span>
+                <span className="text-xs text-gold-dark dark:text-gold-light font-bold tracking-widest uppercase font-antique">
+                    {formatYearRange(activeData.timeRange.start, activeData.timeRange.end)}
                 </span>
               </div>
             </div>
@@ -289,18 +294,28 @@ const App: React.FC = () => {
               <NavButton id="narrative" icon={BookOpen} label="Narrative" />
             </div>
 
-            <button
-              onClick={() => setIsChatOpen(!isChatOpen)}
-              aria-label="Ask Historian"
-              aria-pressed={isChatOpen}
-              className={`p-3 rounded-full transition-colors relative z-10 min-w-[44px] min-h-[44px] flex items-center justify-center ${isChatOpen ? 'bg-gold text-ink shadow-lg ring-2 ring-gold-light' : 'bg-stone-200 text-slate hover:bg-stone-300'}`}
-            >
-              <MessageCircle className="w-5 h-5" />
-            </button>
+            <div className="flex gap-2 items-center relative z-10">
+              <button
+                onClick={() => setIsShareOpen(true)}
+                aria-label="Share & Export"
+                className="p-3 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center bg-stone-200 dark:bg-night-lighter text-slate dark:text-paper hover:bg-stone-300 dark:hover:bg-night"
+              >
+                <Share2 className="w-5 h-5" />
+              </button>
+
+              <button
+                onClick={() => setIsChatOpen(!isChatOpen)}
+                aria-label="Ask Historian"
+                aria-pressed={isChatOpen}
+                className={`p-3 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${isChatOpen ? 'bg-gold text-ink shadow-lg ring-2 ring-gold-light' : 'bg-stone-200 dark:bg-night-lighter text-slate dark:text-paper hover:bg-stone-300 dark:hover:bg-night'}`}
+              >
+                <MessageCircle className="w-5 h-5" />
+              </button>
+            </div>
           </header>
 
           {/* Main Content Area */}
-          <main className="flex-1 relative overflow-hidden bg-stone-100">
+          <main className="flex-1 relative overflow-hidden bg-stone-100 dark:bg-night">
              {view === 'map' && <MapView events={activeData.events} timeRange={activeData.timeRange} onEventClick={setSelectedEvent} />}
              {view === 'timeline' && <div className="h-full overflow-y-auto"><TimelineView eras={activeData.eras} events={activeData.events} onEventClick={setSelectedEvent} /></div>}
              {view === 'list' && <EventListView events={activeData.events} onEventClick={setSelectedEvent} />}
@@ -317,10 +332,17 @@ const App: React.FC = () => {
           </main>
 
           {/* Event Detail Modal */}
-          <EventDetailModal 
-            event={selectedEvent} 
+          <EventDetailModal
+            event={selectedEvent}
             onClose={() => setSelectedEvent(null)}
             onAskHistorian={handleAskHistorian}
+          />
+
+          {/* Share/Export Modal */}
+          <ShareExport
+            timeline={activeData}
+            isOpen={isShareOpen}
+            onClose={() => setIsShareOpen(false)}
           />
         </>
       )}

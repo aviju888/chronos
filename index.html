@@ -3,10 +3,23 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Chronos History Explorer</title>
+    <title>Chronos - Deep History Explorer</title>
+    <meta name="description" content="Explore history through AI-powered interactive timelines. Discover events, eras, and narratives from Ancient Rome to Modern China." />
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://chronos-history.vercel.app/" />
+    <meta property="og:title" content="Chronos - Deep History Explorer" />
+    <meta property="og:description" content="Explore history through AI-powered interactive timelines. Discover events, eras, and narratives from any region and time period." />
+    <meta property="og:image" content="https://chronos-history.vercel.app/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,6 +32,7 @@
 
     <script>
       tailwind.config = {
+        darkMode: 'class',
         theme: {
           extend: {
             colors: {
@@ -31,6 +45,11 @@
               'gold-light': '#e6c88a',
               sepia: '#5c4d3c',
               crimson: '#8a2c2c',
+              // Dark mode colors
+              'night': '#0f0f0f',
+              'night-light': '#1a1a1a',
+              'night-lighter': '#252525',
+              'parchment-dark': '#2a2520',
             },
             fontFamily: {
               sans: ['Lato', 'sans-serif'],
@@ -47,11 +66,21 @@
       }
     </script>
     <style>
+      /* Light mode (default) */
       body {
         background-color: #f4f1ea;
         color: #2b2622;
         background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+        transition: background-color 0.3s ease, color 0.3s ease;
       }
+
+      /* Dark mode */
+      html.dark body {
+        background-color: #0f0f0f;
+        color: #e6e2d6;
+        background-image: url('https://www.transparenttextures.com/patterns/black-leather.png');
+      }
+
       /* Leaflet map container override */
       .leaflet-container {
         width: 100%;
@@ -59,26 +88,43 @@
         z-index: 10;
         background: #e6e2d6;
       }
-      
+      html.dark .leaflet-container {
+        background: #1a1a1a;
+      }
+
       /* Fancy Borders */
       .border-double-archival {
         border: 4px double #e6c88a;
       }
+      html.dark .border-double-archival {
+        border-color: #8a6b32;
+      }
 
-      /* Custom scrollbar */
+      /* Custom scrollbar - Light */
       ::-webkit-scrollbar {
         width: 8px;
         height: 8px;
       }
       ::-webkit-scrollbar-track {
-        background: #e6e2d6; 
+        background: #e6e2d6;
       }
       ::-webkit-scrollbar-thumb {
-        background: #8a6b32; 
+        background: #8a6b32;
         border-radius: 4px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #5c4d3c; 
+        background: #5c4d3c;
+      }
+
+      /* Custom scrollbar - Dark */
+      html.dark ::-webkit-scrollbar-track {
+        background: #1a1a1a;
+      }
+      html.dark ::-webkit-scrollbar-thumb {
+        background: #c5a059;
+      }
+      html.dark ::-webkit-scrollbar-thumb:hover {
+        background: #e6c88a;
       }
     </style>
   <script type="importmap">
