@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GenerationMode } from '../types';
 import { Map as MapIcon, Calendar, Zap, BookOpen, Clock, Loader2, CheckCircle2, Hourglass, Wand2, Search, Globe, ChevronDown, ChevronUp } from 'lucide-react';
-import { ProgressUpdate, getSearchSuggestions, getSmartTimeRange, getRegionsFromCoordinates } from '../services/geminiService';
+import { ProgressUpdate, getSearchSuggestions, getSmartTimeRange, getRegionsFromCoordinates } from '../services/apiService';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 

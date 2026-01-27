@@ -9,7 +9,7 @@ import { ChatPanel } from './components/ChatPanel';
 import { HistorySidebar } from './components/HistorySidebar';
 import { OnboardingOverlay, useOnboarding } from './components/OnboardingOverlay';
 import { useToast, parseApiError } from './components/Toast';
-import { generateTimeline, ProgressUpdate } from './services/geminiService';
+import { generateTimeline, ProgressUpdate } from './services/apiService';
 import { TimelineData, GenerationMode, HistoricalEvent } from './types';
 import { Layout, Map, List, BookOpen, MessageCircle, Menu, HelpCircle } from 'lucide-react';
 

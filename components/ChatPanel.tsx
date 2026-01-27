@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { TimelineData, ChatMessage } from '../types';
-import { askFollowUp } from '../services/geminiService';
+import { askFollowUp } from '../services/apiService';
 import { Send, MessageSquare, X, Trash2 } from 'lucide-react';
 
 // Chat history persistence helpers
