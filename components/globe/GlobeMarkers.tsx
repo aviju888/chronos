@@ -3,7 +3,7 @@ import { useFrame, ThreeEvent } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
 import { HistoricalEvent } from '../../types';
 import { latLngToVector3 } from '../../utils';
-import * as THREE from 'three';
+import { Mesh, Vector3, DoubleSide } from 'three';
 
 interface GlobeMarkersProps {
   events: HistoricalEvent[];
@@ -35,15 +35,15 @@ function Marker({
   onHover: () => void;
   onUnhover: () => void;
 }) {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const pulseRef = useRef<THREE.Mesh>(null);
+  const meshRef = useRef<Mesh>(null);
+  const pulseRef = useRef<Mesh>(null);
 
   // Animate marker on hover
   useFrame((state, delta) => {
     if (meshRef.current) {
       const targetScale = isHovered ? 1.5 : 1;
       meshRef.current.scale.lerp(
-        new THREE.Vector3(targetScale, targetScale, targetScale),
+        new Vector3(targetScale, targetScale, targetScale),
         0.1
       );
     }
@@ -71,7 +71,7 @@ function Marker({
             color={color}
             transparent
             opacity={0.5}
-            side={THREE.DoubleSide}
+            side={DoubleSide}
           />
         </mesh>
       )}
