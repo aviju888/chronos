@@ -207,8 +207,7 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-8 space-y-8 bg-paper dark:bg-night-light"
-        
+      <form onSubmit={handleSubmit} className="p-8 space-y-8 bg-paper dark:bg-night-light">
         {/* Region Section */}
         <div className="space-y-4">
           <label className="block text-ink font-serif font-bold text-lg flex items-center justify-between border-b border-gold/30 pb-2">
