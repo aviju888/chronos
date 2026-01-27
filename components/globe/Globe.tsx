@@ -1,7 +1,7 @@
 import React, { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
-import * as THREE from 'three';
+import { Mesh, Color, SRGBColorSpace, BackSide, AdditiveBlending, DoubleSide } from 'three';
 
 interface GlobeProps {
   isDarkMode: boolean;
@@ -27,8 +27,8 @@ const atmosphereFragmentShader = `
 `;
 
 export const Globe: React.FC<GlobeProps> = ({ isDarkMode }) => {
-  const globeRef = useRef<THREE.Mesh>(null);
-  const atmosphereRef = useRef<THREE.Mesh>(null);
+  const globeRef = useRef<Mesh>(null);
+  const atmosphereRef = useRef<Mesh>(null);
 
   // Use public texture URLs - NASA Blue Marble for light mode, night lights for dark
   // These are hosted textures that work well for globe visualization
@@ -44,13 +44,13 @@ export const Globe: React.FC<GlobeProps> = ({ isDarkMode }) => {
 
   // Configure texture settings
   useMemo(() => {
-    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.colorSpace = SRGBColorSpace;
     texture.anisotropy = 8;
   }, [texture]);
 
   // Atmosphere uniforms
   const atmosphereUniforms = useMemo(() => ({
-    glowColor: { value: new THREE.Color(isDarkMode ? '#c5a059' : '#87CEEB') },
+    glowColor: { value: new Color(isDarkMode ? '#c5a059' : '#87CEEB') },
     intensity: { value: isDarkMode ? 0.8 : 0.5 },
   }), [isDarkMode]);
 
@@ -82,9 +82,9 @@ export const Globe: React.FC<GlobeProps> = ({ isDarkMode }) => {
           vertexShader={atmosphereVertexShader}
           fragmentShader={atmosphereFragmentShader}
           uniforms={atmosphereUniforms}
-          side={THREE.BackSide}
+          side={BackSide}
           transparent
-          blending={THREE.AdditiveBlending}
+          blending={AdditiveBlending}
         />
       </mesh>
 
@@ -95,7 +95,7 @@ export const Globe: React.FC<GlobeProps> = ({ isDarkMode }) => {
           color={isDarkMode ? '#c5a059' : '#8a6b32'}
           transparent
           opacity={0.1}
-          side={THREE.DoubleSide}
+          side={DoubleSide}
         />
       </mesh>
     </group>

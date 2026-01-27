@@ -17,11 +17,11 @@
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-leaflet": "^5.0.0",
-    "three": "^0.182.0"
+    "three": "0.169.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
-    "@types/three": "^0.182.0",
+    "@types/three": "^0.169.0",
     "@vercel/node": "^3.0.0",
     "@vitejs/plugin-react": "^5.0.0",
     "typescript": "~5.8.2",

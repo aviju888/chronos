@@ -211,7 +211,7 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] dark:bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-30 dark:opacity-10 pointer-events-none"></div>
 
         {/* Region Section */}
-        <div className="space-y-4 relative z-10">
+        <div className="space-y-4 relative z-20">
           <label className="block text-ink dark:text-paper font-dramatic font-bold text-lg flex items-center justify-between border-b border-gold/30 pb-2">
             <div className="flex items-center gap-2">
                <MapIcon className="w-5 h-5 text-gold" />

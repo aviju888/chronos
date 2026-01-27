@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { QuadraticBezierLine } from '@react-three/drei';
 import { HistoricalEvent } from '../../types';
 import { latLngToVector3, getArcMidpoint } from '../../utils';
-import * as THREE from 'three';
+import { Vector3 } from 'three';
 
 interface GlobeArcsProps {
   events: HistoricalEvent[];
@@ -10,9 +10,9 @@ interface GlobeArcsProps {
 }
 
 interface ArcData {
-  start: THREE.Vector3;
-  mid: THREE.Vector3;
-  end: THREE.Vector3;
+  start: Vector3;
+  mid: Vector3;
+  end: Vector3;
 }
 
 export const GlobeArcs: React.FC<GlobeArcsProps> = ({ events, isDarkMode }) => {
@@ -57,9 +57,9 @@ export const GlobeArcs: React.FC<GlobeArcsProps> = ({ events, isDarkMode }) => {
       const midPos = getArcMidpoint(startPos, endPos, arcHeight);
 
       result.push({
-        start: new THREE.Vector3(...startPos),
-        mid: new THREE.Vector3(...midPos),
-        end: new THREE.Vector3(...endPos),
+        start: new Vector3(...startPos),
+        mid: new Vector3(...midPos),
+        end: new Vector3(...endPos),
       });
     }
 
