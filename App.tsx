@@ -214,8 +214,8 @@ const App: React.FC = () => {
       aria-pressed={view === id}
       className={`flex items-center justify-center gap-2 min-w-[44px] min-h-[44px] px-3 md:px-4 py-2 rounded-full font-bold text-sm transition-all ${
         view === id
-          ? 'bg-ink text-gold shadow-md border border-gold'
-          : 'bg-paper text-slate hover:bg-stone-200 border border-transparent'
+          ? 'bg-ink dark:bg-gold text-gold dark:text-ink shadow-md border border-gold'
+          : 'bg-paper dark:bg-night-lighter text-slate dark:text-paper hover:bg-stone-200 dark:hover:bg-night border border-transparent'
       }`}
     >
       <Icon className="w-5 h-5 md:w-4 md:h-4" />
