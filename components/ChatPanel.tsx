@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { TimelineData, ChatMessage } from '../types';
 import { askFollowUp } from '../services/apiService';
 import { Send, MessageSquare, X, Trash2 } from 'lucide-react';
+import { formatYearRange } from '../utils';
 
 // Chat history persistence helpers
 const CHAT_STORAGE_PREFIX = 'chronos_chat_';
@@ -64,7 +65,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
   const getWelcomeMessage = useCallback((): ChatMessage => ({
     id: 'init',
     role: 'model',
-    text: `I have studied the timeline of ${timelineData.region} (${timelineData.timeRange.start}-${timelineData.timeRange.end}). Ask me anything about these events!`,
+    text: `I have studied the timeline of ${timelineData.region} (${formatYearRange(timelineData.timeRange.start, timelineData.timeRange.end)}). Ask me anything about these events!`,
     timestamp: Date.now()
   }), [timelineData.region, timelineData.timeRange.start, timelineData.timeRange.end]);
 

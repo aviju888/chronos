@@ -2,6 +2,7 @@ import React from 'react';
 import { Era, HistoricalEvent } from '../types';
 import { ChevronRight, Book, AlertTriangle } from 'lucide-react';
 import { EventImage } from './EventImage';
+import { formatYear, formatYearRange } from '../utils';
 
 interface TimelineViewProps {
   eras: Era[];
@@ -30,7 +31,7 @@ export const TimelineView: React.FC<TimelineViewProps> = ({ eras, events, onEven
               <div className="mb-6">
                 <h3 className="text-2xl font-serif text-ink font-bold">{era.title}</h3>
                 <span className="text-sm font-bold text-gold-dark uppercase tracking-wide">
-                  {era.startYear} — {era.endYear}
+                  {formatYearRange(era.startYear, era.endYear)}
                 </span>
                 <p className="mt-2 text-slate leading-relaxed">{era.summary}</p>
               </div>
@@ -61,7 +62,7 @@ export const TimelineView: React.FC<TimelineViewProps> = ({ eras, events, onEven
 
                     <div className="p-4 flex-1 flex flex-col">
                         <div className="flex justify-between items-start mb-2">
-                        <span className="text-sm font-bold text-slate bg-stone-100 px-2 py-0.5 rounded">{evt.year}</span>
+                        <span className="text-sm font-bold text-slate bg-stone-100 px-2 py-0.5 rounded">{formatYear(evt.year)}</span>
                         {evt.isDisputed && (
                             <span className="text-[10px] font-bold text-red-600 border border-red-200 bg-red-50 px-1 rounded uppercase tracking-tighter flex items-center gap-1">
                                 <AlertTriangle className="w-3 h-3" /> Disputed

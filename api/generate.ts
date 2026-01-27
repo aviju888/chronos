@@ -122,46 +122,70 @@ const MODELS = {
   deep: 'llama-3.3-70b-versatile'
 };
 
+// Helper to delay execution
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 async function callGroq(
   messages: { role: 'system' | 'user' | 'assistant'; content: string }[],
   model: string = MODELS.fast,
-  jsonMode: boolean = true
+  jsonMode: boolean = true,
+  retries: number = 3
 ): Promise<string> {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
     throw new Error('GROQ_API_KEY not configured');
   }
 
-  const response = await fetch(GROQ_API_URL, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model,
-      messages,
-      temperature: 0.3, // Lower temperature for factual accuracy
-      max_tokens: 8192,
-      ...(jsonMode ? { response_format: { type: 'json_object' } } : {}),
-    }),
-  });
+  let lastError: Error | null = null;
 
-  if (!response.ok) {
-    const error = await response.text();
-    console.error('Groq API error:', response.status, error);
-    // Return more specific error for debugging
-    if (response.status === 429) {
-      throw new Error('Rate limited by AI service. Please wait a moment.');
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      const response = await fetch(GROQ_API_URL, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model,
+          messages,
+          temperature: 0.3, // Lower temperature for factual accuracy
+          max_tokens: 6000, // Reduced to stay under token limits
+          ...(jsonMode ? { response_format: { type: 'json_object' } } : {}),
+        }),
+      });
+
+      if (response.status === 429) {
+        // Rate limited - wait and retry with exponential backoff
+        const retryAfter = response.headers.get('retry-after');
+        const waitTime = retryAfter ? parseInt(retryAfter) * 1000 : Math.min(1000 * Math.pow(2, attempt), 10000);
+        console.log(`Rate limited, waiting ${waitTime}ms before retry ${attempt + 1}/${retries}`);
+        await sleep(waitTime);
+        continue;
+      }
+
+      if (!response.ok) {
+        const error = await response.text();
+        console.error('Groq API error:', response.status, error);
+        if (response.status === 401) {
+          throw new Error('API key issue. Please check configuration.');
+        }
+        throw new Error(`AI service error (${response.status})`);
+      }
+
+      const data = await response.json();
+      return data.choices[0]?.message?.content || '';
+    } catch (error) {
+      lastError = error as Error;
+      if (attempt < retries - 1) {
+        const waitTime = Math.min(1000 * Math.pow(2, attempt), 10000);
+        console.log(`Error, waiting ${waitTime}ms before retry ${attempt + 1}/${retries}`);
+        await sleep(waitTime);
+      }
     }
-    if (response.status === 401) {
-      throw new Error('API key issue. Please check configuration.');
-    }
-    throw new Error(`AI service error (${response.status})`);
   }
 
-  const data = await response.json();
-  return data.choices[0]?.message?.content || '';
+  throw lastError || new Error('Failed after retries');
 }
 
 // ============================================
@@ -223,12 +247,22 @@ async function getSmartTimeRange(region: string): Promise<{ start: number; end: 
     },
     {
       role: 'user',
-      content: `For the historical region or topic "${region}", provide the most significant historical time range (start year and end year).
+      content: `For the historical region or topic "${region}", provide the most significant historical time range.
+
+               CRITICAL: Use NEGATIVE numbers for BC/BCE dates!
+               Examples:
+               - 753 BC = -753
+               - 476 AD = 476
+               - 3000 BC = -3000
+
                Rules:
-               1. Over-estimate slightly to ensure context is covered.
-               2. For empires, include rise and fall.
-               3. For cities, pick their 'Golden Age' or most eventful period if not specified, or 1000-2000 AD if generic.
-               4. Return JSON in format: {"start": number, "end": number}`
+               1. Start year must be LESS than end year (e.g., -753 < 476)
+               2. Over-estimate slightly to ensure context is covered.
+               3. For empires, include rise and fall.
+               4. For ancient civilizations, use negative numbers for BC dates.
+
+               Return JSON in format: {"start": number, "end": number}
+               Example for Ancient Rome: {"start": -753, "end": 476}`
     }
   ]);
 
@@ -250,23 +284,32 @@ async function generateTimelineData(
   mode: 'quick' | 'deep'
 ): Promise<any> {
   const model = mode === 'deep' ? MODELS.deep : MODELS.fast;
-  const eventCount = mode === 'deep' ? 80 : 40;
+  const eventCount = mode === 'deep' ? 30 : 15; // Reduced to stay under token limits
 
   // Step 1: Generate Eras
+  // Format years for display in prompts
+  const formatYearForPrompt = (year: number) => year < 0 ? `${Math.abs(year)} BC` : `${year} AD`;
+  const startDisplay = formatYearForPrompt(startYear);
+  const endDisplay = formatYearForPrompt(endYear);
+
   const erasResponse = await callGroq([
     {
       role: 'system',
-      content: `You are a rigorous academic historian. Use ONLY standard historical periodization that would appear in textbooks and encyclopedias. Do not invent era names - use established historical terminology.`
+      content: `You are a rigorous academic historian. Use ONLY standard historical periodization that would appear in textbooks and encyclopedias. Do not invent era names - use established historical terminology.
+
+IMPORTANT: For dates, use NEGATIVE numbers for BC/BCE years.
+Examples: 753 BC = -753, 476 AD = 476, 3000 BC = -3000`
     },
     {
       role: 'user',
-      content: `Divide the history of ${region} from ${startYear} to ${endYear} into 5-10 standard historical eras.
+      content: `Divide the history of ${region} from ${startDisplay} (year ${startYear}) to ${endDisplay} (year ${endYear}) into 5-10 standard historical eras.
 
         REQUIREMENTS:
         - Use ONLY well-established historical period names (e.g., "Renaissance", "Ming Dynasty", "Victorian Era")
         - Each era must be a recognized historical period found in academic sources
         - Do NOT invent creative era names
         - Eras must have accurate, historically accepted date ranges
+        - Use NEGATIVE numbers for BC dates (e.g., 500 BC = -500)
 
         Return JSON in format:
         {
@@ -274,8 +317,8 @@ async function generateTimelineData(
             {
               "id": "string",
               "title": "string (standard historical name)",
-              "startYear": number,
-              "endYear": number,
+              "startYear": number (negative for BC),
+              "endYear": number (negative for BC),
               "summary": "string (1-2 sentences)"
             }
           ]
@@ -305,12 +348,13 @@ CRITICAL RULES:
 5. Use EXACT dates when known, approximate decades when uncertain
 6. Every event MUST be verifiable in Wikipedia, Britannica, or academic sources
 7. Citations must reference REAL sources that actually discuss the event
+8. Use NEGATIVE numbers for BC/BCE years (e.g., 44 BC = -44)
 
 Always respond with valid JSON matching the requested schema exactly.`
     },
     {
       role: 'user',
-      content: `Generate ${eventCount} VERIFIED historical events for ${region} from ${startYear} to ${endYear}.
+      content: `Generate ${eventCount} VERIFIED historical events for ${region} from ${startDisplay} (year ${startYear}) to ${endDisplay} (year ${endYear}).
 
         The eras are: ${eras.map((e: any) => e.title).join(', ')}
 
@@ -326,6 +370,7 @@ Always respond with valid JSON matching the requested schema exactly.`
         9. Set confidenceScore="High" only for textbook-level well-known events
         10. Set confidenceScore="Medium" for events with some scholarly debate on details
         11. Provide 'imageQuery': 2-4 word Wikipedia search term for the event
+        12. Use NEGATIVE year numbers for BC dates (44 BC = -44, 509 BC = -509)
 
         Return JSON in format:
         {
@@ -333,7 +378,7 @@ Always respond with valid JSON matching the requested schema exactly.`
             {
               "id": "string",
               "title": "string (use common historical name)",
-              "year": number (exact year, not approximate),
+              "year": number (NEGATIVE for BC, e.g., -44 for 44 BC),
               "category": "Politics" | "War" | "Culture" | "Economy" | "Religion" | "Science" | "Other",
               "summary": "string (2-3 sentences, factual only)",
               "imageQuery": "string",
@@ -373,7 +418,7 @@ Always respond with valid JSON matching the requested schema exactly.`
     },
     {
       role: 'user',
-      content: `Write a factual historical overview (3-4 paragraphs) of ${region} from ${startYear} to ${endYear}.
+      content: `Write a factual historical overview (3-4 paragraphs) of ${region} from ${startDisplay} to ${endDisplay}.
 
         Reference these eras: ${eras.map((e: any) => e.title).join(', ')}
         Key events include: ${events.slice(0, 10).map((e: any) => e.title).join(', ')}

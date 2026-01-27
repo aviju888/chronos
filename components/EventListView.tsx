@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { HistoricalEvent, EventCategory } from '../types';
 import { Search, AlertTriangle, Book, Filter, ChevronRight } from 'lucide-react';
 import { EventImage } from './EventImage';
+import { formatYear } from '../utils';
 
 interface EventListViewProps {
   events: HistoricalEvent[];
@@ -89,14 +90,14 @@ export const EventListView: React.FC<EventListViewProps> = ({ events, onEventCli
                </div>
 
                <div className="w-16 flex-shrink-0 flex flex-col items-center justify-center border-r border-stone-100 pr-4 sm:hidden">
-                 <span className="text-lg font-bold text-gold-dark font-display">{evt.year}</span>
+                 <span className="text-lg font-bold text-gold-dark font-display">{formatYear(evt.year)}</span>
                </div>
                
                <div className="flex-1 flex flex-col">
                  <div className="flex justify-between items-start">
                     <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                           <span className="hidden sm:inline-block text-gold-dark font-display font-bold text-lg">{evt.year}</span>
+                           <span className="hidden sm:inline-block text-gold-dark font-display font-bold text-lg">{formatYear(evt.year)}</span>
                            <span className="text-xs uppercase tracking-wider font-bold text-slate bg-stone-100 px-2 py-0.5 rounded">
                                {evt.category}
                            </span>

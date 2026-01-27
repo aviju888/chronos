@@ -2,6 +2,7 @@ import React from 'react';
 import { HistoricalEvent } from '../types';
 import { X, ExternalLink, AlertTriangle, ShieldCheck, HelpCircle, MessageSquare } from 'lucide-react';
 import { EventImage } from './EventImage';
+import { formatYear } from '../utils';
 
 interface EventDetailModalProps {
   event: HistoricalEvent | null;
@@ -41,7 +42,7 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
              </button>
              <div className="absolute bottom-4 left-6 text-white">
                 <span className="inline-block text-xs font-bold tracking-wider uppercase bg-gold px-2 py-0.5 rounded text-ink mb-2 shadow-sm">
-                   {event.year} • {event.category}
+                   {formatYear(event.year)} • {event.category}
                 </span>
                 <h2 className="text-3xl font-serif font-bold leading-none shadow-black drop-shadow-md">{event.title}</h2>
              </div>

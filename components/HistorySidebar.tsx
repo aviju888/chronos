@@ -1,6 +1,7 @@
 import React from 'react';
 import { TimelineData } from '../types';
 import { Clock, Plus, Trash2, Scroll } from 'lucide-react';
+import { formatYearRange } from '../utils';
 
 interface HistorySidebarProps {
   timelines: TimelineData[];
@@ -72,7 +73,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                 <div className="font-serif font-bold text-sm leading-tight mb-1">{t.region}</div>
                 <div className="text-xs opacity-70 flex items-center gap-1 font-mono">
                   <Clock className="w-3 h-3" />
-                  {t.timeRange.start} — {t.timeRange.end}
+                  {formatYearRange(t.timeRange.start, t.timeRange.end)}
                 </div>
                 <div className="text-[10px] mt-2 opacity-50 uppercase tracking-wider">
                   {new Date(t.createdAt).toLocaleDateString()}

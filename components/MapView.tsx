@@ -4,6 +4,7 @@ import L from 'leaflet';
 import { HistoricalEvent } from '../types';
 import { ChevronLeft, ChevronRight, Play, Pause, Book } from 'lucide-react';
 import { EventImage } from './EventImage';
+import { formatYear } from '../utils';
 
 // Fix for default Leaflet marker icons in React
 const DefaultIcon = L.icon({
@@ -266,7 +267,7 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
                       </div>
                       <div className="flex justify-between items-center mb-1">
                         <span className={`inline-block text-[10px] font-bold px-1.5 py-0.5 rounded border ${evt.isDisputed ? 'bg-red-100 text-red-800 border-red-300' : 'bg-ink text-gold border-gold'}`}>
-                          {evt.year}
+                          {formatYear(evt.year)}
                         </span>
                         <span className="text-[10px] text-stone-500 flex items-center gap-0.5">
                           <Book className="w-2 h-2" /> {evt.citations.length}
@@ -300,7 +301,7 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
                         >
                           <div className="flex items-start gap-2">
                             <span className={`text-[10px] font-bold px-1 py-0.5 rounded ${evt.isDisputed ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-800'}`}>
-                              {evt.year}
+                              {formatYear(evt.year)}
                             </span>
                             <span className="text-xs font-medium text-ink leading-tight">{evt.title}</span>
                           </div>
@@ -344,7 +345,7 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
                         <div>
                              <h3 className="text-[10px] font-bold tracking-[0.2em] text-stone-400 uppercase font-sans">Current Year</h3>
                              <div className="text-4xl font-display font-bold text-white tabular-nums leading-none tracking-tight">
-                                {currentYear}
+                                {formatYear(currentYear)}
                              </div>
                         </div>
                     </div>
@@ -419,8 +420,8 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
 
                 {/* Range Labels */}
                 <div className="flex justify-between text-xs text-stone-500 font-mono font-bold px-1">
-                    <span>{timeRange.start}</span>
-                    <span>{timeRange.end}</span>
+                    <span>{formatYear(timeRange.start)}</span>
+                    <span>{formatYear(timeRange.end)}</span>
                 </div>
             </div>
         </div>
