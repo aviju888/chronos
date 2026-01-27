@@ -1,0 +1,414 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { GenerationMode } from '../types';
+import { Map as MapIcon, Calendar, Zap, BookOpen, Clock, Loader2, CheckCircle2, Hourglass, Wand2, Search, Globe, ChevronDown, ChevronUp } from 'lucide-react';
+import { ProgressUpdate, getSearchSuggestions, getSmartTimeRange, getRegionsFromCoordinates } from '../services/geminiService';
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import L from 'leaflet';
+
+// Leaflet Icon fix
+const DefaultIcon = L.icon({
+  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41]
+});
+L.Marker.prototype.options.icon = DefaultIcon;
+
+interface SetupFormProps {
+  onGenerate: (region: string, start: number, end: number, mode: GenerationMode) => void;
+  isLoading: boolean;
+  progress: ProgressUpdate | null;
+  logs: string[];
+}
+
+const PRESET_REGIONS = [
+  "Ancient Rome", "Feudal Japan", "Victorian England", "The American West", 
+  "Ottoman Empire", "Mesoamerica (Aztec/Maya)", "Industrial Revolution Europe", "Modern China"
+];
+
+// Map Click Component
+const MapClickReceiver: React.FC<{ onLocationSelected: (lat: number, lng: number) => void }> = ({ onLocationSelected }) => {
+  useMapEvents({
+    click(e) {
+      onLocationSelected(e.latlng.lat, e.latlng.lng);
+    },
+  });
+  return null;
+};
+
+export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, progress, logs }) => {
+  const [region, setRegion] = useState('');
+  const [startYear, setStartYear] = useState<number>(1800);
+  const [endYear, setEndYear] = useState<number>(2000);
+  const [mode, setMode] = useState<GenerationMode>(GenerationMode.QUICK);
+  
+  // Search features state
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [isSuggestionsLoading, setIsSuggestionsLoading] = useState(false);
+  const [isTimeOptimizing, setIsTimeOptimizing] = useState(false);
+  const suggestionBoxRef = useRef<HTMLDivElement>(null);
+  
+  // Map Picker State
+  const [showMapPicker, setShowMapPicker] = useState(false);
+  const [selectedCoords, setSelectedCoords] = useState<[number, number] | null>(null);
+  const [mapSuggestions, setMapSuggestions] = useState<string[]>([]);
+  const [isMapLoading, setIsMapLoading] = useState(false);
+
+  const logContainerRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll logs
+  useEffect(() => {
+    if (logContainerRef.current) {
+      logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
+    }
+  }, [logs]);
+
+  // Click outside suggestions to close
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (suggestionBoxRef.current && !suggestionBoxRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Debounce for text suggestions
+  useEffect(() => {
+    if (region.length < 3) {
+      setSuggestions([]);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setIsSuggestionsLoading(true);
+      const results = await getSearchSuggestions(region);
+      setSuggestions(results);
+      if (results.length > 0) setShowSuggestions(true);
+      setIsSuggestionsLoading(false);
+    }, 600);
+
+    return () => clearTimeout(timer);
+  }, [region]);
+
+  const optimizeTimeRange = async (selectedRegion: string) => {
+    setIsTimeOptimizing(true);
+    const range = await getSmartTimeRange(selectedRegion);
+    if (range) {
+      setStartYear(range.start);
+      setEndYear(range.end);
+    }
+    setIsTimeOptimizing(false);
+  };
+
+  const handleSuggestionClick = (s: string) => {
+    setRegion(s);
+    setShowSuggestions(false);
+    optimizeTimeRange(s);
+  };
+
+  const handlePresetClick = (r: string) => {
+    setRegion(r);
+    optimizeTimeRange(r);
+  };
+  
+  const handleMapClick = async (lat: number, lng: number) => {
+    setSelectedCoords([lat, lng]);
+    setIsMapLoading(true);
+    setMapSuggestions([]);
+    
+    // Get historical suggestions from coords
+    const suggestions = await getRegionsFromCoordinates(lat, lng);
+    setMapSuggestions(suggestions);
+    setIsMapLoading(false);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onGenerate(region, startYear, endYear, mode);
+  };
+
+  const handleRecentHistory = () => {
+    const currentYear = new Date().getFullYear();
+    setStartYear(currentYear - 100);
+    setEndYear(currentYear);
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto bg-paper-dark shadow-2xl rounded-lg overflow-hidden border-double-archival mt-10 mb-10 relative">
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold to-transparent opacity-50"></div>
+      
+      <div className="bg-ink p-8 text-paper text-center relative overflow-hidden">
+         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-20"></div>
+        <h1 className="text-5xl font-display font-bold text-gold mb-2 tracking-widest relative z-10">CHRONOS</h1>
+        <p className="text-gold-light/60 font-antique text-lg tracking-widest relative z-10">Deep History Explorer</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="p-8 space-y-8 bg-paper">
+        
+        {/* Region Section */}
+        <div className="space-y-4">
+          <label className="block text-ink font-serif font-bold text-lg flex items-center justify-between border-b border-gold/30 pb-2">
+            <div className="flex items-center gap-2">
+               <MapIcon className="w-5 h-5 text-gold-dark" />
+               Select Region or Topic
+            </div>
+            <button
+               type="button"
+               onClick={() => setShowMapPicker(!showMapPicker)}
+               className="text-xs font-bold text-gold-dark uppercase tracking-widest flex items-center gap-1 hover:text-ink transition-colors"
+            >
+               <Globe className="w-3 h-3" />
+               {showMapPicker ? 'Close Map' : 'Select on Map'}
+               {showMapPicker ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+            </button>
+          </label>
+          
+          {/* Map Picker Modal Area */}
+          {showMapPicker && (
+             <div className="border-2 border-gold rounded-lg overflow-hidden bg-stone-200 relative animate-in fade-in zoom-in duration-300">
+                <div className="h-48 md:h-64 w-full relative z-0">
+                    <MapContainer center={[20, 0]} zoom={2} style={{ height: '100%', width: '100%' }}>
+                        <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" />
+                        <MapClickReceiver onLocationSelected={handleMapClick} />
+                        {selectedCoords && <Marker position={selectedCoords} />}
+                    </MapContainer>
+                </div>
+                
+                {/* Overlay for Suggestions */}
+                <div className="bg-ink/90 p-4 text-paper relative z-10">
+                   {isMapLoading ? (
+                       <div className="flex items-center justify-center gap-2 text-gold">
+                           <Loader2 className="w-4 h-4 animate-spin" />
+                           <span className="text-xs uppercase tracking-widest">Identifying Historical Significance...</span>
+                       </div>
+                   ) : mapSuggestions.length > 0 ? (
+                       <div>
+                           <div className="text-xs text-stone-400 uppercase tracking-widest mb-2">Historical Suggestions for this location:</div>
+                           <div className="flex flex-wrap gap-2">
+                               {mapSuggestions.map(s => (
+                                   <button 
+                                      key={s}
+                                      type="button"
+                                      onClick={() => handleSuggestionClick(s)}
+                                      className="bg-gold/20 hover:bg-gold text-gold hover:text-ink border border-gold/50 rounded-full px-3 py-1 text-sm font-bold transition-all"
+                                   >
+                                      {s}
+                                   </button>
+                               ))}
+                           </div>
+                       </div>
+                   ) : (
+                       <div className="text-center text-stone-500 text-xs italic">
+                           {selectedCoords ? "No specific historical suggestions found for this exact coordinate. Try a nearby city." : "Click anywhere on the map to identify historical regions."}
+                       </div>
+                   )}
+                </div>
+             </div>
+          )}
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+            {PRESET_REGIONS.map((r) => (
+              <button
+                key={r}
+                type="button"
+                onClick={() => handlePresetClick(r)}
+                disabled={isLoading}
+                className={`text-sm px-3 py-2 rounded border transition-all font-serif ${
+                  region === r 
+                    ? 'bg-ink text-gold border-gold shadow-md' 
+                    : 'bg-white text-ink-light hover:bg-stone-100 border-stone-300'
+                } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                {r}
+              </button>
+            ))}
+          </div>
+          
+          <div className="relative" ref={suggestionBoxRef}>
+            <input
+              type="text"
+              placeholder="Or type a specific region (e.g., 'Paris', 'California')..."
+              value={region}
+              onChange={(e) => { setRegion(e.target.value); setShowSuggestions(true); }}
+              onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true); }}
+              disabled={isLoading}
+              className="w-full p-4 border border-stone-400 rounded focus:ring-2 focus:ring-gold focus:outline-none bg-white font-serif text-lg shadow-inner disabled:opacity-50"
+              required
+            />
+            {isSuggestionsLoading && (
+              <div className="absolute right-4 top-4 text-stone-400">
+                <Loader2 className="w-5 h-5 animate-spin" />
+              </div>
+            )}
+            
+            {/* Auto-Suggestions Dropdown */}
+            {showSuggestions && suggestions.length > 0 && !isLoading && (
+              <ul className="absolute z-50 left-0 right-0 top-full mt-1 bg-paper-dark border-2 border-gold rounded shadow-xl max-h-60 overflow-y-auto">
+                {suggestions.map((s) => (
+                  <li key={s}>
+                    <button
+                      type="button"
+                      onClick={() => handleSuggestionClick(s)}
+                      className="w-full text-left px-4 py-3 hover:bg-gold/20 hover:text-ink font-serif text-stone-700 transition-colors flex items-center gap-2"
+                    >
+                      <Search className="w-4 h-4 text-gold-dark opacity-50" />
+                      {s}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+
+        {/* Time Range Section */}
+        <div className="space-y-4">
+          <div className="flex justify-between items-center border-b border-gold/30 pb-2">
+            <label className="block text-ink font-serif font-bold text-lg flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-gold-dark" />
+              Time Range
+            </label>
+            <div className="flex gap-3">
+              {isTimeOptimizing && (
+                 <span className="text-xs font-bold text-gold-dark animate-pulse flex items-center gap-1">
+                   <Wand2 className="w-3 h-3" /> Optimizing Era...
+                 </span>
+              )}
+              <button
+                type="button"
+                onClick={handleRecentHistory}
+                disabled={isLoading}
+                className="text-xs font-bold font-display uppercase tracking-wider text-stone-500 hover:text-ink flex items-center gap-1 disabled:opacity-50 transition-colors"
+              >
+                <Clock className="w-3 h-3" /> Recent History
+              </button>
+            </div>
+          </div>
+          
+          <div className="flex gap-4 items-center">
+            <div className="flex-1 relative">
+              <span className="block text-xs font-bold text-stone-500 mb-1 font-antique tracking-widest">START YEAR</span>
+              <input
+                type="number"
+                value={startYear}
+                onChange={(e) => setStartYear(Number(e.target.value))}
+                disabled={isLoading || isTimeOptimizing}
+                className={`w-full p-3 border rounded focus:ring-2 focus:ring-gold bg-white text-xl font-display text-ink text-center disabled:opacity-50 transition-all ${isTimeOptimizing ? 'border-gold text-transparent' : 'border-stone-400'}`}
+              />
+              {isTimeOptimizing && <div className="absolute inset-0 top-6 flex items-center justify-center"><Loader2 className="w-5 h-5 animate-spin text-gold" /></div>}
+            </div>
+            <span className="text-gold-dark font-serif italic text-lg">to</span>
+            <div className="flex-1 relative">
+              <span className="block text-xs font-bold text-stone-500 mb-1 font-antique tracking-widest">END YEAR</span>
+              <input
+                type="number"
+                value={endYear}
+                onChange={(e) => setEndYear(Number(e.target.value))}
+                disabled={isLoading || isTimeOptimizing}
+                className={`w-full p-3 border rounded focus:ring-2 focus:ring-gold bg-white text-xl font-display text-ink text-center disabled:opacity-50 transition-all ${isTimeOptimizing ? 'border-gold text-transparent' : 'border-stone-400'}`}
+              />
+              {isTimeOptimizing && <div className="absolute inset-0 top-6 flex items-center justify-center"><Loader2 className="w-5 h-5 animate-spin text-gold" /></div>}
+            </div>
+          </div>
+        </div>
+
+        {/* Mode Selection */}
+        <div className="space-y-4">
+          <label className="block text-ink font-serif font-bold text-lg border-b border-gold/30 pb-2">Investigation Depth</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <button
+              type="button"
+              onClick={() => setMode(GenerationMode.QUICK)}
+              disabled={isLoading}
+              className={`p-4 rounded border-2 text-left transition-all ${
+                mode === GenerationMode.QUICK
+                  ? 'border-gold bg-amber-50/50 shadow-inner'
+                  : 'border-stone-300 hover:border-gold-dark/50 bg-white'
+              } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <Zap className={`w-5 h-5 ${mode === GenerationMode.QUICK ? 'text-gold-dark' : 'text-stone-400'}`} />
+                <span className="font-display font-bold text-ink">Quick Overview</span>
+              </div>
+              <p className="text-sm text-stone-600 font-serif">Faster generation. Good for broad strokes. Single-pass verification.</p>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setMode(GenerationMode.DEEP)}
+              disabled={isLoading}
+              className={`p-4 rounded border-2 text-left transition-all ${
+                mode === GenerationMode.DEEP
+                  ? 'border-gold bg-amber-50/50 shadow-inner'
+                  : 'border-stone-300 hover:border-gold-dark/50 bg-white'
+              } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              <div className="flex items-center gap-2 mb-2">
+                <BookOpen className={`w-5 h-5 ${mode === GenerationMode.DEEP ? 'text-gold-dark' : 'text-stone-400'}`} />
+                <span className="font-display font-bold text-ink">Deep Archive Search</span>
+              </div>
+              <p className="text-sm text-stone-600 font-serif">Thorough analysis. Multiple sources. Detailed dispute resolution. Slower.</p>
+            </button>
+          </div>
+        </div>
+
+        {/* Action Button & Progress Log */}
+        <div className="space-y-4 pt-4">
+          {!isLoading ? (
+            <button
+              type="submit"
+              disabled={!region || isLoading}
+              className={`w-full py-5 text-xl font-display font-bold text-paper-dark tracking-[0.2em] uppercase transition-all transform active:scale-[0.99] rounded shadow-lg bg-ink hover:bg-ink-light hover:shadow-2xl border-2 border-ink hover:border-gold`}
+            >
+              Construct Timeline
+            </button>
+          ) : (
+            <div className="bg-ink rounded p-6 shadow-2xl border border-gold relative overflow-hidden">
+               {/* Progress Bar */}
+               <div className="w-full h-2 bg-stone-700 rounded-full mb-4 overflow-hidden">
+                  <div 
+                    className="h-full bg-gold transition-all duration-700 ease-out relative"
+                    style={{ width: `${progress?.percent || 5}%` }}
+                  >
+                    <div className="absolute top-0 right-0 bottom-0 w-4 bg-white/30 animate-pulse"></div>
+                  </div>
+               </div>
+
+               <div className="flex items-center justify-between mb-4 border-b border-stone-600 pb-3">
+                  <div className="flex items-center gap-3 text-gold-light">
+                    <Loader2 className="w-5 h-5 animate-spin text-gold" />
+                    <span className="font-display text-sm tracking-widest">RESEARCHING ARCHIVES...</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-stone-400 font-mono">
+                    <Hourglass className="w-3 h-3" />
+                    <span>~{progress?.timeLeft || '?'}s remaining</span>
+                  </div>
+               </div>
+               
+               <div 
+                 ref={logContainerRef} 
+                 className="h-32 overflow-y-auto font-mono text-xs space-y-2 pr-2 border-l border-stone-700 pl-3"
+               >
+                 {logs.length === 0 && <span className="text-stone-500 animate-pulse">Initializing request...</span>}
+                 {logs.map((log, idx) => (
+                    <div key={idx} className="flex items-start gap-2">
+                       <span className={idx === logs.length - 1 ? "text-gold" : "text-stone-500"}>
+                         {log}
+                       </span>
+                       {idx < logs.length - 1 && <CheckCircle2 className="w-3 h-3 text-green-700 mt-0.5 ml-auto" />}
+                    </div>
+                 ))}
+                 <div className="flex items-center gap-2 animate-pulse mt-2">
+                    <span className="w-2 h-4 bg-gold block"></span>
+                 </div>
+               </div>
+            </div>
+          )}
+        </div>
+      </form>
+    </div>
+  );
+};
