@@ -1,32 +1,126 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-// Groq API endpoint
+// ============================================
+// SECURITY & RATE LIMITING
+// ============================================
+
+// In-memory rate limiting (resets on cold start, but good enough for serverless)
+// For production, consider using Vercel KV or Upstash Redis
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+
+// Rate limit configuration
+const RATE_LIMITS = {
+  // Per IP limits
+  suggestions: { max: 30, windowMs: 60 * 1000 },      // 30 per minute
+  regions: { max: 20, windowMs: 60 * 1000 },          // 20 per minute
+  timeRange: { max: 20, windowMs: 60 * 1000 },        // 20 per minute
+  timeline: { max: 5, windowMs: 60 * 60 * 1000 },     // 5 per hour (expensive!)
+  followUp: { max: 30, windowMs: 60 * 1000 },         // 30 per minute
+};
+
+// Global daily limit to protect your API quota
+const GLOBAL_DAILY_LIMIT = {
+  timeline: 100,  // Max 100 timeline generations per day globally
+};
+
+let globalTimelineCount = 0;
+let globalResetTime = Date.now() + 24 * 60 * 60 * 1000;
+
+function getClientIP(req: VercelRequest): string {
+  // Get real IP from various headers (Vercel/Cloudflare/etc)
+  const forwarded = req.headers['x-forwarded-for'];
+  const realIp = req.headers['x-real-ip'];
+
+  if (typeof forwarded === 'string') {
+    return forwarded.split(',')[0].trim();
+  }
+  if (typeof realIp === 'string') {
+    return realIp;
+  }
+  return 'unknown';
+}
+
+function checkRateLimit(ip: string, action: keyof typeof RATE_LIMITS): { allowed: boolean; retryAfter?: number } {
+  const config = RATE_LIMITS[action];
+  const key = `${ip}:${action}`;
+  const now = Date.now();
+
+  // Check global daily limit for timeline
+  if (action === 'timeline') {
+    if (now > globalResetTime) {
+      globalTimelineCount = 0;
+      globalResetTime = now + 24 * 60 * 60 * 1000;
+    }
+    if (globalTimelineCount >= GLOBAL_DAILY_LIMIT.timeline) {
+      return { allowed: false, retryAfter: Math.ceil((globalResetTime - now) / 1000) };
+    }
+  }
+
+  const record = rateLimitMap.get(key);
+
+  if (!record || now > record.resetTime) {
+    rateLimitMap.set(key, { count: 1, resetTime: now + config.windowMs });
+    return { allowed: true };
+  }
+
+  if (record.count >= config.max) {
+    return { allowed: false, retryAfter: Math.ceil((record.resetTime - now) / 1000) };
+  }
+
+  record.count++;
+  return { allowed: true };
+}
+
+function incrementGlobalCount(action: string) {
+  if (action === 'timeline') {
+    globalTimelineCount++;
+  }
+}
+
+// Input validation & sanitization
+function sanitizeString(input: unknown, maxLength: number = 200): string | null {
+  if (typeof input !== 'string') return null;
+  // Remove any potential XSS or injection attempts
+  const sanitized = input
+    .trim()
+    .slice(0, maxLength)
+    .replace(/<[^>]*>/g, '') // Remove HTML tags
+    .replace(/[^\w\s\-.,'"()]/gi, ''); // Only allow safe characters
+  return sanitized.length > 0 ? sanitized : null;
+}
+
+function validateCoordinates(lat: unknown, lng: unknown): { lat: number; lng: number } | null {
+  if (typeof lat !== 'number' || typeof lng !== 'number') return null;
+  if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return null;
+  return { lat, lng };
+}
+
+function validateYear(year: unknown): number | null {
+  if (typeof year !== 'number') return null;
+  if (!Number.isInteger(year)) return null;
+  if (year < -10000 || year > 2100) return null; // Reasonable range for history
+  return year;
+}
+
+function validateTimeRange(start: unknown, end: unknown): { start: number; end: number } | null {
+  const startYear = validateYear(start);
+  const endYear = validateYear(end);
+  if (startYear === null || endYear === null) return null;
+  if (startYear >= endYear) return null;
+  if (endYear - startYear > 5000) return null; // Max 5000 year span
+  return { start: startYear, end: endYear };
+}
+
+// ============================================
+// GROQ API INTEGRATION
+// ============================================
+
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
-// Models
 const MODELS = {
   fast: 'llama-3.1-8b-instant',
   deep: 'llama-3.3-70b-versatile'
 };
-
-interface GenerateRequest {
-  action: 'suggestions' | 'regions' | 'timeRange' | 'timeline' | 'followUp';
-  // For suggestions
-  query?: string;
-  // For regions
-  lat?: number;
-  lng?: number;
-  // For timeRange
-  region?: string;
-  // For timeline
-  startYear?: number;
-  endYear?: number;
-  mode?: 'quick' | 'deep';
-  // For followUp
-  contextSummary?: string;
-  history?: { role: string; text: string }[];
-  question?: string;
-}
 
 async function callGroq(
   messages: { role: 'system' | 'user' | 'assistant'; content: string }[],
@@ -55,14 +149,18 @@ async function callGroq(
 
   if (!response.ok) {
     const error = await response.text();
-    throw new Error(`Groq API error: ${response.status} - ${error}`);
+    console.error('Groq API error:', response.status, error);
+    throw new Error(`AI service temporarily unavailable`);
   }
 
   const data = await response.json();
   return data.choices[0]?.message?.content || '';
 }
 
-// Handler functions for each action
+// ============================================
+// HANDLER FUNCTIONS
+// ============================================
+
 async function getSuggestions(query: string): Promise<string[]> {
   if (query.length < 3) return [];
 
@@ -81,7 +179,7 @@ async function getSuggestions(query: string): Promise<string[]> {
 
   try {
     const data = JSON.parse(response);
-    return data.suggestions || [];
+    return Array.isArray(data.suggestions) ? data.suggestions.slice(0, 5) : [];
   } catch {
     return [];
   }
@@ -104,7 +202,7 @@ async function getRegionsFromCoordinates(lat: number, lng: number): Promise<stri
 
   try {
     const data = JSON.parse(response);
-    return data.suggestions || [];
+    return Array.isArray(data.suggestions) ? data.suggestions.slice(0, 4) : [];
   } catch {
     return [];
   }
@@ -138,7 +236,7 @@ async function getSmartTimeRange(region: string): Promise<{ start: number; end: 
   }
 }
 
-async function generateTimeline(
+async function generateTimelineData(
   region: string,
   startYear: number,
   endYear: number,
@@ -284,30 +382,55 @@ async function askFollowUp(
   history: { role: string; text: string }[],
   question: string
 ): Promise<string> {
+  // Limit history to prevent abuse
+  const limitedHistory = history.slice(-10);
+
   const messages: { role: 'system' | 'user' | 'assistant'; content: string }[] = [
     {
       role: 'system',
-      content: `You are an expert historian assistant. You have access to a generated timeline. Answer questions specifically about this timeline and period. Be academic but accessible.
+      content: `You are an expert historian assistant. You have access to a generated timeline. Answer questions specifically about this timeline and period. Be academic but accessible. Keep responses concise (under 500 words).
 
-Context: ${contextSummary}`,
+Context: ${contextSummary.slice(0, 2000)}`, // Limit context size
     },
-    ...history.map((h) => ({
+    ...limitedHistory.map((h) => ({
       role: (h.role === 'user' ? 'user' : 'assistant') as 'user' | 'assistant',
-      content: h.text,
+      content: h.text.slice(0, 1000), // Limit each message
     })),
     {
       role: 'user',
-      content: question,
+      content: question.slice(0, 500), // Limit question length
     },
   ];
 
   return callGroq(messages, MODELS.fast, false);
 }
 
-// Main handler
+// ============================================
+// MAIN HANDLER
+// ============================================
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  // CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // Security headers
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+
+  // CORS - restrict to your domain in production
+  const allowedOrigins = [
+    'https://chronos-explorer.vercel.app',
+    'https://chronos.vercel.app',
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '',
+    'http://localhost:3000', // For local dev
+  ].filter(Boolean);
+
+  const origin = req.headers.origin;
+  if (origin && allowedOrigins.some(allowed => origin.startsWith(allowed.replace('https://', '').replace('http://', '')))) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  } else if (process.env.NODE_ENV === 'development') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
+
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -319,56 +442,95 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  try {
-    const body: GenerateRequest = req.body;
+  // Get client IP for rate limiting
+  const clientIP = getClientIP(req);
 
-    switch (body.action) {
+  try {
+    const body = req.body;
+
+    // Validate action
+    const validActions = ['suggestions', 'regions', 'timeRange', 'timeline', 'followUp'];
+    if (!body?.action || !validActions.includes(body.action)) {
+      return res.status(400).json({ error: 'Invalid action' });
+    }
+
+    const action = body.action as keyof typeof RATE_LIMITS;
+
+    // Check rate limit
+    const rateCheck = checkRateLimit(clientIP, action);
+    if (!rateCheck.allowed) {
+      res.setHeader('Retry-After', String(rateCheck.retryAfter));
+      return res.status(429).json({
+        error: 'Too many requests. Please try again later.',
+        retryAfter: rateCheck.retryAfter
+      });
+    }
+
+    switch (action) {
       case 'suggestions': {
-        if (!body.query) {
-          return res.status(400).json({ error: 'Query required' });
+        const query = sanitizeString(body.query, 100);
+        if (!query) {
+          return res.status(400).json({ error: 'Valid query required' });
         }
-        const suggestions = await getSuggestions(body.query);
+        const suggestions = await getSuggestions(query);
         return res.status(200).json({ suggestions });
       }
 
       case 'regions': {
-        if (body.lat === undefined || body.lng === undefined) {
-          return res.status(400).json({ error: 'Coordinates required' });
+        const coords = validateCoordinates(body.lat, body.lng);
+        if (!coords) {
+          return res.status(400).json({ error: 'Valid coordinates required' });
         }
-        const suggestions = await getRegionsFromCoordinates(body.lat, body.lng);
+        const suggestions = await getRegionsFromCoordinates(coords.lat, coords.lng);
         return res.status(200).json({ suggestions });
       }
 
       case 'timeRange': {
-        if (!body.region) {
-          return res.status(400).json({ error: 'Region required' });
+        const region = sanitizeString(body.region, 200);
+        if (!region) {
+          return res.status(400).json({ error: 'Valid region required' });
         }
-        const timeRange = await getSmartTimeRange(body.region);
+        const timeRange = await getSmartTimeRange(region);
         return res.status(200).json({ timeRange });
       }
 
       case 'timeline': {
-        if (!body.region || body.startYear === undefined || body.endYear === undefined) {
-          return res.status(400).json({ error: 'Region and time range required' });
+        const region = sanitizeString(body.region, 200);
+        const timeRange = validateTimeRange(body.startYear, body.endYear);
+        const mode = body.mode === 'deep' ? 'deep' : 'quick';
+
+        if (!region || !timeRange) {
+          return res.status(400).json({ error: 'Valid region and time range required' });
         }
-        const timeline = await generateTimeline(
-          body.region,
-          body.startYear,
-          body.endYear,
-          body.mode || 'quick'
+
+        // Increment global counter for timeline generations
+        incrementGlobalCount('timeline');
+
+        const timeline = await generateTimelineData(
+          region,
+          timeRange.start,
+          timeRange.end,
+          mode
         );
         return res.status(200).json({ timeline });
       }
 
       case 'followUp': {
-        if (!body.contextSummary || !body.question) {
+        const contextSummary = sanitizeString(body.contextSummary, 3000);
+        const question = sanitizeString(body.question, 500);
+
+        if (!contextSummary || !question) {
           return res.status(400).json({ error: 'Context and question required' });
         }
-        const answer = await askFollowUp(
-          body.contextSummary,
-          body.history || [],
-          body.question
-        );
+
+        // Validate history array
+        const history = Array.isArray(body.history)
+          ? body.history.filter((h: any) =>
+              h && typeof h.role === 'string' && typeof h.text === 'string'
+            ).slice(-10)
+          : [];
+
+        const answer = await askFollowUp(contextSummary, history, question);
         return res.status(200).json({ answer });
       }
 
@@ -378,7 +540,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   } catch (error) {
     console.error('API Error:', error);
     return res.status(500).json({
-      error: error instanceof Error ? error.message : 'Internal server error'
+      error: 'Something went wrong. Please try again.'
     });
   }
 }
