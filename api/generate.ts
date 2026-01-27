@@ -112,6 +112,180 @@ function validateTimeRange(start: unknown, end: unknown): { start: number; end: 
 }
 
 // ============================================
+// JSON PARSING HELPERS
+// ============================================
+
+/**
+ * Safely parse JSON with recovery for common LLM issues:
+ * - Truncated responses (missing closing brackets)
+ * - Extra text before/after JSON
+ * - Markdown code blocks wrapping JSON
+ */
+function safeParseJSON<T>(text: string, fallback: T): { data: T; recovered: boolean } {
+  if (!text || typeof text !== 'string') {
+    return { data: fallback, recovered: true };
+  }
+
+  // Step 1: Try direct parse first
+  try {
+    return { data: JSON.parse(text), recovered: false };
+  } catch {
+    // Continue to recovery
+  }
+
+  let cleaned = text;
+
+  // Step 2: Remove markdown code blocks if present
+  cleaned = cleaned.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '');
+
+  // Step 3: Extract JSON object/array from surrounding text
+  const jsonMatch = cleaned.match(/(\{[\s\S]*\}|\[[\s\S]*\])/);
+  if (jsonMatch) {
+    cleaned = jsonMatch[1];
+  }
+
+  // Step 4: Try parsing cleaned version
+  try {
+    return { data: JSON.parse(cleaned), recovered: true };
+  } catch {
+    // Continue to bracket repair
+  }
+
+  // Step 5: Attempt to repair truncated JSON by adding closing brackets
+  let repaired = cleaned.trim();
+
+  // Count open brackets
+  const openBraces = (repaired.match(/\{/g) || []).length;
+  const closeBraces = (repaired.match(/\}/g) || []).length;
+  const openBrackets = (repaired.match(/\[/g) || []).length;
+  const closeBrackets = (repaired.match(/\]/g) || []).length;
+
+  // Add missing closing brackets (limit to prevent runaway)
+  const maxRepairs = 10;
+  let repairs = 0;
+
+  // Remove trailing comma if present
+  repaired = repaired.replace(/,\s*$/, '');
+
+  // Add missing braces
+  while (repairs < maxRepairs && (repaired.match(/\{/g) || []).length > (repaired.match(/\}/g) || []).length) {
+    repaired += '}';
+    repairs++;
+  }
+
+  // Add missing brackets
+  while (repairs < maxRepairs && (repaired.match(/\[/g) || []).length > (repaired.match(/\]/g) || []).length) {
+    repaired += ']';
+    repairs++;
+  }
+
+  // Step 6: Try parsing repaired version
+  try {
+    const parsed = JSON.parse(repaired);
+    console.log(`JSON recovered with ${repairs} bracket repairs`);
+    return { data: parsed, recovered: true };
+  } catch (e) {
+    console.error('JSON parse failed even after recovery attempts:', e);
+    return { data: fallback, recovered: true };
+  }
+}
+
+// ============================================
+// EVENT DEDUPLICATION
+// ============================================
+
+/**
+ * Normalize a string for comparison (lowercase, remove punctuation, extra spaces)
+ */
+function normalizeString(str: string): string {
+  return str
+    .toLowerCase()
+    .replace(/[^\w\s]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * Check if two event titles are similar enough to be considered duplicates
+ * Uses simple substring matching and word overlap
+ */
+function areTitlesSimilar(title1: string, title2: string): boolean {
+  const norm1 = normalizeString(title1);
+  const norm2 = normalizeString(title2);
+
+  // Exact match
+  if (norm1 === norm2) return true;
+
+  // One contains the other
+  if (norm1.includes(norm2) || norm2.includes(norm1)) return true;
+
+  // Word overlap (at least 70% of words match)
+  const words1 = new Set(norm1.split(' ').filter(w => w.length > 2));
+  const words2 = new Set(norm2.split(' ').filter(w => w.length > 2));
+
+  if (words1.size === 0 || words2.size === 0) return false;
+
+  const intersection = [...words1].filter(w => words2.has(w)).length;
+  const unionSize = Math.min(words1.size, words2.size);
+
+  return intersection / unionSize >= 0.7;
+}
+
+/**
+ * Deduplicate events by removing near-duplicates (same year + similar title)
+ * Keeps the event with more citations/detail
+ */
+function deduplicateEvents(events: any[]): any[] {
+  if (!Array.isArray(events) || events.length === 0) return events;
+
+  const seen: Map<string, any> = new Map();
+  const duplicatesRemoved: string[] = [];
+
+  for (const event of events) {
+    if (!event || typeof event.year !== 'number' || typeof event.title !== 'string') {
+      continue;
+    }
+
+    // Create a key based on year and normalized title start
+    const yearKey = event.year.toString();
+    let isDuplicate = false;
+
+    // Check against all events in the same year
+    for (const [key, existing] of seen.entries()) {
+      if (key.startsWith(yearKey + ':')) {
+        if (areTitlesSimilar(event.title, existing.title)) {
+          isDuplicate = true;
+
+          // Keep the one with more citations
+          const eventCitations = Array.isArray(event.citations) ? event.citations.length : 0;
+          const existingCitations = Array.isArray(existing.citations) ? existing.citations.length : 0;
+
+          if (eventCitations > existingCitations) {
+            // Replace with the better one
+            seen.delete(key);
+            seen.set(`${yearKey}:${normalizeString(event.title).slice(0, 20)}`, event);
+            duplicatesRemoved.push(existing.title);
+          } else {
+            duplicatesRemoved.push(event.title);
+          }
+          break;
+        }
+      }
+    }
+
+    if (!isDuplicate) {
+      seen.set(`${yearKey}:${normalizeString(event.title).slice(0, 20)}`, event);
+    }
+  }
+
+  if (duplicatesRemoved.length > 0) {
+    console.log(`Removed ${duplicatesRemoved.length} duplicate events:`, duplicatesRemoved);
+  }
+
+  return Array.from(seen.values());
+}
+
+// ============================================
 // GROQ API INTEGRATION
 // ============================================
 
@@ -216,12 +390,8 @@ async function getSuggestions(query: string): Promise<string[]> {
     }
   ]);
 
-  try {
-    const data = JSON.parse(response);
-    return Array.isArray(data.suggestions) ? data.suggestions.slice(0, 5) : [];
-  } catch {
-    return [];
-  }
+  const parsed = safeParseJSON<{ suggestions?: string[] }>(response, { suggestions: [] });
+  return Array.isArray(parsed.data.suggestions) ? parsed.data.suggestions.slice(0, 5) : [];
 }
 
 async function getRegionsFromCoordinates(lat: number, lng: number): Promise<string[]> {
@@ -239,12 +409,8 @@ async function getRegionsFromCoordinates(lat: number, lng: number): Promise<stri
     }
   ]);
 
-  try {
-    const data = JSON.parse(response);
-    return Array.isArray(data.suggestions) ? data.suggestions.slice(0, 4) : [];
-  } catch {
-    return [];
-  }
+  const parsed = safeParseJSON<{ suggestions?: string[] }>(response, { suggestions: [] });
+  return Array.isArray(parsed.data.suggestions) ? parsed.data.suggestions.slice(0, 4) : [];
 }
 
 async function getSmartTimeRange(region: string): Promise<{ start: number; end: number } | null> {
@@ -280,15 +446,11 @@ async function getSmartTimeRange(region: string): Promise<{ start: number; end: 
     }
   ]);
 
-  try {
-    const data = JSON.parse(response);
-    if (typeof data.start === 'number' && typeof data.end === 'number') {
-      return { start: data.start, end: data.end };
-    }
-    return null;
-  } catch {
-    return null;
+  const parsed = safeParseJSON<{ start?: number; end?: number }>(response, {});
+  if (typeof parsed.data.start === 'number' && typeof parsed.data.end === 'number') {
+    return { start: parsed.data.start, end: parsed.data.end };
   }
+  return null;
 }
 
 async function generateTimelineData(
@@ -341,11 +503,10 @@ Examples: 753 BC = -753, 476 AD = 476, 3000 BC = -3000`
   ], model);
 
   let eras = [];
-  try {
-    const erasData = JSON.parse(erasResponse);
-    eras = Array.isArray(erasData?.eras) ? erasData.eras : [];
-  } catch {
-    eras = [];
+  const erasParsed = safeParseJSON<{ eras?: any[] }>(erasResponse, { eras: [] });
+  eras = Array.isArray(erasParsed.data?.eras) ? erasParsed.data.eras : [];
+  if (erasParsed.recovered) {
+    console.log('Eras response required JSON recovery');
   }
 
   // Step 2: Generate Events
@@ -408,21 +569,27 @@ Always respond with valid JSON matching the requested schema exactly.`
   ], model);
 
   let events = [];
-  try {
-    const eventsData = JSON.parse(eventsResponse);
-    events = (Array.isArray(eventsData?.events) ? eventsData.events : []).map((evt: any) => ({
-      ...evt,
-      citations: Array.isArray(evt.citations) ? evt.citations : [],
-      disputeClaims: Array.isArray(evt.disputeClaims)
-        ? evt.disputeClaims.map((dc: any) => ({
-            ...dc,
-            citations: Array.isArray(dc.citations) ? dc.citations : [],
-          }))
-        : [],
-    }));
-  } catch {
-    events = [];
+  const eventsParsed = safeParseJSON<{ events?: any[] }>(eventsResponse, { events: [] });
+  if (eventsParsed.recovered) {
+    console.log('Events response required JSON recovery');
   }
+
+  // Parse and normalize events
+  const rawEvents = (Array.isArray(eventsParsed.data?.events) ? eventsParsed.data.events : []).map((evt: any) => ({
+    ...evt,
+    citations: Array.isArray(evt.citations) ? evt.citations : [],
+    disputeClaims: Array.isArray(evt.disputeClaims)
+      ? evt.disputeClaims.map((dc: any) => ({
+          ...dc,
+          citations: Array.isArray(dc.citations) ? dc.citations : [],
+        }))
+      : [],
+    // Flag events outside the requested time range
+    isOutOfRange: typeof evt.year === 'number' && (evt.year < startYear || evt.year > endYear),
+  }));
+
+  // Deduplicate events (same year + similar title)
+  events = deduplicateEvents(rawEvents);
 
   // Step 3: Generate Narrative
   const narrativeResponse = await callGroq([
@@ -449,12 +616,11 @@ Always respond with valid JSON matching the requested schema exactly.`
   ], model);
 
   let narrative = '';
-  try {
-    const narrativeData = JSON.parse(narrativeResponse);
-    narrative = narrativeData.narrative || '';
-  } catch {
-    narrative = '';
+  const narrativeParsed = safeParseJSON<{ narrative?: string }>(narrativeResponse, { narrative: '' });
+  if (narrativeParsed.recovered) {
+    console.log('Narrative response required JSON recovery');
   }
+  narrative = narrativeParsed.data?.narrative || '';
 
   return {
     id: crypto.randomUUID(),

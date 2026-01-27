@@ -12,6 +12,7 @@ import { useToast, parseApiError } from './components/Toast';
 import { ThemeToggle } from './components/ThemeToggle';
 import { ShareExport } from './components/ShareExport';
 import { generateTimeline, ProgressUpdate } from './services/apiService';
+import { loadTimelines, saveTimelines, deleteTimeline as deleteTimelineFromStorage } from './services/storageService';
 import { TimelineData, GenerationMode, HistoricalEvent } from './types';
 import { Layout, Map, List, BookOpen, MessageCircle, Menu, HelpCircle, Share2 } from 'lucide-react';
 import { formatYearRange } from './utils';
@@ -83,41 +84,43 @@ const App: React.FC = () => {
 
   // Load from local storage on mount and restore URL state
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('chronos_archives');
-      if (saved) {
-        const loadedTimelines = JSON.parse(saved);
-        setTimelines(loadedTimelines);
+    const loadedTimelines = loadTimelines();
+    setTimelines(loadedTimelines);
 
-        // Restore state from URL hash after timelines load
-        const { timelineId, view: urlView, eventId } = parseHash();
-        if (timelineId && loadedTimelines.some((t: TimelineData) => t.id === timelineId)) {
-          setActiveTimelineId(timelineId);
-          if (urlView) {
-            setView(urlView as typeof view);
-          }
-          if (eventId) {
-            const timeline = loadedTimelines.find((t: TimelineData) => t.id === timelineId);
-            const event = timeline?.events.find((e: HistoricalEvent) => e.id === eventId);
-            if (event) {
-              setSelectedEvent(event);
-            }
-          }
+    // Restore state from URL hash after timelines load
+    const { timelineId, view: urlView, eventId } = parseHash();
+    if (timelineId && loadedTimelines.some((t: TimelineData) => t.id === timelineId)) {
+      setActiveTimelineId(timelineId);
+      if (urlView) {
+        setView(urlView as typeof view);
+      }
+      if (eventId) {
+        const timeline = loadedTimelines.find((t: TimelineData) => t.id === timelineId);
+        const event = timeline?.events.find((e: HistoricalEvent) => e.id === eventId);
+        if (event) {
+          setSelectedEvent(event);
         }
       }
-    } catch (e) {
-      console.error("Failed to load archives", e);
     }
   }, []);
 
-  // Save to local storage on change
+  // Save to local storage on change (with auto-cleanup)
   useEffect(() => {
-    try {
-      localStorage.setItem('chronos_archives', JSON.stringify(timelines));
-    } catch (e) {
-      console.error("Failed to save archives (quota exceeded?)", e);
+    if (timelines.length === 0) return; // Don't save empty state on initial load
+
+    const result = saveTimelines(timelines);
+
+    if (!result.success) {
+      showError('Storage Error', result.error || 'Failed to save timeline data.');
+    } else if (result.cleanedUp && result.cleanedUp > 0) {
+      showSuccess(
+        'Storage Cleaned Up',
+        `Removed ${result.cleanedUp} old timeline${result.cleanedUp > 1 ? 's' : ''} to make room for new data.`
+      );
+      // Reload timelines to reflect cleanup
+      setTimelines(loadTimelines());
     }
-  }, [timelines]);
+  }, [timelines, showError, showSuccess]);
 
   // Update URL hash when state changes
   useEffect(() => {
@@ -170,7 +173,15 @@ const App: React.FC = () => {
       setTimelines(prev => [...prev, result]);
       setActiveTimelineId(result.id);
       setView('map');
-      showSuccess('Timeline Generated', `Successfully created timeline for ${region}.`);
+
+      // Warn if timeline has no events or very few events
+      if (!result.events || result.events.length === 0) {
+        showError('No Events Found', `The AI couldn't find documented events for "${region}" in this time period. Try a broader range or different region.`);
+      } else if (result.events.length < 5) {
+        showSuccess('Timeline Generated', `Found ${result.events.length} events for ${region}. Consider expanding the time range for more results.`);
+      } else {
+        showSuccess('Timeline Generated', `Successfully created timeline for ${region} with ${result.events.length} events.`);
+      }
     } catch (error) {
       console.error(error);
       const { title, message } = parseApiError(error);
@@ -183,9 +194,9 @@ const App: React.FC = () => {
     }
   };
 
-  const deleteTimeline = (id: string) => {
+  const handleDeleteTimeline = (id: string) => {
     if(confirm("Are you sure you want to burn this archive?")) {
-      setTimelines(prev => prev.filter(t => t.id !== id));
+      setTimelines(prev => deleteTimelineFromStorage(prev, id));
       if (activeTimelineId === id) setActiveTimelineId(null);
     }
   };
@@ -227,7 +238,7 @@ const App: React.FC = () => {
         activeId={activeTimelineId}
         onSelect={setActiveTimelineId}
         onNew={() => setActiveTimelineId(null)}
-        onDelete={deleteTimeline}
+        onDelete={handleDeleteTimeline}
         isOpen={isSidebarOpen}
         onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
       />

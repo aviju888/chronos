@@ -1,4 +1,5 @@
 import React from 'react';
+import { FileText } from 'lucide-react';
 
 interface NarrativeViewProps {
   text: string;
@@ -7,6 +8,22 @@ interface NarrativeViewProps {
 export const NarrativeView: React.FC<NarrativeViewProps> = ({ text }) => {
   // Simple paragraph splitter for better readability
   const paragraphs = text.split('\n\n').filter(p => p.trim().length > 0);
+
+  // Empty state
+  if (!text || paragraphs.length === 0) {
+    return (
+      <div className="max-w-4xl mx-auto p-8 bg-paper min-h-full flex items-center justify-center">
+        <div className="text-center p-8 max-w-md">
+          <FileText className="w-16 h-16 mx-auto mb-4 text-stone-400" />
+          <h3 className="text-xl font-display font-bold text-ink mb-2">No Narrative Available</h3>
+          <p className="text-slate text-sm leading-relaxed">
+            A historical narrative could not be generated for this timeline.
+            Try the Events view to explore individual records.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-8 bg-paper min-h-full">

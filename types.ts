@@ -35,6 +35,7 @@ export interface HistoricalEvent {
   disputeClaims?: DisputeClaim[];
   confidenceScore: 'High' | 'Medium' | 'Low'; // For UI indication
   imageQuery?: string; // Optimized search term for finding an image
+  isOutOfRange?: boolean; // Event year is outside the requested time range
 }
 
 export interface Era {

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import { HistoricalEvent } from '../types';
-import { ChevronLeft, ChevronRight, Play, Pause, Book } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, Pause, Book, MapPinOff } from 'lucide-react';
 import { EventImage } from './EventImage';
 import { formatYear } from '../utils';
 
@@ -181,6 +181,11 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
       return events.filter(e => e.location && e.year <= currentYear && e.year >= timeRange.start);
   }, [events, currentYear, timeRange.start]);
 
+  // Check if ANY events have location data
+  const hasAnyLocations = useMemo(() => {
+      return events.some(e => e.location);
+  }, [events]);
+
   // Cluster events based on zoom level - larger grid at low zoom, smaller at high zoom
   const clusteredEvents = useMemo(() => {
     // At high zoom levels (8+), show individual markers
@@ -322,6 +327,34 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
         
         {/* Overlay Gradient for vintage look */}
         <div className="absolute inset-0 pointer-events-none z-[400] bg-[radial-gradient(circle_at_center,transparent_0%,rgba(92,77,60,0.1)_100%)]"></div>
+
+        {/* Empty State Overlay - no location data */}
+        {!hasAnyLocations && (
+          <div className="absolute inset-0 z-[500] flex items-center justify-center bg-stone-100/80 backdrop-blur-sm">
+            <div className="text-center p-8 bg-paper rounded-lg shadow-xl border-2 border-gold/30 max-w-md mx-4">
+              <MapPinOff className="w-16 h-16 mx-auto mb-4 text-gold-dark opacity-60" />
+              <h3 className="text-xl font-display font-bold text-ink mb-2">No Location Data Available</h3>
+              <p className="text-slate text-sm leading-relaxed">
+                The events in this timeline don't have specific geographic coordinates.
+                Try the <span className="font-bold text-gold-dark">Timeline</span> or <span className="font-bold text-gold-dark">Events</span> view to explore the historical records.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Empty State Overlay - no events at all */}
+        {events.length === 0 && (
+          <div className="absolute inset-0 z-[500] flex items-center justify-center bg-stone-100/80 backdrop-blur-sm">
+            <div className="text-center p-8 bg-paper rounded-lg shadow-xl border-2 border-gold/30 max-w-md mx-4">
+              <MapPinOff className="w-16 h-16 mx-auto mb-4 text-stone-400" />
+              <h3 className="text-xl font-display font-bold text-ink mb-2">No Events Found</h3>
+              <p className="text-slate text-sm leading-relaxed">
+                No historical events were generated for this timeline.
+                Try adjusting the time range or selecting a different region.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Enhanced Time Scrubber Control */}
