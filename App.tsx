@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { GlobeView } from './components/globe/GlobeView';
-import { RegionInputPanel } from './components/overlays/RegionInputPanel';
-import { TimeRangePanel } from './components/overlays/TimeRangePanel';
-import { GenerationPanel } from './components/overlays/GenerationPanel';
-import { ResultsSlidePanel } from './components/overlays/ResultsSlidePanel';
+import { SetupForm } from './components/SetupForm';
+import { MapView } from './components/MapView';
 import { TimelineView } from './components/TimelineView';
 import { EventListView } from './components/EventListView';
 import { NarrativeView } from './components/NarrativeView';
@@ -14,53 +11,20 @@ import { OnboardingOverlay, useOnboarding } from './components/OnboardingOverlay
 import { useToast, parseApiError } from './components/Toast';
 import { ThemeToggle } from './components/ThemeToggle';
 import { ShareExport } from './components/ShareExport';
-import { generateTimeline, getRegionsFromCoordinates, getTimeRange, ProgressUpdate } from './services/apiService';
+import { generateTimeline, ProgressUpdate } from './services/apiService';
 import { TimelineData, GenerationMode, HistoricalEvent } from './types';
-import { Layout, Map, List, BookOpen, MessageCircle, Share2, X, ChevronRight } from 'lucide-react';
+import { Layout, Map, List, BookOpen, MessageCircle, Menu, HelpCircle, Share2 } from 'lucide-react';
 import { formatYearRange } from './utils';
-
-// Curated historical regions for "Surprise Me" feature
-const SURPRISE_REGIONS = [
-  { region: "Ancient Egypt", start: -3100, end: -30 },
-  { region: "Ancient Greece", start: -800, end: -31 },
-  { region: "Roman Empire", start: -753, end: 476 },
-  { region: "Byzantine Empire", start: 330, end: 1453 },
-  { region: "Viking Age Scandinavia", start: 793, end: 1066 },
-  { region: "Medieval Japan", start: 1185, end: 1603 },
-  { region: "Mongol Empire", start: 1206, end: 1368 },
-  { region: "Renaissance Italy", start: 1300, end: 1600 },
-  { region: "Aztec Empire", start: 1428, end: 1521 },
-  { region: "Ottoman Empire", start: 1299, end: 1922 },
-  { region: "Ming Dynasty China", start: 1368, end: 1644 },
-  { region: "Mughal Empire", start: 1526, end: 1857 },
-  { region: "Age of Exploration", start: 1400, end: 1600 },
-  { region: "French Revolution", start: 1789, end: 1799 },
-  { region: "American Civil War", start: 1861, end: 1865 },
-  { region: "Victorian England", start: 1837, end: 1901 },
-  { region: "Meiji Japan", start: 1868, end: 1912 },
-  { region: "World War I", start: 1914, end: 1918 },
-  { region: "Roaring Twenties America", start: 1920, end: 1929 },
-  { region: "World War II", start: 1939, end: 1945 },
-  { region: "Cold War Era", start: 1947, end: 1991 },
-  { region: "Ancient Mesopotamia", start: -3500, end: -539 },
-  { region: "Persian Empire", start: -550, end: -330 },
-  { region: "Han Dynasty China", start: -206, end: 220 },
-  { region: "Inca Empire", start: 1438, end: 1533 },
-  { region: "Khmer Empire", start: 802, end: 1431 },
-  { region: "Mali Empire", start: 1235, end: 1600 },
-  { region: "Qing Dynasty China", start: 1644, end: 1912 },
-  { region: "Spanish Golden Age", start: 1492, end: 1659 },
-  { region: "Dutch Golden Age", start: 1588, end: 1672 },
-];
 
 // URL hash parsing and generation for deep linking
 const parseHash = (): { timelineId?: string; view?: string; eventId?: string } => {
-  const hash = window.location.hash.slice(1);
+  const hash = window.location.hash.slice(1); // Remove #
   if (!hash) return {};
 
   const parts = hash.split('/').filter(Boolean);
   const result: { timelineId?: string; view?: string; eventId?: string } = {};
 
+  // Format: /timeline/{id}/{view} or /timeline/{id}/{view}/event/{eventId}
   if (parts[0] === 'timeline' && parts[1]) {
     result.timelineId = parts[1];
     if (parts[2] && ['map', 'timeline', 'list', 'narrative'].includes(parts[2])) {
@@ -76,6 +40,7 @@ const parseHash = (): { timelineId?: string; view?: string; eventId?: string } =
 
 const updateHash = (timelineId: string | null, view: string, eventId: string | null = null): void => {
   if (!timelineId) {
+    // Clear hash when no timeline is active
     if (window.location.hash) {
       history.pushState(null, '', window.location.pathname);
     }
@@ -87,6 +52,7 @@ const updateHash = (timelineId: string | null, view: string, eventId: string | n
     hash += `/event/${eventId}`;
   }
 
+  // Only update if different to avoid unnecessary history entries
   if (window.location.hash !== hash) {
     history.pushState(null, '', hash);
   }
@@ -100,30 +66,22 @@ const App: React.FC = () => {
   // UI State
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState<ProgressUpdate | null>(null);
+  const [logs, setLogs] = useState<string[]>([]);
 
+  const [view, setView] = useState<'map' | 'timeline' | 'list' | 'narrative'>('map');
   const [selectedEvent, setSelectedEvent] = useState<HistoricalEvent | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
-  const [isResultsOpen, setIsResultsOpen] = useState(false);
   const [pendingChatQuery, setPendingChatQuery] = useState<string | null>(null);
-
-  // Globe/Region Selection State
-  const [selectedRegion, setSelectedRegion] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
-  const [startYear, setStartYear] = useState(-500);
-  const [endYear, setEndYear] = useState(500);
-  const [mode, setMode] = useState<GenerationMode>('quick');
-  const [focusLocation, setFocusLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [hoveredEvent, setHoveredEvent] = useState<HistoricalEvent | null>(null);
 
   // Toast notifications
   const { showError, showSuccess, ToastContainer } = useToast();
 
   // Onboarding
-  const { showOnboarding, completeOnboarding } = useOnboarding();
+  const { showOnboarding, resetOnboarding, completeOnboarding } = useOnboarding();
 
-  // Load from local storage on mount
+  // Load from local storage on mount and restore URL state
   useEffect(() => {
     try {
       const saved = localStorage.getItem('chronos_archives');
@@ -131,10 +89,13 @@ const App: React.FC = () => {
         const loadedTimelines = JSON.parse(saved);
         setTimelines(loadedTimelines);
 
-        const { timelineId, eventId } = parseHash();
+        // Restore state from URL hash after timelines load
+        const { timelineId, view: urlView, eventId } = parseHash();
         if (timelineId && loadedTimelines.some((t: TimelineData) => t.id === timelineId)) {
           setActiveTimelineId(timelineId);
-          setIsResultsOpen(true);
+          if (urlView) {
+            setView(urlView as typeof view);
+          }
           if (eventId) {
             const timeline = loadedTimelines.find((t: TimelineData) => t.id === timelineId);
             const event = timeline?.events.find((e: HistoricalEvent) => e.id === eventId);
@@ -160,17 +121,19 @@ const App: React.FC = () => {
 
   // Update URL hash when state changes
   useEffect(() => {
-    updateHash(activeTimelineId, 'map', selectedEvent?.id || null);
-  }, [activeTimelineId, selectedEvent]);
+    updateHash(activeTimelineId, view, selectedEvent?.id || null);
+  }, [activeTimelineId, view, selectedEvent]);
 
-  // Handle browser back/forward
+  // Handle browser back/forward navigation
   useEffect(() => {
     const handlePopState = () => {
-      const { timelineId, eventId } = parseHash();
+      const { timelineId, view: urlView, eventId } = parseHash();
 
       if (timelineId && timelines.some(t => t.id === timelineId)) {
         setActiveTimelineId(timelineId);
-        setIsResultsOpen(true);
+        if (urlView) {
+          setView(urlView as typeof view);
+        }
         if (eventId) {
           const timeline = timelines.find(t => t.id === timelineId);
           const event = timeline?.events.find(e => e.id === eventId);
@@ -180,7 +143,6 @@ const App: React.FC = () => {
         }
       } else {
         setActiveTimelineId(null);
-        setIsResultsOpen(false);
         setSelectedEvent(null);
       }
     };
@@ -191,270 +153,198 @@ const App: React.FC = () => {
 
   const activeData = timelines.find(t => t.id === activeTimelineId) || null;
 
-  // Handle country click on globe
-  const handleCountryClick = async (countryName: string, lat: number, lng: number) => {
-    setSelectedCountry(countryName);
-    setFocusLocation({ lat, lng });
-
-    // Fetch historical region suggestions for this location
-    try {
-      const suggestions = await getRegionsFromCoordinates(lat, lng);
-      if (suggestions.length > 0) {
-        setSelectedRegion(suggestions[0]);
-
-        // Also get optimal time range for this region
-        try {
-          const timeRange = await getTimeRange(suggestions[0]);
-          setStartYear(timeRange.start);
-          setEndYear(timeRange.end);
-        } catch (e) {
-          console.error('Failed to get time range:', e);
-        }
-      }
-    } catch (e) {
-      // Fallback to country name
-      setSelectedRegion(countryName);
-    }
-  };
-
-  // Handle region change from input
-  const handleRegionChange = async (region: string) => {
-    setSelectedRegion(region);
-
-    // Get optimal time range for this region
-    if (region.length > 2) {
-      try {
-        const timeRange = await getTimeRange(region);
-        setStartYear(timeRange.start);
-        setEndYear(timeRange.end);
-      } catch (e) {
-        console.error('Failed to get time range:', e);
-      }
-    }
-  };
-
-  // Generate timeline
-  const handleGenerate = async () => {
-    if (!selectedRegion.trim()) return;
-
+  const handleGenerate = async (region: string, start: number, end: number, mode: GenerationMode) => {
     setLoading(true);
+    setLogs([]);
     setProgress(null);
     try {
-      const result = await generateTimeline(selectedRegion, startYear, endYear, mode, (update) => {
+      const result = await generateTimeline(region, start, end, mode, (update) => {
         setProgress(update);
+        setLogs(prev => {
+             // Avoid duplicate logs if update sends same message
+             if(prev[prev.length - 1] === update.message) return prev;
+             return [...prev, update.message];
+        });
       });
 
       setTimelines(prev => [...prev, result]);
       setActiveTimelineId(result.id);
-      setIsResultsOpen(true);
-      showSuccess('Timeline Generated', `Successfully created timeline for ${selectedRegion}.`);
+      setView('map');
+      showSuccess('Timeline Generated', `Successfully created timeline for ${region}.`);
     } catch (error) {
       console.error(error);
       const { title, message } = parseApiError(error);
       showError(title, message, {
         label: 'Try Again',
-        onClick: handleGenerate,
+        onClick: () => handleGenerate(region, start, end, mode),
       });
     } finally {
       setLoading(false);
     }
   };
 
-  // Surprise Me - pick random region
-  const handleSurpriseMe = () => {
-    const randomIndex = Math.floor(Math.random() * SURPRISE_REGIONS.length);
-    const surprise = SURPRISE_REGIONS[randomIndex];
-    setSelectedRegion(surprise.region);
-    setStartYear(surprise.start);
-    setEndYear(surprise.end);
-    setSelectedCountry(null);
-    setFocusLocation(null);
-  };
-
-  // Clear country selection
-  const clearCountrySelection = () => {
-    setSelectedCountry(null);
-    setFocusLocation(null);
-  };
-
-  // Delete timeline
   const deleteTimeline = (id: string) => {
-    if (confirm("Are you sure you want to delete this archive?")) {
+    if(confirm("Are you sure you want to burn this archive?")) {
       setTimelines(prev => prev.filter(t => t.id !== id));
-      if (activeTimelineId === id) {
-        setActiveTimelineId(null);
-        setIsResultsOpen(false);
-      }
+      if (activeTimelineId === id) setActiveTimelineId(null);
     }
   };
 
-  // Handle event click (from results panel or globe)
-  const handleEventClick = (event: HistoricalEvent) => {
-    setSelectedEvent(event);
-    if (event.location?.lat && event.location?.lng) {
-      setFocusLocation({ lat: event.location.lat, lng: event.location.lng });
-    }
-  };
-
-  // Handle event hover (highlight on globe)
-  const handleEventHover = (event: HistoricalEvent | null) => {
-    setHoveredEvent(event);
-    if (event?.location?.lat && event?.location?.lng) {
-      // Could add visual feedback here
-    }
-  };
-
-  // Ask historian from event modal
   const handleAskHistorian = (event: HistoricalEvent) => {
     setSelectedEvent(null);
     setIsChatOpen(true);
     setPendingChatQuery(`Tell me interesting details about the event "${event.title}" (${event.year}) that aren't in the summary.`);
   };
 
+  const NavButton = ({ id, icon: Icon, label }: { id: typeof view, icon: React.ElementType, label: string }) => (
+    <button
+      onClick={() => setView(id)}
+      aria-label={label}
+      aria-pressed={view === id}
+      className={`flex items-center justify-center gap-2 min-w-[44px] min-h-[44px] px-3 md:px-4 py-2 rounded-full font-bold text-sm transition-all ${
+        view === id
+          ? 'bg-ink text-gold shadow-md border border-gold'
+          : 'bg-paper text-slate hover:bg-stone-200 border border-transparent'
+      }`}
+    >
+      <Icon className="w-5 h-5 md:w-4 md:h-4" />
+      <span className="hidden md:inline">{label}</span>
+    </button>
+  );
+
   return (
-    <div className="h-screen w-screen overflow-hidden bg-night">
-      {/* Global UI Elements */}
+    <div className="h-screen flex flex-col bg-paper dark:bg-night overflow-hidden text-ink dark:text-paper transition-colors duration-300">
       <ThemeToggle />
       <ToastContainer />
 
-      {/* Onboarding overlay */}
+      {/* Onboarding overlay for first-time users */}
       {showOnboarding && (
         <OnboardingOverlay onComplete={completeOnboarding} />
       )}
 
-      {/* History Sidebar */}
-      <HistorySidebar
+      <HistorySidebar 
         timelines={timelines}
         activeId={activeTimelineId}
-        onSelect={(id) => {
-          setActiveTimelineId(id);
-          setIsResultsOpen(true);
-        }}
-        onNew={() => {
-          setActiveTimelineId(null);
-          setIsResultsOpen(false);
-          setSelectedRegion('');
-          setSelectedCountry(null);
-        }}
+        onSelect={setActiveTimelineId}
+        onNew={() => setActiveTimelineId(null)}
         onDelete={deleteTimeline}
         isOpen={isSidebarOpen}
         onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
       />
 
-      {/* 3D Globe - Full Screen Background */}
-      <GlobeView
-        events={activeData?.events || []}
-        onCountryClick={handleCountryClick}
-        onEventClick={handleEventClick}
-        focusLocation={focusLocation}
-        isInteractive={!loading}
-      />
+      {!activeData ? (
+        <div className="flex-1 overflow-auto bg-grid-pattern relative">
+             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] opacity-50 pointer-events-none"></div>
+             <div className="absolute inset-0 bg-gradient-to-b from-stone-100/50 to-stone-300/50 pointer-events-none"></div>
+             
+             <div className="relative z-10 pt-10 px-4">
+                 <SetupForm 
+                    onGenerate={handleGenerate} 
+                    isLoading={loading} 
+                    progress={progress}
+                    logs={logs}
+                 />
+                 
+                 {/* Decorative Hero Elements if empty */}
+                 {!loading && (
+                     <div className="mt-16 text-center opacity-30 select-none pointer-events-none">
+                         <p className="font-display text-7xl text-stone-400 font-bold uppercase tracking-[1rem]">History Awaits</p>
+                         <p className="font-serif italic text-stone-500 mt-4">Select an existing archive from the sidebar or start a new investigation.</p>
+                     </div>
+                 )}
 
-      {/* Floating Overlay Panels - Only show when no active timeline or results closed */}
-      {!isResultsOpen && (
+                 {/* Help button to restart onboarding */}
+                 {!loading && (
+                   <div className="fixed bottom-6 right-6 z-50">
+                     <button
+                       onClick={resetOnboarding}
+                       className="p-3 bg-ink text-paper rounded-full shadow-lg hover:bg-ink-light transition-colors flex items-center gap-2 group"
+                       aria-label="Take a tour"
+                     >
+                       <HelpCircle className="w-5 h-5" />
+                       <span className="hidden group-hover:inline text-sm font-medium">Take a Tour</span>
+                     </button>
+                   </div>
+                 )}
+             </div>
+        </div>
+      ) : (
         <>
-          <RegionInputPanel
-            selectedRegion={selectedRegion}
-            onRegionChange={handleRegionChange}
-            selectedCountry={selectedCountry}
-            onClearCountry={clearCountrySelection}
+          {/* Main App Layout */}
+          
+          {/* Header Bar */}
+          <header className="bg-paper-dark dark:bg-night-light border-b-2 border-gold-dark/30 px-6 py-3 flex justify-between items-center shadow-lg z-20 relative">
+             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/aged-paper.png')] dark:bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-50 dark:opacity-30 pointer-events-none"></div>
+            
+            <div className="flex items-center gap-4 relative z-10 ml-12 md:ml-0">
+              <h1 className="font-display font-bold text-xl text-ink dark:text-gold hidden md:block tracking-widest">CHRONOS</h1>
+              <div className="h-6 w-px bg-gold-dark hidden md:block"></div>
+              <div>
+                <span className="block font-serif font-bold text-ink dark:text-paper text-lg leading-none">{activeData.region}</span>
+                <span className="text-xs text-gold-dark dark:text-gold-light font-bold tracking-widest uppercase font-antique">
+                    {formatYearRange(activeData.timeRange.start, activeData.timeRange.end)}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex gap-2 relative z-10 overflow-x-auto pb-1 md:pb-0">
+              <NavButton id="map" icon={Map} label="Map" />
+              <NavButton id="timeline" icon={Layout} label="Timeline" />
+              <NavButton id="list" icon={List} label="Events" />
+              <NavButton id="narrative" icon={BookOpen} label="Narrative" />
+            </div>
+
+            <div className="flex gap-2 items-center relative z-10">
+              <button
+                onClick={() => setIsShareOpen(true)}
+                aria-label="Share & Export"
+                className="p-3 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center bg-stone-200 dark:bg-night-lighter text-slate dark:text-paper hover:bg-stone-300 dark:hover:bg-night"
+              >
+                <Share2 className="w-5 h-5" />
+              </button>
+
+              <button
+                onClick={() => setIsChatOpen(!isChatOpen)}
+                aria-label="Ask Historian"
+                aria-pressed={isChatOpen}
+                className={`p-3 rounded-full transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${isChatOpen ? 'bg-gold text-ink shadow-lg ring-2 ring-gold-light' : 'bg-stone-200 dark:bg-night-lighter text-slate dark:text-paper hover:bg-stone-300 dark:hover:bg-night'}`}
+              >
+                <MessageCircle className="w-5 h-5" />
+              </button>
+            </div>
+          </header>
+
+          {/* Main Content Area */}
+          <main className="flex-1 relative overflow-hidden bg-stone-100 dark:bg-night">
+             {view === 'map' && <MapView events={activeData.events} timeRange={activeData.timeRange} onEventClick={setSelectedEvent} />}
+             {view === 'timeline' && <div className="h-full overflow-y-auto"><TimelineView eras={activeData.eras} events={activeData.events} onEventClick={setSelectedEvent} /></div>}
+             {view === 'list' && <EventListView events={activeData.events} onEventClick={setSelectedEvent} />}
+             {view === 'narrative' && <div className="h-full overflow-y-auto"><NarrativeView text={activeData.narrative} /></div>}
+             
+             {/* Chat Panel Overlay */}
+             <ChatPanel 
+                timelineData={activeData} 
+                isOpen={isChatOpen} 
+                onClose={() => setIsChatOpen(false)} 
+                pendingMessage={pendingChatQuery}
+                onMessageHandled={() => setPendingChatQuery(null)}
+             />
+          </main>
+
+          {/* Event Detail Modal */}
+          <EventDetailModal
+            event={selectedEvent}
+            onClose={() => setSelectedEvent(null)}
+            onAskHistorian={handleAskHistorian}
           />
 
-          <TimeRangePanel
-            startYear={startYear}
-            endYear={endYear}
-            onStartYearChange={setStartYear}
-            onEndYearChange={setEndYear}
-          />
-
-          <GenerationPanel
-            region={selectedRegion}
-            mode={mode}
-            onModeChange={setMode}
-            onGenerate={handleGenerate}
-            onSurpriseMe={handleSurpriseMe}
-            isLoading={loading}
-            progress={progress}
+          {/* Share/Export Modal */}
+          <ShareExport
+            timeline={activeData}
+            isOpen={isShareOpen}
+            onClose={() => setIsShareOpen(false)}
           />
         </>
-      )}
-
-      {/* Mini Header when results are open */}
-      {isResultsOpen && activeData && (
-        <div className="fixed top-4 left-16 z-50 flex items-center gap-3">
-          <button
-            onClick={() => setIsResultsOpen(false)}
-            className="p-2 bg-paper/90 dark:bg-night/90 backdrop-blur-lg rounded-full shadow-lg border border-gold/20 hover:scale-105 transition-transform"
-          >
-            <X className="w-5 h-5 text-ink dark:text-paper" />
-          </button>
-          <div className="px-4 py-2 bg-paper/90 dark:bg-night/90 backdrop-blur-lg rounded-xl shadow-lg border border-gold/20">
-            <span className="font-serif font-bold text-ink dark:text-paper">{activeData.region}</span>
-            <span className="ml-2 text-xs text-gold">{formatYearRange(activeData.timeRange.start, activeData.timeRange.end)}</span>
-          </div>
-
-          {/* Action buttons */}
-          <button
-            onClick={() => setIsShareOpen(true)}
-            className="p-2 bg-paper/90 dark:bg-night/90 backdrop-blur-lg rounded-full shadow-lg border border-gold/20 hover:scale-105 transition-transform"
-          >
-            <Share2 className="w-5 h-5 text-ink dark:text-paper" />
-          </button>
-          <button
-            onClick={() => setIsChatOpen(!isChatOpen)}
-            className={`p-2 backdrop-blur-lg rounded-full shadow-lg border transition-all ${
-              isChatOpen
-                ? 'bg-gold text-ink border-gold'
-                : 'bg-paper/90 dark:bg-night/90 border-gold/20 hover:scale-105'
-            }`}
-          >
-            <MessageCircle className="w-5 h-5" />
-          </button>
-
-          {/* Reopen results button */}
-          <button
-            onClick={() => setIsResultsOpen(true)}
-            className="p-2 bg-gold/90 backdrop-blur-lg rounded-full shadow-lg border border-gold hover:scale-105 transition-transform"
-          >
-            <ChevronRight className="w-5 h-5 text-ink" />
-          </button>
-        </div>
-      )}
-
-      {/* Results Slide Panel */}
-      <ResultsSlidePanel
-        isOpen={isResultsOpen}
-        timeline={activeData}
-        onClose={() => setIsResultsOpen(false)}
-        onEventClick={handleEventClick}
-        onEventHover={handleEventHover}
-      />
-
-      {/* Chat Panel */}
-      {activeData && (
-        <ChatPanel
-          timelineData={activeData}
-          isOpen={isChatOpen}
-          onClose={() => setIsChatOpen(false)}
-          pendingMessage={pendingChatQuery}
-          onMessageHandled={() => setPendingChatQuery(null)}
-        />
-      )}
-
-      {/* Event Detail Modal */}
-      <EventDetailModal
-        event={selectedEvent}
-        onClose={() => setSelectedEvent(null)}
-        onAskHistorian={handleAskHistorian}
-      />
-
-      {/* Share/Export Modal */}
-      {activeData && (
-        <ShareExport
-          timeline={activeData}
-          isOpen={isShareOpen}
-          onClose={() => setIsShareOpen(false)}
-        />
       )}
     </div>
   );
