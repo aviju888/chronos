@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { HistoricalEvent, EventCategory } from '../types';
-import { Search, AlertTriangle, Book, Filter, ChevronRight } from 'lucide-react';
+import { Search, AlertTriangle, Book, Filter, ChevronRight, Clock } from 'lucide-react';
 import { EventImage } from './EventImage';
 import { formatYear } from '../utils';
 
@@ -101,6 +101,11 @@ export const EventListView: React.FC<EventListViewProps> = ({ events, onEventCli
                            <span className="text-xs uppercase tracking-wider font-bold text-slate bg-stone-100 px-2 py-0.5 rounded">
                                {evt.category}
                            </span>
+                           {evt.isOutOfRange && (
+                               <span className="text-[10px] font-bold text-orange-600 bg-orange-50 border border-orange-200 px-1.5 py-0.5 rounded uppercase flex items-center gap-1">
+                                   <Clock className="w-3 h-3" /> Out of Range
+                               </span>
+                           )}
                            {evt.isDisputed && (
                                <span className="text-[10px] font-bold text-red-600 bg-red-50 border border-red-200 px-1.5 py-0.5 rounded uppercase flex items-center gap-1">
                                    <AlertTriangle className="w-3 h-3" /> Disputed

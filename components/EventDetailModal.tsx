@@ -1,6 +1,6 @@
 import React from 'react';
 import { HistoricalEvent } from '../types';
-import { X, ExternalLink, AlertTriangle, ShieldCheck, HelpCircle, MessageSquare } from 'lucide-react';
+import { X, ExternalLink, AlertTriangle, ShieldCheck, HelpCircle, MessageSquare, Clock } from 'lucide-react';
 import { EventImage } from './EventImage';
 import { formatYear } from '../utils';
 
@@ -75,6 +75,19 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
                 </span>
              </div>
           </div>
+
+          {/* Out of Range Warning */}
+          {event.isOutOfRange && (
+            <div className="flex items-center gap-3 p-3 rounded border text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800">
+               <Clock className="w-5 h-5" />
+               <div>
+                  <span className="block font-bold text-sm">Outside Requested Time Range</span>
+                  <span className="text-xs opacity-90">
+                     This event falls outside the time period you specified, but may provide relevant context.
+                  </span>
+               </div>
+            </div>
+          )}
 
           {/* Dispute Handling */}
           {event.isDisputed && (

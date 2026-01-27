@@ -1,6 +1,6 @@
 import React from 'react';
 import { Era, HistoricalEvent } from '../types';
-import { ChevronRight, Book, AlertTriangle } from 'lucide-react';
+import { ChevronRight, Book, AlertTriangle, Clock, FileQuestion } from 'lucide-react';
 import { EventImage } from './EventImage';
 import { formatYear, formatYearRange } from '../utils';
 
@@ -11,10 +11,28 @@ interface TimelineViewProps {
 }
 
 export const TimelineView: React.FC<TimelineViewProps> = ({ eras, events, onEventClick }) => {
+  // Empty state
+  if (!eras || eras.length === 0) {
+    return (
+      <div className="p-6 bg-paper min-h-full flex items-center justify-center">
+        <div className="text-center p-8 max-w-md">
+          <FileQuestion className="w-16 h-16 mx-auto mb-4 text-stone-400" />
+          <h3 className="text-xl font-display font-bold text-ink mb-2">No Historical Eras Found</h3>
+          <p className="text-slate text-sm leading-relaxed">
+            {events.length === 0
+              ? "No events or eras were generated for this timeline. Try a different region or time range."
+              : `${events.length} events were found but no defined eras. Try the Events view to explore the records.`
+            }
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 space-y-8 bg-paper min-h-full">
       <h2 className="text-3xl font-display font-bold text-ink border-b-2 border-gold pb-2 inline-block">Chronological Eras</h2>
-      
+
       <div className="space-y-6">
         {eras.map((era) => {
           const eraEvents = events.filter(e => e.year >= era.startYear && e.year <= era.endYear).sort((a,b) => a.year - b.year);
@@ -63,11 +81,18 @@ export const TimelineView: React.FC<TimelineViewProps> = ({ eras, events, onEven
                     <div className="p-4 flex-1 flex flex-col">
                         <div className="flex justify-between items-start mb-2">
                         <span className="text-sm font-bold text-slate bg-stone-100 px-2 py-0.5 rounded">{formatYear(evt.year)}</span>
-                        {evt.isDisputed && (
-                            <span className="text-[10px] font-bold text-red-600 border border-red-200 bg-red-50 px-1 rounded uppercase tracking-tighter flex items-center gap-1">
-                                <AlertTriangle className="w-3 h-3" /> Disputed
-                            </span>
-                        )}
+                        <div className="flex gap-1">
+                          {evt.isOutOfRange && (
+                              <span className="text-[10px] font-bold text-orange-600 border border-orange-200 bg-orange-50 px-1 rounded uppercase tracking-tighter flex items-center gap-1">
+                                  <Clock className="w-3 h-3" /> Range
+                              </span>
+                          )}
+                          {evt.isDisputed && (
+                              <span className="text-[10px] font-bold text-red-600 border border-red-200 bg-red-50 px-1 rounded uppercase tracking-tighter flex items-center gap-1">
+                                  <AlertTriangle className="w-3 h-3" /> Disputed
+                              </span>
+                          )}
+                        </div>
                         </div>
                         <h4 className="font-serif font-bold text-ink group-hover:text-gold-dark mb-1 leading-tight">{evt.title}</h4>
                         <p className="text-sm text-slate line-clamp-3 mb-2 flex-1">{evt.summary}</p>
