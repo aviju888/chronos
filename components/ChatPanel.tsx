@@ -146,9 +146,9 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
       />
 
       {/* Chat panel - full width on mobile, fixed width on desktop */}
-      <div className={`fixed z-[1500] flex flex-col bg-paper shadow-2xl transition-all duration-300 ease-out
+      <div className={`fixed z-[1500] flex flex-col bg-paper dark:bg-night-light shadow-2xl transition-all duration-300 ease-out
         /* Mobile: bottom drawer */
-        inset-x-0 bottom-0 h-[85vh] rounded-t-2xl border-t border-stone-200
+        inset-x-0 bottom-0 h-[85vh] rounded-t-2xl border-t border-stone-200 dark:border-gold/20
         /* Desktop: right sidebar */
         md:inset-x-auto md:right-0 md:top-0 md:bottom-0 md:h-auto md:w-96 md:rounded-none md:border-l md:border-t-0
         /* Transform based on open state */
@@ -156,7 +156,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
       `}>
         {/* Drag handle for mobile */}
         <div className="md:hidden flex justify-center pt-2 pb-1">
-          <div className="w-10 h-1 bg-stone-300 rounded-full" />
+          <div className="w-10 h-1 bg-stone-300 dark:bg-gold/30 rounded-full" />
         </div>
 
         <div className="p-4 bg-ink text-paper flex justify-between items-center shadow-md">
@@ -183,13 +183,13 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-stone-50" ref={scrollRef}>
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-stone-50 dark:bg-night" ref={scrollRef}>
           {messages.map(msg => (
             <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-[85%] p-3 rounded-lg text-sm leading-relaxed ${
                 msg.role === 'user'
                   ? 'bg-ink text-white rounded-br-none shadow-md'
-                  : 'bg-white border border-stone-200 text-ink rounded-bl-none shadow-sm'
+                  : 'bg-white dark:bg-night-lighter border border-stone-200 dark:border-gold/20 text-ink dark:text-paper rounded-bl-none shadow-sm'
               }`}>
                 {msg.text}
               </div>
@@ -197,14 +197,14 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
           ))}
           {isTyping && (
             <div className="flex justify-start">
-              <div className="bg-stone-100 p-3 rounded-lg rounded-bl-none text-xs text-slate italic animate-pulse border border-stone-200">
+              <div className="bg-stone-100 dark:bg-night-lighter p-3 rounded-lg rounded-bl-none text-xs text-slate dark:text-paper/60 italic animate-pulse border border-stone-200 dark:border-gold/20">
                 Consulting archives...
               </div>
             </div>
           )}
         </div>
 
-        <div className="p-4 bg-white border-t border-stone-200 pb-safe">
+        <div className="p-4 bg-white dark:bg-night-light border-t border-stone-200 dark:border-gold/20 pb-safe">
           <div className="flex gap-2">
             <input
               type="text"
@@ -212,7 +212,7 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
               placeholder="Ask a question..."
-              className="flex-1 p-3 border border-stone-300 rounded-lg focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 text-base"
+              className="flex-1 p-3 border border-stone-300 dark:border-gold/30 rounded-lg focus:outline-none focus:border-gold focus:ring-2 focus:ring-gold/20 text-base bg-white dark:bg-night text-ink dark:text-paper placeholder:text-ink/40 dark:placeholder:text-paper/40"
               aria-label="Type your question"
             />
             <button
