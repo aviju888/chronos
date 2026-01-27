@@ -18,9 +18,18 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, '.'),
+      // Stub out three/webgpu - we only use WebGL renderer
+      'three/webgpu': path.resolve(__dirname, 'src/stubs/three-webgpu.js'),
     },
   },
   build: {
     outDir: 'dist',
+    rollupOptions: {
+      onwarn(warning, warn) {
+        // Suppress three/webgpu warnings
+        if (warning.message?.includes('three/webgpu')) return;
+        warn(warning);
+      },
+    },
   },
 });
