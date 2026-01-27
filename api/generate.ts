@@ -203,7 +203,15 @@ async function getSuggestions(query: string): Promise<string[]> {
     {
       role: 'user',
       content: `List 5 historically significant regions, empires, or cities that match the search term: "${query}".
-               Examples: "Rom" -> ["Roman Empire", "Romania", "Roman Republic", "Rome (City)", "Holy Roman Empire"].
+
+               IMPORTANT: If the user types a specific city name (like "San Francisco", "Paris", "Tokyo"),
+               the FIRST suggestion should be that exact city, then related regions/empires.
+
+               Examples:
+               - "Rom" -> ["Rome", "Roman Empire", "Roman Republic", "Romania", "Holy Roman Empire"]
+               - "San Francisco" -> ["San Francisco", "California", "Spanish California", "Mexican California", "United States West Coast"]
+               - "Paris" -> ["Paris", "France", "French Empire", "Kingdom of France", "Île-de-France"]
+
                Return JSON in format: {"suggestions": ["item1", "item2", ...]}`
     }
   ]);
@@ -240,6 +248,7 @@ async function getRegionsFromCoordinates(lat: number, lng: number): Promise<stri
 }
 
 async function getSmartTimeRange(region: string): Promise<{ start: number; end: number } | null> {
+  const currentYear = new Date().getFullYear();
   const response = await callGroq([
     {
       role: 'system',
@@ -249,20 +258,25 @@ async function getSmartTimeRange(region: string): Promise<{ start: number; end: 
       role: 'user',
       content: `For the historical region or topic "${region}", provide the most significant historical time range.
 
-               CRITICAL: Use NEGATIVE numbers for BC/BCE dates!
-               Examples:
-               - 753 BC = -753
-               - 476 AD = 476
-               - 3000 BC = -3000
+               DATE FORMAT RULES:
+               - For BC/BCE dates: use NEGATIVE numbers (753 BC = -753, 3000 BC = -3000)
+               - For AD/CE dates: use POSITIVE numbers (1776 AD = 1776, 2000 AD = 2000)
+               - Start year must ALWAYS be less than end year
+
+               EXAMPLES:
+               - Ancient Rome: {"start": -753, "end": 476}
+               - San Francisco: {"start": 1776, "end": ${currentYear}}
+               - Ancient Egypt: {"start": -3100, "end": -30}
+               - Victorian England: {"start": 1837, "end": 1901}
+               - Medieval Europe: {"start": 500, "end": 1500}
 
                Rules:
-               1. Start year must be LESS than end year (e.g., -753 < 476)
-               2. Over-estimate slightly to ensure context is covered.
-               3. For empires, include rise and fall.
-               4. For ancient civilizations, use negative numbers for BC dates.
+               1. For modern cities (founded after 1 AD), use POSITIVE start years
+               2. For ancient civilizations (BC/BCE), use NEGATIVE start years
+               3. For regions that exist today, end year can be current year (${currentYear})
+               4. Over-estimate slightly to ensure context is covered
 
-               Return JSON in format: {"start": number, "end": number}
-               Example for Ancient Rome: {"start": -753, "end": 476}`
+               Return JSON in format: {"start": number, "end": number}`
     }
   ]);
 
