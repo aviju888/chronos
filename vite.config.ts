@@ -18,9 +18,19 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, '.'),
+      // Resolve three.js WebGPU issue - use WebGL renderer only
+      'three/webgpu': 'three',
     },
   },
   build: {
     outDir: 'dist',
+    rollupOptions: {
+      // Externalize problematic imports
+      external: [],
+    },
+  },
+  optimizeDeps: {
+    include: ['globe.gl'],
+    exclude: [],
   },
 });
