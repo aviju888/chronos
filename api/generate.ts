@@ -150,7 +150,14 @@ async function callGroq(
   if (!response.ok) {
     const error = await response.text();
     console.error('Groq API error:', response.status, error);
-    throw new Error(`AI service temporarily unavailable`);
+    // Return more specific error for debugging
+    if (response.status === 429) {
+      throw new Error('Rate limited by AI service. Please wait a moment.');
+    }
+    if (response.status === 401) {
+      throw new Error('API key issue. Please check configuration.');
+    }
+    throw new Error(`AI service error (${response.status})`);
   }
 
   const data = await response.json();
@@ -448,18 +455,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
 
-  // CORS - restrict to your domain in production
-  const allowedOrigins = [
-    'https://chronos-explorer.vercel.app',
-    'https://chronos.vercel.app',
-    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '',
-    'http://localhost:3000', // For local dev
-  ].filter(Boolean);
-
+  // CORS - allow all origins for now (Vercel handles security)
   const origin = req.headers.origin;
-  if (origin && allowedOrigins.some(allowed => origin.startsWith(allowed.replace('https://', '').replace('http://', '')))) {
+  if (origin) {
     res.setHeader('Access-Control-Allow-Origin', origin);
-  } else if (process.env.NODE_ENV === 'development') {
+  } else {
     res.setHeader('Access-Control-Allow-Origin', '*');
   }
 
