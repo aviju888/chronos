@@ -21,9 +21,16 @@ interface SetupFormProps {
   logs: string[];
 }
 
+// Preset regions with sensible default time ranges
 const PRESET_REGIONS = [
-  "Ancient Rome", "Feudal Japan", "Victorian England", "The American West",
-  "Ottoman Empire", "Mesoamerica (Aztec/Maya)", "Industrial Revolution Europe", "Modern China"
+  { region: "Ancient Rome", start: -753, end: 476 },
+  { region: "Feudal Japan", start: 1185, end: 1603 },
+  { region: "Victorian England", start: 1837, end: 1901 },
+  { region: "The American West", start: 1803, end: 1912 },
+  { region: "Ottoman Empire", start: 1299, end: 1922 },
+  { region: "Mesoamerica (Aztec/Maya)", start: -2000, end: 1521 },
+  { region: "Industrial Revolution Europe", start: 1760, end: 1840 },
+  { region: "Modern China", start: 1912, end: 2000 },
 ];
 
 // Expanded list for "Surprise Me" feature
@@ -151,9 +158,10 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
     optimizeTimeRange(s);
   };
 
-  const handlePresetClick = (r: string) => {
-    setRegion(r);
-    optimizeTimeRange(r);
+  const handlePresetClick = (preset: { region: string; start: number; end: number }) => {
+    setRegion(preset.region);
+    setStartYear(preset.start);
+    setEndYear(preset.end);
   };
   
   const handleMapClick = async (lat: number, lng: number) => {
@@ -272,19 +280,19 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
           )}
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
-            {PRESET_REGIONS.map((r) => (
+            {PRESET_REGIONS.map((preset) => (
               <button
-                key={r}
+                key={preset.region}
                 type="button"
-                onClick={() => handlePresetClick(r)}
+                onClick={() => handlePresetClick(preset)}
                 disabled={isLoading}
                 className={`text-sm px-3 py-2.5 rounded border transition-archival font-elegant ${
-                  region === r
+                  region === preset.region
                     ? 'bg-ink dark:bg-gold text-gold dark:text-ink border-gold shadow-tome'
                     : 'bg-paper-cream dark:bg-night-lighter text-sepia dark:text-paper hover:bg-paper-dark dark:hover:bg-night border-gold/30 hover:border-gold card-inset hover-lift'
                 } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
-                {r}
+                {preset.region}
               </button>
             ))}
           </div>
