@@ -29,14 +29,48 @@ export const TimelineView: React.FC<TimelineViewProps> = ({ eras, events, onEven
     );
   }
 
+  // Pre-assign each event to exactly ONE era to avoid duplicates
+  // Strategy: assign to the era where the event year is closest to the era's midpoint
+  const eventToEraMap = new Map<string, string>();
+
+  events.forEach(event => {
+    let bestEraId: string | null = null;
+    let bestScore = Infinity;
+
+    eras.forEach(era => {
+      // Check if event falls within era bounds
+      if (event.year >= era.startYear && event.year <= era.endYear) {
+        // Score: prefer era where event is NOT on the boundary
+        // Lower score = better fit
+        const distFromStart = Math.abs(event.year - era.startYear);
+        const distFromEnd = Math.abs(event.year - era.endYear);
+        const score = Math.min(distFromStart, distFromEnd);
+
+        // If event is on boundary (score = 0), prefer the later era
+        // Otherwise prefer era where event is more "inside"
+        if (bestEraId === null || score > bestScore || (score === bestScore && era.startYear > (eras.find(e => e.id === bestEraId)?.startYear || 0))) {
+          bestScore = score;
+          bestEraId = era.id;
+        }
+      }
+    });
+
+    if (bestEraId) {
+      eventToEraMap.set(event.id, bestEraId);
+    }
+  });
+
   return (
     <div className="p-6 space-y-8 bg-paper min-h-full">
       <h2 className="text-3xl font-display font-bold text-ink border-b-2 border-gold pb-2 inline-block">Chronological Eras</h2>
 
       <div className="space-y-6">
         {eras.map((era) => {
-          const eraEvents = events.filter(e => e.year >= era.startYear && e.year <= era.endYear).sort((a,b) => a.year - b.year);
-          
+          // Only show events assigned to THIS era
+          const eraEvents = events
+            .filter(e => eventToEraMap.get(e.id) === era.id)
+            .sort((a,b) => a.year - b.year);
+
           return (
             <div key={era.id} className="relative pl-8 border-l-4 border-stone-300 hover:border-gold transition-colors">
               {/* Era Header */}
