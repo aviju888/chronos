@@ -156,25 +156,29 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
     setCurrentYear(timeRange.start);
   }, [timeRange]);
 
-  // Auto-play logic
+  // Memoize sorted years for auto-play and navigation
+  const sortedYears = useMemo(() => {
+    return Array.from(new Set(events.map(e => e.year))).sort((a: number, b: number) => a - b);
+  }, [events]);
+
+  // Auto-play logic - jumps to next event instead of crawling through empty years
   useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
+    let timeout: ReturnType<typeof setTimeout>;
     if (isPlaying) {
-      interval = setInterval(() => {
+      timeout = setTimeout(() => {
         setCurrentYear(prev => {
-          if (prev >= timeRange.end) {
+          // Find the next event year after current
+          const nextEventYear = sortedYears.find(y => y > prev);
+          if (nextEventYear === undefined || nextEventYear > timeRange.end) {
             setIsPlaying(false);
-            return prev;
+            return timeRange.end;
           }
-          // Dynamic step size based on range to ensure it doesn't take forever
-          const range = timeRange.end - timeRange.start;
-          const step = Math.max(1, Math.floor(range / 200)); 
-          return Math.min(prev + step, timeRange.end);
+          return nextEventYear;
         });
-      }, 50); // Fast update rate for smoothness
+      }, 1500); // Pause 1.5 seconds between events
     }
-    return () => clearInterval(interval);
-  }, [isPlaying, timeRange]);
+    return () => clearTimeout(timeout);
+  }, [isPlaying, currentYear, sortedYears, timeRange.end]);
 
   const visibleEvents = useMemo(() => {
       // Show events from start up to current year
@@ -218,11 +222,6 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
      const maxCount = Math.max(...distribution, 1);
      return distribution.map(count => count / maxCount); // normalize 0-1
   }, [events, timeRange]);
-
-  // Memoize sorted years to avoid recalculation on every navigation
-  const sortedYears = useMemo(() => {
-    return Array.from(new Set(events.map(e => e.year))).sort((a: number, b: number) => a - b);
-  }, [events]);
 
   const handleJump = (direction: 'prev' | 'next') => {
       if (direction === 'next') {
