@@ -1,6 +1,6 @@
 import React from 'react';
 import { TimelineData } from '../types';
-import { Clock, Plus, Trash2, Scroll, Home } from 'lucide-react';
+import { Clock, Plus, Trash2, Scroll } from 'lucide-react';
 import { formatYearRange } from '../utils';
 
 interface HistorySidebarProps {
@@ -18,9 +18,9 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
 }) => {
   return (
     <>
-      {/* Tab/Handle to open sidebar + Home button */}
+      {/* Tab/Handle to open sidebar */}
       {!isOpen && (
-        <div className="fixed left-0 top-24 z-40 flex flex-col gap-1">
+        <div className="fixed left-0 top-24 z-40">
           <button
             onClick={onToggle}
             className="bg-ink text-gold border-r border-y border-gold p-2 rounded-r-md shadow-lg hover:bg-ink-light transition-all"
@@ -28,15 +28,6 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
           >
             <Scroll className="w-5 h-5" />
           </button>
-          {activeId && (
-            <button
-              onClick={onNew}
-              className="bg-ink text-gold border-r border-y border-gold p-2 rounded-r-md shadow-lg hover:bg-ink-light transition-all"
-              title="Back to Home"
-            >
-              <Home className="w-5 h-5" />
-            </button>
-          )}
         </div>
       )}
 

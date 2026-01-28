@@ -290,7 +290,11 @@ const App: React.FC = () => {
              <div className="absolute bottom-0 left-0 right-0 gold-strip"></div>
 
             <div className="flex items-center gap-4 relative z-10 ml-12 md:ml-0">
-              <h1 className="font-display font-bold text-xl text-ink dark:text-gold hidden md:block tracking-[0.2em] text-embossed animate-candle">CHRONOS</h1>
+              <button
+                onClick={() => setActiveTimelineId(null)}
+                className="font-display font-bold text-xl text-ink dark:text-gold hidden md:block tracking-[0.2em] text-embossed animate-candle hover:text-gold dark:hover:text-paper transition-colors cursor-pointer"
+                title="Return to Home"
+              >CHRONOS</button>
               <div className="h-8 w-px bg-gradient-to-b from-transparent via-gold to-transparent hidden md:block"></div>
               <div>
                 <span className="block font-dramatic font-bold text-ink dark:text-paper text-lg leading-none">{activeData.region}</span>
