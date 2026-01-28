@@ -5,7 +5,6 @@ import { Globe } from './Globe';
 import { GlobeMarkers } from './GlobeMarkers';
 import { GlobeArcs } from './GlobeArcs';
 import { HistoricalEvent } from '../../types';
-import * as THREE from 'three';
 
 interface GlobeCanvasProps {
   events: HistoricalEvent[];
