@@ -161,24 +161,43 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
     return Array.from(new Set(events.map(e => e.year))).sort((a: number, b: number) => a - b);
   }, [events]);
 
-  // Auto-play logic - jumps to next event instead of crawling through empty years
+  // Auto-play logic - smooth but skips empty periods quickly
   useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout>;
+    let interval: ReturnType<typeof setInterval>;
     if (isPlaying) {
-      timeout = setTimeout(() => {
+      interval = setInterval(() => {
         setCurrentYear(prev => {
-          // Find the next event year after current
+          if (prev >= timeRange.end) {
+            setIsPlaying(false);
+            return prev;
+          }
+
+          // Find the next event year
           const nextEventYear = sortedYears.find(y => y > prev);
-          if (nextEventYear === undefined || nextEventYear > timeRange.end) {
+          if (nextEventYear === undefined) {
             setIsPlaying(false);
             return timeRange.end;
           }
-          return nextEventYear;
+
+          // Calculate gap to next event
+          const gap = nextEventYear - prev;
+
+          // If gap is small (< 20 years), move year by year for smoothness
+          // If gap is large, jump in bigger steps (10% of gap) but animate smoothly
+          if (gap <= 20) {
+            return prev + 1;
+          } else {
+            // Move quickly through empty periods but in steps, not instant jumps
+            const step = Math.max(1, Math.floor(gap / 10));
+            const newYear = prev + step;
+            // Don't overshoot the next event
+            return Math.min(newYear, nextEventYear);
+          }
         });
-      }, 1500); // Pause 1.5 seconds between events
+      }, 80); // Smooth 80ms intervals
     }
-    return () => clearTimeout(timeout);
-  }, [isPlaying, currentYear, sortedYears, timeRange.end]);
+    return () => clearInterval(interval);
+  }, [isPlaying, sortedYears, timeRange.end]);
 
   const visibleEvents = useMemo(() => {
       // Show events from start up to current year
