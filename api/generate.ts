@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { batchEnrichEvents, discoverSubEvents, fetchWikipediaArticle } from './services/wikipediaService';
 
 // ============================================
 // SECURITY & RATE LIMITING
@@ -460,14 +461,18 @@ async function generateTimelineData(
   mode: 'quick' | 'deep'
 ): Promise<any> {
   const model = mode === 'deep' ? MODELS.deep : MODELS.fast;
-  const eventCount = mode === 'deep' ? 30 : 15; // Reduced to stay under token limits
+  const seedEventCount = mode === 'deep' ? 15 : 10; // Seed events (will be expanded via Wikipedia)
 
-  // Step 1: Generate Eras
   // Format years for display in prompts
   const formatYearForPrompt = (year: number) => year < 0 ? `${Math.abs(year)} BC` : `${year} AD`;
   const startDisplay = formatYearForPrompt(startYear);
   const endDisplay = formatYearForPrompt(endYear);
+  const yearRange = { start: startYear, end: endYear };
 
+  // ============================================
+  // STEP 1: Generate Eras (unchanged)
+  // ============================================
+  console.log('Step 1: Generating eras...');
   const erasResponse = await callGroq([
     {
       role: 'system',
@@ -512,89 +517,175 @@ CRITICAL DATE FORMAT:
     console.log('Eras response required JSON recovery');
   }
 
-  // Step 2: Generate Events
-  const eventsResponse = await callGroq([
+  // ============================================
+  // STEP 2: Generate SEED Events (major anchor events with Wikipedia titles)
+  // ============================================
+  console.log('Step 2: Generating seed events...');
+  const seedEventsResponse = await callGroq([
     {
       role: 'system',
-      content: `You are a rigorous academic historian. Your PRIMARY DIRECTIVE is factual accuracy.
+      content: `You are a rigorous academic historian. Your task is to identify MAJOR ANCHOR events that have dedicated Wikipedia articles.
 
 CRITICAL RULES:
-1. ONLY include events that are WELL-DOCUMENTED in mainstream historical sources
-2. NEVER invent, fabricate, or guess at historical events
-3. If unsure about an event, DO NOT include it
-4. Prefer FEWER accurate events over MORE questionable ones
-5. Use EXACT dates when known, approximate decades when uncertain
-6. Every event MUST be verifiable in Wikipedia, Britannica, or academic sources
-7. Citations must reference REAL sources that actually discuss the event
-8. AD years are POSITIVE (1776 AD = 1776), BC years are NEGATIVE (44 BC = -44)
+1. Focus on PIVOTAL events only (wars, regime changes, major treaties, revolutions, famous battles)
+2. Each event MUST have its own Wikipedia article
+3. Include the EXACT Wikipedia article title - this will be used to fetch more details
+4. AD years are POSITIVE (1776), BC years are NEGATIVE (-44)
 
-Always respond with valid JSON matching the requested schema exactly.`
+Always respond with valid JSON.`
     },
     {
       role: 'user',
-      content: `Generate ${eventCount} VERIFIED historical events for ${region} from ${startDisplay} (year ${startYear}) to ${endDisplay} (year ${endYear}).
+      content: `Generate ${seedEventCount} MAJOR anchor events for ${region} from ${startDisplay} (year ${startYear}) to ${endDisplay} (year ${endYear}).
 
         The eras are: ${eras.map((e: any) => e.title).join(', ')}
 
-        STRICT REQUIREMENTS:
-        1. ONLY include events you are CERTAIN are historically accurate
-        2. Each event must be findable in Wikipedia or Encyclopaedia Britannica
-        3. If you cannot verify an event exists, DO NOT include it
-        4. Better to return 20 accurate events than 40 with fabrications
-        5. For ancient history, stick to major well-documented events only
-        6. EVERY event MUST include location coordinates (lat/lng) - use the city, battlefield, or region center
-        7. Categorize: Politics, War, Culture, Economy, Religion, Science, Other
-        8. Citation sources must be REAL encyclopedic sources
-        9. Set confidenceScore="High" only for textbook-level well-known events
-        10. Set confidenceScore="Medium" for events with some scholarly debate on details
-        11. Provide 'imageQuery': 2-4 word Wikipedia search term for the event
-        12. AD years are POSITIVE (1776 = 1776), BC years are NEGATIVE (44 BC = -44)
+        REQUIREMENTS:
+        1. Each event MUST have a corresponding Wikipedia article
+        2. Include the EXACT Wikipedia article title in "wikipediaTitle" field
+        3. Focus on: Wars, Battles, Treaties, Revolutions, Coronations, Deaths of rulers, Major laws/edicts
+        4. Spread events across the entire time period
+        5. Include coordinates (lat/lng) for each event location
 
         Return JSON in format:
         {
           "events": [
             {
               "id": "string",
-              "title": "string (use common historical name)",
-              "year": number (positive for AD like 1776, negative for BC like -44),
+              "title": "string (common name)",
+              "wikipediaTitle": "string (EXACT Wikipedia article title, e.g., 'Battle of Thermopylae' or 'Julius Caesar')",
+              "year": number (positive for AD, negative for BC),
               "category": "Politics" | "War" | "Culture" | "Economy" | "Religion" | "Science" | "Other",
-              "summary": "string (2-3 sentences, factual only)",
-              "imageQuery": "string",
-              "citations": [{"source": "Wikipedia: Article Name" or "Britannica: Article Name", "url": "string (optional)"}],
-              "location": {"lat": number, "lng": number, "name": "string"} (REQUIRED - use city/region center coordinates),
+              "summary": "string (1 sentence)",
+              "imageQuery": "string (2-4 words for image search)",
+              "location": {"lat": number, "lng": number, "name": "string"},
               "isDisputed": boolean,
-              "disputeClaims": [{"summary": "string", "citations": [{"source": "string"}]}] (optional),
-              "confidenceScore": "High" | "Medium" | "Low"
+              "confidenceScore": "High" | "Medium"
             }
           ]
         }`
     }
   ], model);
 
-  let events = [];
-  const eventsParsed = safeParseJSON<{ events?: any[] }>(eventsResponse, { events: [] });
-  if (eventsParsed.recovered) {
-    console.log('Events response required JSON recovery');
+  const seedEventsParsed = safeParseJSON<{ events?: any[] }>(seedEventsResponse, { events: [] });
+  if (seedEventsParsed.recovered) {
+    console.log('Seed events response required JSON recovery');
   }
 
-  // Parse and normalize events
-  const rawEvents = (Array.isArray(eventsParsed.data?.events) ? eventsParsed.data.events : []).map((evt: any) => ({
-    ...evt,
-    citations: Array.isArray(evt.citations) ? evt.citations : [],
-    disputeClaims: Array.isArray(evt.disputeClaims)
-      ? evt.disputeClaims.map((dc: any) => ({
-          ...dc,
-          citations: Array.isArray(dc.citations) ? dc.citations : [],
-        }))
-      : [],
-    // Flag events outside the requested time range
-    isOutOfRange: typeof evt.year === 'number' && (evt.year < startYear || evt.year > endYear),
-  }));
+  const seedEvents = (Array.isArray(seedEventsParsed.data?.events) ? seedEventsParsed.data.events : [])
+    .filter((evt: any) => evt && typeof evt.year === 'number' && evt.year >= startYear && evt.year <= endYear);
 
-  // Deduplicate events (same year + similar title)
-  events = deduplicateEvents(rawEvents);
+  console.log(`Generated ${seedEvents.length} seed events`);
 
-  // Step 3: Generate Narrative
+  // ============================================
+  // STEP 3: Wikipedia Enrichment
+  // ============================================
+  console.log('Step 3: Enriching events via Wikipedia...');
+
+  let allEvents: any[] = [];
+
+  try {
+    const { enrichedEvents, allSubEvents } = await batchEnrichEvents(
+      seedEvents.map((e: any) => ({
+        title: e.title,
+        year: e.year,
+        wikipediaTitle: e.wikipediaTitle
+      })),
+      yearRange
+    );
+
+    console.log(`Wikipedia enriched: ${enrichedEvents.length} events, discovered ${allSubEvents.length} sub-events`);
+
+    // Merge seed events with Wikipedia data
+    for (const seed of seedEvents) {
+      const enriched = enrichedEvents.find(e =>
+        e.title.toLowerCase() === seed.title.toLowerCase() ||
+        e.wikipediaTitle?.toLowerCase() === seed.wikipediaTitle?.toLowerCase()
+      );
+
+      allEvents.push({
+        id: seed.id || crypto.randomUUID(),
+        title: seed.title,
+        year: seed.year,
+        category: seed.category || 'Other',
+        summary: enriched?.summary || seed.summary,
+        imageQuery: seed.imageQuery,
+        citations: [
+          ...(seed.citations || []),
+          enriched?.wikipediaUrl ? {
+            source: `Wikipedia: ${enriched.wikipediaTitle}`,
+            url: enriched.wikipediaUrl
+          } : null
+        ].filter(Boolean),
+        location: seed.location || (enriched?.coordinates ? {
+          lat: enriched.coordinates.lat,
+          lng: enriched.coordinates.lng,
+          name: seed.title
+        } : undefined),
+        isDisputed: seed.isDisputed || false,
+        confidenceScore: 'High',
+        wikipediaTitle: enriched?.wikipediaTitle || seed.wikipediaTitle,
+        wikipediaUrl: enriched?.wikipediaUrl,
+        exactDate: enriched?.exactDate,
+        keyFigures: enriched?.keyFigures,
+        sourceType: 'llm' as const,
+        isSubEvent: false
+      });
+    }
+
+    // Add discovered sub-events
+    for (const sub of allSubEvents) {
+      // Find parent event
+      const parent = allEvents.find(e =>
+        Math.abs(e.year - sub.year) < 50 // Within 50 years
+      );
+
+      allEvents.push({
+        id: crypto.randomUUID(),
+        title: sub.title,
+        year: sub.year,
+        category: categorizeEvent(sub.title),
+        summary: sub.summary,
+        imageQuery: sub.title.split(' ').slice(0, 3).join(' '),
+        citations: [{
+          source: `Wikipedia: ${sub.wikipediaTitle}`,
+          url: sub.wikipediaUrl
+        }],
+        location: sub.coordinates ? {
+          lat: sub.coordinates.lat,
+          lng: sub.coordinates.lng,
+          name: sub.title
+        } : parent?.location,
+        isDisputed: false,
+        confidenceScore: 'High',
+        wikipediaTitle: sub.wikipediaTitle,
+        wikipediaUrl: sub.wikipediaUrl,
+        exactDate: sub.exactDate,
+        keyFigures: sub.keyFigures,
+        sourceType: 'wikipedia' as const,
+        isSubEvent: true,
+        parentEventId: parent?.id
+      });
+    }
+  } catch (wikiError) {
+    console.error('Wikipedia enrichment failed, using seed events only:', wikiError);
+    // Fall back to seed events without enrichment
+    allEvents = seedEvents.map((e: any) => ({
+      ...e,
+      id: e.id || crypto.randomUUID(),
+      citations: e.citations || [],
+      sourceType: 'llm' as const
+    }));
+  }
+
+  // Deduplicate events
+  const events = deduplicateEvents(allEvents);
+  console.log(`Final event count after deduplication: ${events.length}`);
+
+  // ============================================
+  // STEP 4: Generate Narrative (enhanced with more events)
+  // ============================================
+  console.log('Step 4: Generating narrative...');
   const narrativeResponse = await callGroq([
     {
       role: 'system',
@@ -605,13 +696,13 @@ Always respond with valid JSON matching the requested schema exactly.`
       content: `Write a factual historical overview (3-4 paragraphs) of ${region} from ${startDisplay} to ${endDisplay}.
 
         Reference these eras: ${eras.map((e: any) => e.title).join(', ')}
-        Key events include: ${events.slice(0, 10).map((e: any) => e.title).join(', ')}
+        Key events include: ${events.slice(0, 15).map((e: any) => `${e.title} (${formatYearForPrompt(e.year)})`).join(', ')}
 
         REQUIREMENTS:
         - Write in encyclopedia style (factual, neutral tone)
         - Only state facts that would appear in Britannica or Wikipedia
-        - Mention major turning points
-        - Note any well-known historical debates (with "historians debate..." framing)
+        - Mention major turning points and their consequences
+        - Note any well-known historical debates
         - Do NOT invent details or dramatize
 
         Return JSON in format: {"narrative": "string"}`
@@ -634,6 +725,21 @@ Always respond with valid JSON matching the requested schema exactly.`
     events,
     narrative,
   };
+}
+
+// Helper to categorize events based on title
+function categorizeEvent(title: string): string {
+  const lower = title.toLowerCase();
+  if (/battle|war|siege|invasion|conquest|campaign|crusade/.test(lower)) return 'War';
+  if (/treaty|peace|alliance|agreement|accord/.test(lower)) return 'Politics';
+  if (/coronation|death of|assassination|reign|emperor|king|queen/.test(lower)) return 'Politics';
+  if (/act|law|edict|decree|constitution/.test(lower)) return 'Politics';
+  if (/revolution|rebellion|uprising|revolt/.test(lower)) return 'Politics';
+  if (/church|pope|council|religious|monastery/.test(lower)) return 'Religion';
+  if (/trade|commerce|economic|famine|plague/.test(lower)) return 'Economy';
+  if (/art|literature|philosophy|university|discovery/.test(lower)) return 'Culture';
+  if (/invention|science|astronomy|mathematics/.test(lower)) return 'Science';
+  return 'Other';
 }
 
 async function askFollowUp(

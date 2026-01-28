@@ -36,6 +36,15 @@ export interface HistoricalEvent {
   confidenceScore: 'High' | 'Medium' | 'Low'; // For UI indication
   imageQuery?: string; // Optimized search term for finding an image
   isOutOfRange?: boolean; // Event year is outside the requested time range
+
+  // Wikipedia enrichment fields
+  wikipediaTitle?: string;       // Source Wikipedia article title
+  wikipediaUrl?: string;         // Direct link to Wikipedia article
+  exactDate?: string;            // Full date like "July 4, 1776"
+  keyFigures?: string[];         // Key people involved
+  parentEventId?: string;        // Links sub-events to anchor events
+  isSubEvent?: boolean;          // True for events discovered from Wikipedia links
+  sourceType?: 'llm' | 'wikipedia' | 'search';  // Origin of the event data
 }
 
 export interface Era {
