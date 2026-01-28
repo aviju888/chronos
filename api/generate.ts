@@ -473,8 +473,10 @@ async function generateTimelineData(
       role: 'system',
       content: `You are a rigorous academic historian. Use ONLY standard historical periodization that would appear in textbooks and encyclopedias. Do not invent era names - use established historical terminology.
 
-IMPORTANT: For dates, use NEGATIVE numbers for BC/BCE years.
-Examples: 753 BC = -753, 476 AD = 476, 3000 BC = -3000`
+CRITICAL DATE FORMAT:
+- AD/CE years are POSITIVE: 1760 AD = 1760, 1840 AD = 1840, 476 AD = 476
+- BC/BCE years are NEGATIVE: 753 BC = -753, 3000 BC = -3000
+- NEVER use negative numbers for AD years!`
     },
     {
       role: 'user',
@@ -485,7 +487,8 @@ Examples: 753 BC = -753, 476 AD = 476, 3000 BC = -3000`
         - Each era must be a recognized historical period found in academic sources
         - Do NOT invent creative era names
         - Eras must have accurate, historically accepted date ranges
-        - Use NEGATIVE numbers for BC dates (e.g., 500 BC = -500)
+        - AD years are POSITIVE (1760, 1840, etc.)
+        - BC years are NEGATIVE (-753, -500, etc.)
 
         Return JSON in format:
         {
@@ -493,8 +496,8 @@ Examples: 753 BC = -753, 476 AD = 476, 3000 BC = -3000`
             {
               "id": "string",
               "title": "string (standard historical name)",
-              "startYear": number (negative for BC),
-              "endYear": number (negative for BC),
+              "startYear": number (positive for AD, negative for BC),
+              "endYear": number (positive for AD, negative for BC),
               "summary": "string (1-2 sentences)"
             }
           ]
@@ -523,7 +526,7 @@ CRITICAL RULES:
 5. Use EXACT dates when known, approximate decades when uncertain
 6. Every event MUST be verifiable in Wikipedia, Britannica, or academic sources
 7. Citations must reference REAL sources that actually discuss the event
-8. Use NEGATIVE numbers for BC/BCE years (e.g., 44 BC = -44)
+8. AD years are POSITIVE (1776 AD = 1776), BC years are NEGATIVE (44 BC = -44)
 
 Always respond with valid JSON matching the requested schema exactly.`
     },
@@ -545,7 +548,7 @@ Always respond with valid JSON matching the requested schema exactly.`
         9. Set confidenceScore="High" only for textbook-level well-known events
         10. Set confidenceScore="Medium" for events with some scholarly debate on details
         11. Provide 'imageQuery': 2-4 word Wikipedia search term for the event
-        12. Use NEGATIVE year numbers for BC dates (44 BC = -44, 509 BC = -509)
+        12. AD years are POSITIVE (1776 = 1776), BC years are NEGATIVE (44 BC = -44)
 
         Return JSON in format:
         {
@@ -553,7 +556,7 @@ Always respond with valid JSON matching the requested schema exactly.`
             {
               "id": "string",
               "title": "string (use common historical name)",
-              "year": number (NEGATIVE for BC, e.g., -44 for 44 BC),
+              "year": number (positive for AD like 1776, negative for BC like -44),
               "category": "Politics" | "War" | "Culture" | "Economy" | "Religion" | "Science" | "Other",
               "summary": "string (2-3 sentences, factual only)",
               "imageQuery": "string",
