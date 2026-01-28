@@ -539,7 +539,7 @@ Always respond with valid JSON matching the requested schema exactly.`
         3. If you cannot verify an event exists, DO NOT include it
         4. Better to return 20 accurate events than 40 with fabrications
         5. For ancient history, stick to major well-documented events only
-        6. Include Lat/Lng only for events with KNOWN specific locations
+        6. EVERY event MUST include location coordinates (lat/lng) - use the city, battlefield, or region center
         7. Categorize: Politics, War, Culture, Economy, Religion, Science, Other
         8. Citation sources must be REAL encyclopedic sources
         9. Set confidenceScore="High" only for textbook-level well-known events
@@ -558,7 +558,7 @@ Always respond with valid JSON matching the requested schema exactly.`
               "summary": "string (2-3 sentences, factual only)",
               "imageQuery": "string",
               "citations": [{"source": "Wikipedia: Article Name" or "Britannica: Article Name", "url": "string (optional)"}],
-              "location": {"lat": number, "lng": number, "name": "string"} (optional, only if location is certain),
+              "location": {"lat": number, "lng": number, "name": "string"} (REQUIRED - use city/region center coordinates),
               "isDisputed": boolean,
               "disputeClaims": [{"summary": "string", "citations": [{"source": "string"}]}] (optional),
               "confidenceScore": "High" | "Medium" | "Low"
