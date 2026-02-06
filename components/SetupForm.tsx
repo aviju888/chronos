@@ -195,13 +195,13 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-paper-dark dark:bg-night-light shadow-archive rounded-lg overflow-hidden border-manuscript mt-10 mb-10 relative animate-page-turn">
+    <div className="max-w-3xl mx-2 md:mx-auto bg-paper-dark dark:bg-night-light shadow-archive rounded-lg overflow-hidden border-manuscript mt-4 md:mt-10 mb-4 md:mb-10 relative animate-page-turn">
       <div className="absolute top-0 left-0 w-full gold-strip"></div>
 
-      <div className="bg-ink p-8 text-paper text-center relative overflow-hidden vignette">
+      <div className="bg-ink p-5 md:p-8 text-paper text-center relative overflow-hidden vignette">
          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-20"></div>
-        <h1 className="text-5xl font-display font-bold text-gold mb-2 tracking-[0.25em] relative z-10 text-embossed animate-candle">CHRONOS</h1>
-        <p className="text-gold-light/70 font-antique text-lg tracking-widest relative z-10">Deep History Explorer</p>
+        <h1 className="text-3xl md:text-5xl font-display font-bold text-gold mb-1 md:mb-2 tracking-[0.15em] md:tracking-[0.25em] relative z-10 text-embossed animate-candle">CHRONOS</h1>
+        <p className="text-gold-light/70 font-antique text-sm md:text-lg tracking-widest relative z-10">Deep History Explorer</p>
 
         {/* Surprise Me Button */}
         <button
@@ -215,7 +215,7 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-8 space-y-8 bg-paper dark:bg-night-light relative">
+      <form onSubmit={handleSubmit} className="p-4 md:p-8 space-y-6 md:space-y-8 bg-paper dark:bg-night-light relative">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] dark:bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-30 dark:opacity-10 pointer-events-none"></div>
 
         {/* Region Section */}
