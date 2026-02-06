@@ -86,10 +86,10 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
 
               <button
                 onClick={(e) => { e.stopPropagation(); onDelete(t.id); }}
-                className="absolute top-2 right-2 p-1.5 rounded hover:bg-crimson/30 hover:text-crimson-light text-stone-600 transition-colors opacity-0 group-hover:opacity-100"
+                className="absolute top-2 right-2 p-1.5 rounded hover:bg-crimson/30 hover:text-crimson-light text-stone-600 transition-colors opacity-100 md:opacity-0 md:group-hover:opacity-100 min-w-[36px] min-h-[36px] flex items-center justify-center"
                 title="Delete Archive"
               >
-                <Trash2 className="w-3 h-3" />
+                <Trash2 className="w-4 h-4 md:w-3 md:h-3" />
               </button>
             </div>
           ))}

@@ -376,8 +376,8 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
       </div>
 
       {/* Enhanced Time Scrubber Control */}
-      <div className="absolute bottom-6 left-4 right-4 md:left-1/2 md:right-auto md:transform md:-translate-x-1/2 md:w-3/4 max-w-4xl bg-paper border-double-archival shadow-2xl z-[1000] p-1 rounded-lg">
-        <div className="bg-ink p-4 rounded text-paper relative overflow-hidden">
+      <div className="absolute bottom-3 md:bottom-6 left-3 right-3 md:left-1/2 md:right-auto md:transform md:-translate-x-1/2 md:w-3/4 max-w-4xl bg-paper border-double-archival shadow-2xl z-[1000] p-1 rounded-lg">
+        <div className="bg-ink p-3 md:p-4 rounded text-paper relative overflow-hidden">
             {/* Background Texture */}
             <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')]"></div>
             
@@ -395,7 +395,7 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
                         </button>
                         <div>
                              <h3 className="text-[10px] font-bold tracking-[0.2em] text-stone-400 uppercase font-sans">Current Year</h3>
-                             <div className="text-4xl font-display font-bold text-white tabular-nums leading-none tracking-tight">
+                             <div className="text-3xl md:text-4xl font-display font-bold text-white tabular-nums leading-none tracking-tight">
                                 {formatYear(currentYear)}
                              </div>
                         </div>

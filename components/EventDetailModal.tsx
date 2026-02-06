@@ -26,30 +26,34 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
   }[event.confidenceScore];
 
   return (
-    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-ink/60 backdrop-blur-sm">
-      <div className="bg-paper dark:bg-night-light rounded-lg shadow-archive w-full max-w-2xl max-h-[90vh] overflow-y-auto flex flex-col border-manuscript animate-page-turn">
+    <div className="fixed inset-0 z-[2000] flex items-end md:items-center justify-center p-0 md:p-4 bg-ink/60 backdrop-blur-sm">
+      <div className="bg-paper dark:bg-night-light rounded-t-2xl md:rounded-lg shadow-archive w-full max-w-full md:max-w-2xl h-[95vh] md:h-auto md:max-h-[90vh] overflow-y-auto flex flex-col md:border-manuscript animate-page-turn">
 
         {/* Banner Image */}
-        <div className="w-full h-48 relative shrink-0">
+        <div className="w-full h-36 md:h-48 relative shrink-0">
              <EventImage
                 query={event.imageQuery || event.title}
                 alt={event.title}
                 className="w-full h-full"
              />
              <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/30 to-transparent vignette"></div>
-             <button onClick={onClose} className="absolute top-4 right-4 p-2 bg-ink/50 hover:bg-ink/70 text-gold rounded-full transition-archival backdrop-blur-sm border border-gold/30 glow-gold">
+             <button onClick={onClose} className="absolute top-3 right-3 md:top-4 md:right-4 p-2 bg-ink/50 hover:bg-ink/70 text-gold rounded-full transition-archival backdrop-blur-sm border border-gold/30 glow-gold min-w-[44px] min-h-[44px] flex items-center justify-center">
                 <X className="w-6 h-6" />
              </button>
-             <div className="absolute bottom-4 left-6 text-white">
-                <span className="inline-block text-xs font-bold tracking-widest uppercase bg-gradient-to-r from-gold to-gold-dark px-3 py-1 rounded text-ink mb-2 shadow-lg font-antique">
+             {/* Mobile drag handle */}
+             <div className="md:hidden absolute top-2 left-1/2 -translate-x-1/2">
+               <div className="w-10 h-1 bg-white/40 rounded-full" />
+             </div>
+             <div className="absolute bottom-3 left-4 md:bottom-4 md:left-6 text-white">
+                <span className="inline-block text-[10px] md:text-xs font-bold tracking-widest uppercase bg-gradient-to-r from-gold to-gold-dark px-2 md:px-3 py-0.5 md:py-1 rounded text-ink mb-1 md:mb-2 shadow-lg font-antique">
                    [{formatYear(event.year)}] • {event.category}
                 </span>
-                <h2 className="text-3xl font-dramatic font-bold leading-none drop-shadow-lg">{event.title}</h2>
+                <h2 className="text-2xl md:text-3xl font-dramatic font-bold leading-none drop-shadow-lg">{event.title}</h2>
              </div>
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6 relative">
+        <div className="p-4 md:p-6 space-y-5 md:space-y-6 relative">
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] dark:bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-30 dark:opacity-10 pointer-events-none"></div>
 
           {/* Summary */}

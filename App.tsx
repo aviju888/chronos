@@ -207,21 +207,40 @@ const App: React.FC = () => {
     setPendingChatQuery(`Tell me interesting details about the event "${event.title}" (${event.year}) that aren't in the summary.`);
   };
 
-  const NavButton = ({ id, icon: Icon, label }: { id: typeof view, icon: React.ElementType, label: string }) => (
-    <button
-      onClick={() => setView(id)}
-      aria-label={label}
-      aria-pressed={view === id}
-      className={`flex items-center justify-center gap-2 min-w-[44px] min-h-[44px] px-3 md:px-4 py-2 rounded-full font-bold text-sm transition-all ${
-        view === id
-          ? 'bg-ink dark:bg-gold text-gold dark:text-ink shadow-md border border-gold'
-          : 'bg-paper dark:bg-night-lighter text-slate dark:text-paper hover:bg-stone-200 dark:hover:bg-night border border-transparent'
-      }`}
-    >
-      <Icon className="w-5 h-5 md:w-4 md:h-4" />
-      <span className="hidden md:inline">{label}</span>
-    </button>
-  );
+  const NavButton = ({ id, icon: Icon, label, variant = 'header' }: { id: typeof view, icon: React.ElementType, label: string, variant?: 'header' | 'bottombar' }) => {
+    if (variant === 'bottombar') {
+      return (
+        <button
+          onClick={() => setView(id)}
+          aria-label={label}
+          aria-pressed={view === id}
+          className={`flex flex-col items-center justify-center flex-1 py-2 gap-0.5 transition-all ${
+            view === id
+              ? 'text-gold'
+              : 'text-stone-400 dark:text-stone-500'
+          }`}
+        >
+          <Icon className={`w-5 h-5 ${view === id ? 'drop-shadow-[0_0_4px_rgba(197,160,89,0.6)]' : ''}`} />
+          <span className={`text-[10px] font-bold tracking-wide ${view === id ? 'text-gold' : ''}`}>{label}</span>
+        </button>
+      );
+    }
+    return (
+      <button
+        onClick={() => setView(id)}
+        aria-label={label}
+        aria-pressed={view === id}
+        className={`flex items-center justify-center gap-2 min-w-[44px] min-h-[44px] px-4 py-2 rounded-full font-bold text-sm transition-all ${
+          view === id
+            ? 'bg-ink dark:bg-gold text-gold dark:text-ink shadow-md border border-gold'
+            : 'bg-paper dark:bg-night-lighter text-slate dark:text-paper hover:bg-stone-200 dark:hover:bg-night border border-transparent'
+        }`}
+      >
+        <Icon className="w-4 h-4" />
+        <span>{label}</span>
+      </button>
+    );
+  };
 
   return (
     <div className="h-screen flex flex-col bg-paper dark:bg-night overflow-hidden text-ink dark:text-paper transition-colors duration-300">
@@ -258,9 +277,9 @@ const App: React.FC = () => {
                  
                  {/* Decorative Hero Elements if empty */}
                  {!loading && (
-                     <div className="mt-16 text-center opacity-30 select-none pointer-events-none">
-                         <p className="font-display text-7xl text-stone-400 font-bold uppercase tracking-[1rem]">History Awaits</p>
-                         <p className="font-serif italic text-stone-500 mt-4">Select an existing archive from the sidebar or start a new investigation.</p>
+                     <div className="mt-10 md:mt-16 text-center opacity-30 select-none pointer-events-none">
+                         <p className="font-display text-3xl md:text-7xl text-stone-400 font-bold uppercase tracking-[0.3rem] md:tracking-[1rem]">History Awaits</p>
+                         <p className="font-serif italic text-stone-500 mt-2 md:mt-4 text-sm md:text-base px-4 md:px-0">Select an existing archive from the sidebar or start a new investigation.</p>
                      </div>
                  )}
 
@@ -284,38 +303,39 @@ const App: React.FC = () => {
           {/* Main App Layout */}
           
           {/* Header Bar */}
-          <header className="bg-paper-dark dark:bg-night-light border-b border-gold/30 px-6 py-3 flex justify-between items-center shadow-tome z-20 relative">
+          <header className="bg-paper-dark dark:bg-night-light border-b border-gold/30 px-3 md:px-6 py-2 md:py-3 flex justify-between items-center shadow-tome z-20 relative">
              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/aged-paper.png')] dark:bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-40 dark:opacity-20 pointer-events-none"></div>
              {/* Gold strip at bottom */}
              <div className="absolute bottom-0 left-0 right-0 gold-strip"></div>
 
-            <div className="flex items-center gap-4 relative z-10 ml-12 md:ml-0">
+            <div className="flex items-center gap-4 relative z-10 ml-12 md:ml-0 min-w-0">
               <button
                 onClick={() => setActiveTimelineId(null)}
-                className="font-display font-bold text-xl text-ink dark:text-gold hidden md:block tracking-[0.2em] text-embossed animate-candle hover:text-gold dark:hover:text-paper transition-colors cursor-pointer"
+                className="font-display font-bold text-xl text-ink dark:text-gold hidden md:block tracking-[0.2em] text-embossed animate-candle hover:text-gold dark:hover:text-paper transition-colors cursor-pointer flex-shrink-0"
                 title="Return to Home"
               >CHRONOS</button>
               <div className="h-8 w-px bg-gradient-to-b from-transparent via-gold to-transparent hidden md:block"></div>
-              <div>
-                <span className="block font-dramatic font-bold text-ink dark:text-paper text-lg leading-none">{activeData.region}</span>
+              <div className="min-w-0">
+                <span className="block font-dramatic font-bold text-ink dark:text-paper text-base md:text-lg leading-none truncate max-w-[45vw] md:max-w-none">{activeData.region}</span>
                 <span className="text-xs text-gold-dark dark:text-gold font-bold tracking-widest uppercase font-antique">
                     {formatYearRange(activeData.timeRange.start, activeData.timeRange.end)}
                 </span>
               </div>
             </div>
 
-            <div className="flex gap-2 relative z-10 overflow-x-auto pb-1 md:pb-0">
-              <NavButton id="map" icon={Map} label="Map" />
-              <NavButton id="timeline" icon={Layout} label="Timeline" />
-              <NavButton id="list" icon={List} label="Events" />
-              <NavButton id="narrative" icon={BookOpen} label="Narrative" />
+            {/* Desktop-only nav buttons in header */}
+            <div className="hidden md:flex gap-2 relative z-10">
+              <NavButton id="map" icon={Map} label="Map" variant="header" />
+              <NavButton id="timeline" icon={Layout} label="Timeline" variant="header" />
+              <NavButton id="list" icon={List} label="Events" variant="header" />
+              <NavButton id="narrative" icon={BookOpen} label="Narrative" variant="header" />
             </div>
 
-            <div className="flex gap-2 items-center relative z-10">
+            <div className="flex gap-1 md:gap-2 items-center relative z-10 flex-shrink-0">
               <button
                 onClick={() => setIsShareOpen(true)}
                 aria-label="Share & Export"
-                className="p-3 rounded-full transition-archival min-w-[44px] min-h-[44px] flex items-center justify-center bg-paper dark:bg-night-lighter text-sepia dark:text-paper border border-gold/30 hover:border-gold hover:text-gold glow-gold"
+                className="p-2 md:p-3 rounded-full transition-archival min-w-[44px] min-h-[44px] flex items-center justify-center bg-paper dark:bg-night-lighter text-sepia dark:text-paper border border-gold/30 hover:border-gold hover:text-gold glow-gold"
               >
                 <Share2 className="w-5 h-5" />
               </button>
@@ -324,7 +344,7 @@ const App: React.FC = () => {
                 onClick={() => setIsChatOpen(!isChatOpen)}
                 aria-label="Ask Historian"
                 aria-pressed={isChatOpen}
-                className={`p-3 rounded-full transition-archival min-w-[44px] min-h-[44px] flex items-center justify-center border ${isChatOpen ? 'bg-gold text-ink shadow-lg border-gold-light glow-gold' : 'bg-paper dark:bg-night-lighter text-sepia dark:text-paper border-gold/30 hover:border-gold hover:text-gold glow-gold'}`}
+                className={`p-2 md:p-3 rounded-full transition-archival min-w-[44px] min-h-[44px] flex items-center justify-center border ${isChatOpen ? 'bg-gold text-ink shadow-lg border-gold-light glow-gold' : 'bg-paper dark:bg-night-lighter text-sepia dark:text-paper border-gold/30 hover:border-gold hover:text-gold glow-gold'}`}
               >
                 <MessageCircle className="w-5 h-5" />
               </button>
@@ -337,16 +357,27 @@ const App: React.FC = () => {
              {view === 'timeline' && <div className="h-full overflow-y-auto"><TimelineView eras={activeData.eras} events={activeData.events} onEventClick={setSelectedEvent} /></div>}
              {view === 'list' && <EventListView events={activeData.events} onEventClick={setSelectedEvent} />}
              {view === 'narrative' && <div className="h-full overflow-y-auto"><NarrativeView text={activeData.narrative} /></div>}
-             
+
              {/* Chat Panel Overlay */}
-             <ChatPanel 
-                timelineData={activeData} 
-                isOpen={isChatOpen} 
-                onClose={() => setIsChatOpen(false)} 
+             <ChatPanel
+                timelineData={activeData}
+                isOpen={isChatOpen}
+                onClose={() => setIsChatOpen(false)}
                 pendingMessage={pendingChatQuery}
                 onMessageHandled={() => setPendingChatQuery(null)}
              />
           </main>
+
+          {/* Mobile Bottom Tab Bar - flex child so main area shrinks naturally */}
+          <nav className="md:hidden flex-shrink-0 bg-paper-dark dark:bg-night-light border-t border-gold/30 shadow-[0_-2px_10px_rgba(0,0,0,0.1)] dark:shadow-[0_-2px_10px_rgba(0,0,0,0.3)]">
+            <div className="flex">
+              <NavButton id="map" icon={Map} label="Map" variant="bottombar" />
+              <NavButton id="timeline" icon={Layout} label="Timeline" variant="bottombar" />
+              <NavButton id="list" icon={List} label="Events" variant="bottombar" />
+              <NavButton id="narrative" icon={BookOpen} label="Narrative" variant="bottombar" />
+            </div>
+            <div className="gold-strip"></div>
+          </nav>
 
           {/* Event Detail Modal */}
           <EventDetailModal
