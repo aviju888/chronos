@@ -12,6 +12,7 @@ Usage:
 import argparse
 import json
 import sys
+import urllib.parse
 import urllib.request
 import urllib.error
 
@@ -40,7 +41,7 @@ def print_header(name, tag):
 
 def fetch_account(name, tag):
     print(">>> Account Info")
-    data = fetch_json(f"{API_BASE}/v1/account/{name}/{tag}")
+    data = fetch_json(f"{API_BASE}/v1/account/{urllib.parse.quote(name)}/{urllib.parse.quote(tag)}")
     if data:
         print(f"  Name:    {data.get('name', 'N/A')}#{data.get('tag', 'N/A')}")
         print(f"  Region:  {data.get('region', 'N/A')}")
@@ -60,7 +61,7 @@ def fetch_mmr(name, tag, hint_region=None):
     print(">>> Competitive Rank")
     regions = [hint_region] + [r for r in REGIONS if r != hint_region] if hint_region else REGIONS
     for region in regions:
-        data = fetch_json(f"{API_BASE}/v2/mmr/{region}/{name}/{tag}")
+        data = fetch_json(f"{API_BASE}/v2/mmr/{region}/{urllib.parse.quote(name)}/{urllib.parse.quote(tag)}")
         if data:
             cur = data.get("current_data", {})
             high = data.get("highest_rank", {})
@@ -82,7 +83,7 @@ def fetch_matches(name, tag, hint_region=None, count=5):
     print(f">>> Recent Matches (last {count})")
     regions = [hint_region] + [r for r in REGIONS if r != hint_region] if hint_region else REGIONS
     for region in regions:
-        data = fetch_json(f"{API_BASE}/v3/matches/{region}/{name}/{tag}?size={count}")
+        data = fetch_json(f"{API_BASE}/v3/matches/{region}/{urllib.parse.quote(name)}/{urllib.parse.quote(tag)}?size={count}")
         if data and isinstance(data, list) and len(data) > 0:
             print(f"  Region: {region.upper()}")
             print()
@@ -158,7 +159,7 @@ def fetch_matches(name, tag, hint_region=None, count=5):
 
 def main():
     parser = argparse.ArgumentParser(description="Fetch Valorant stats")
-    parser.add_argument("--name", default="ayje", help="Riot ID name (default: ayje)")
+    parser.add_argument("--name", default="SWXG ayje", help="Riot ID name (default: SWXG ayje)")
     parser.add_argument("--tag", default="888", help="Riot ID tag (default: 888)")
     parser.add_argument("--matches", type=int, default=5, help="Number of recent matches to fetch (default: 5)")
     args = parser.parse_args()
