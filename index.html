@@ -359,6 +359,25 @@
       .transition-archival {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
+
+      /* Hide scrollbar for horizontal scroll containers */
+      .scrollbar-none {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .scrollbar-none::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* Snap scrolling for mobile carousels */
+      @media (max-width: 767px) {
+        .snap-x {
+          scroll-snap-type: x mandatory;
+        }
+        .snap-start {
+          scroll-snap-align: start;
+        }
+      }
     </style>
   <script type="importmap">
 {

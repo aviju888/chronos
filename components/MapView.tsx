@@ -375,69 +375,117 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
         )}
       </div>
 
-      {/* Enhanced Time Scrubber Control */}
-      <div className="absolute bottom-3 md:bottom-6 left-3 right-3 md:left-1/2 md:right-auto md:transform md:-translate-x-1/2 md:w-3/4 max-w-4xl bg-paper border-double-archival shadow-2xl z-[1000] p-1 rounded-lg">
-        <div className="bg-ink p-3 md:p-4 rounded text-paper relative overflow-hidden">
-            {/* Background Texture */}
+      {/* Mobile: Compact floating scrubber */}
+      <div className="md:hidden absolute bottom-2 left-2 right-2 z-[1000]">
+        <div className="bg-ink/95 backdrop-blur-md rounded-2xl shadow-2xl border border-gold/30 px-3 py-2.5">
+            <div className="flex items-center gap-3">
+                <button
+                    onClick={() => setIsPlaying(!isPlaying)}
+                    aria-label={isPlaying ? "Pause" : "Play History"}
+                    className="w-11 h-11 flex items-center justify-center rounded-full bg-gold text-ink shadow-lg active:scale-95 border-2 border-ink flex-shrink-0"
+                >
+                    {isPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current ml-0.5" />}
+                </button>
+
+                <div className="flex-1 min-w-0">
+                    <div className="flex justify-between items-baseline mb-1">
+                        <span className="text-xl font-display font-bold text-white tabular-nums">{formatYear(currentYear)}</span>
+                        <span className="text-[9px] text-stone-400 font-bold">{visibleEvents.length} events</span>
+                    </div>
+                    {/* Slim slider */}
+                    <div className="relative h-6 flex items-center">
+                        <input
+                          type="range"
+                          min={timeRange.start}
+                          max={timeRange.end}
+                          value={currentYear}
+                          onChange={(e) => { setIsPlaying(false); setCurrentYear(Number(e.target.value)); }}
+                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
+                        />
+                        <div className="w-full h-1 bg-stone-700 rounded-full relative pointer-events-none">
+                            <div className="h-full bg-gold rounded-l-full" style={{ width: `${((currentYear - timeRange.start) / (timeRange.end - timeRange.start)) * 100}%` }}></div>
+                        </div>
+                        <div
+                            className="absolute top-1/2 w-5 h-5 bg-paper border-3 border-gold rounded-full shadow-[0_0_10px_rgba(197,160,89,0.6)] z-30 pointer-events-none"
+                            style={{ left: `${((currentYear - timeRange.start) / (timeRange.end - timeRange.start)) * 100}%`, transform: 'translate(-50%, -50%)' }}
+                        ></div>
+                    </div>
+                    <div className="flex justify-between text-[9px] text-stone-500 font-mono">
+                        <span>{formatYear(timeRange.start)}</span>
+                        <span>{formatYear(timeRange.end)}</span>
+                    </div>
+                </div>
+
+                <div className="flex flex-col gap-1 flex-shrink-0">
+                    <button onClick={() => handleJump('prev')} aria-label="Previous Event" className="w-8 h-8 flex items-center justify-center rounded-lg bg-ink-light border border-stone-600 active:border-gold text-stone-300">
+                        <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <button onClick={() => handleJump('next')} aria-label="Next Event" className="w-8 h-8 flex items-center justify-center rounded-lg bg-ink-light border border-stone-600 active:border-gold text-stone-300">
+                        <ChevronRight className="w-4 h-4" />
+                    </button>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      {/* Desktop: Full time scrubber */}
+      <div className="hidden md:block absolute bottom-6 left-1/2 right-auto transform -translate-x-1/2 w-3/4 max-w-4xl bg-paper border-double-archival shadow-2xl z-[1000] p-1 rounded-lg">
+        <div className="bg-ink p-4 rounded text-paper relative overflow-hidden">
             <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')]"></div>
-            
+
             <div className="relative z-10 flex flex-col gap-3">
-                {/* Header Info */}
                 <div className="flex justify-between items-end mb-1">
-                    <div className="flex items-center gap-3 md:gap-4">
+                    <div className="flex items-center gap-4">
                         <button
                             onClick={() => setIsPlaying(!isPlaying)}
                             aria-label={isPlaying ? "Pause" : "Play History"}
                             aria-pressed={isPlaying}
-                            className="w-14 h-14 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-gold hover:bg-gold-light text-ink shadow-lg transition-transform active:scale-95 border-2 border-ink"
+                            className="w-12 h-12 flex items-center justify-center rounded-full bg-gold hover:bg-gold-light text-ink shadow-lg transition-transform active:scale-95 border-2 border-ink"
                         >
-                            {isPlaying ? <Pause className="w-6 h-6 md:w-5 md:h-5 fill-current" /> : <Play className="w-6 h-6 md:w-5 md:h-5 fill-current ml-0.5" />}
+                            {isPlaying ? <Pause className="w-5 h-5 fill-current" /> : <Play className="w-5 h-5 fill-current ml-0.5" />}
                         </button>
                         <div>
                              <h3 className="text-[10px] font-bold tracking-[0.2em] text-stone-400 uppercase font-sans">Current Year</h3>
-                             <div className="text-3xl md:text-4xl font-display font-bold text-white tabular-nums leading-none tracking-tight">
+                             <div className="text-4xl font-display font-bold text-white tabular-nums leading-none tracking-tight">
                                 {formatYear(currentYear)}
                              </div>
                         </div>
                     </div>
-                    
+
                     <div className="text-right">
-                        <div className="text-[10px] font-bold tracking-[0.2em] text-stone-400 uppercase mb-1 hidden md:block">{visibleEvents.length} Events Revealed</div>
+                        <div className="text-[10px] font-bold tracking-[0.2em] text-stone-400 uppercase mb-1">{visibleEvents.length} Events Revealed</div>
                         <div className="flex gap-2 justify-end">
                             <button
                                 onClick={() => handleJump('prev')}
                                 aria-label="Jump to Previous Event"
-                                className="px-4 py-3 md:px-3 md:py-1 bg-ink-light border border-stone-600 rounded-lg md:rounded hover:border-gold hover:text-gold transition-colors flex items-center gap-1 text-xs font-bold uppercase min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0"
+                                className="px-3 py-1 bg-ink-light border border-stone-600 rounded hover:border-gold hover:text-gold transition-colors flex items-center gap-1 text-xs font-bold uppercase"
                             >
-                                <ChevronLeft className="w-4 h-4 md:w-3 md:h-3" />
-                                <span className="hidden md:inline">Prev Event</span>
+                                <ChevronLeft className="w-3 h-3" />
+                                Prev Event
                             </button>
                             <button
                                 onClick={() => handleJump('next')}
                                 aria-label="Jump to Next Event"
-                                className="px-4 py-3 md:px-3 md:py-1 bg-ink-light border border-stone-600 rounded-lg md:rounded hover:border-gold hover:text-gold transition-colors flex items-center gap-1 text-xs font-bold uppercase min-w-[44px] min-h-[44px] md:min-w-0 md:min-h-0"
+                                className="px-3 py-1 bg-ink-light border border-stone-600 rounded hover:border-gold hover:text-gold transition-colors flex items-center gap-1 text-xs font-bold uppercase"
                             >
-                                <span className="hidden md:inline">Next Event</span>
-                                <ChevronRight className="w-4 h-4 md:w-3 md:h-3" />
+                                Next Event
+                                <ChevronRight className="w-3 h-3" />
                             </button>
                         </div>
                     </div>
                 </div>
 
-                {/* Slider Track Container */}
                 <div className="relative h-14 flex items-center group">
-                    {/* Visual Histogram Background */}
                     <div className="absolute inset-x-2 inset-y-2 flex items-end justify-between opacity-40 pointer-events-none gap-0.5">
                         {timelineTicks.map((height, i) => (
-                            <div 
-                                key={i} 
+                            <div
+                                key={i}
                                 className="flex-1 bg-gold rounded-t-[1px] transition-all hover:bg-white"
                                 style={{ height: `${Math.max(10, height * 100)}%` }}
                             ></div>
                         ))}
                     </div>
 
-                    {/* Actual Input */}
                     <input
                       type="range"
                       min={timeRange.start}
@@ -447,20 +495,16 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20"
                     />
 
-                    {/* Custom Styled Thumb/Track Representation */}
                     <div className="absolute inset-0 pointer-events-none flex items-center px-2">
-                        {/* Track line */}
                         <div className="w-full h-1 bg-stone-700 rounded-full relative">
-                            {/* Progress Fill */}
-                            <div 
-                                className="h-full bg-gold rounded-l-full" 
+                            <div
+                                className="h-full bg-gold rounded-l-full"
                                 style={{ width: `${((currentYear - timeRange.start) / (timeRange.end - timeRange.start)) * 100}%` }}
                             ></div>
                         </div>
-                        
-                        {/* Thumb - larger on mobile for touch */}
+
                         <div
-                            className="absolute top-1/2 w-10 h-10 md:w-6 md:h-6 bg-paper border-4 border-gold rounded-full shadow-[0_0_15px_rgba(197,160,89,0.8)] transition-transform group-hover:scale-110 z-30"
+                            className="absolute top-1/2 w-6 h-6 bg-paper border-4 border-gold rounded-full shadow-[0_0_15px_rgba(197,160,89,0.8)] transition-transform group-hover:scale-110 z-30"
                             style={{
                                 left: `${((currentYear - timeRange.start) / (timeRange.end - timeRange.start)) * 100}%`,
                                 transform: `translate(-50%, -50%)`
@@ -469,7 +513,6 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
                     </div>
                 </div>
 
-                {/* Range Labels */}
                 <div className="flex justify-between text-xs text-stone-500 font-mono font-bold px-1">
                     <span>{formatYear(timeRange.start)}</span>
                     <span>{formatYear(timeRange.end)}</span>

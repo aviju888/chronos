@@ -195,27 +195,27 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
   };
 
   return (
-    <div className="max-w-3xl mx-2 md:mx-auto bg-paper-dark dark:bg-night-light shadow-archive rounded-lg overflow-hidden border-manuscript mt-4 md:mt-10 mb-4 md:mb-10 relative animate-page-turn">
-      <div className="absolute top-0 left-0 w-full gold-strip"></div>
+    <div className="max-w-3xl mx-0 md:mx-auto bg-paper-dark dark:bg-night-light md:shadow-archive rounded-none md:rounded-lg overflow-hidden md:border-manuscript mt-0 md:mt-10 mb-0 md:mb-10 relative md:animate-page-turn">
+      <div className="hidden md:block absolute top-0 left-0 w-full gold-strip"></div>
 
-      <div className="bg-ink p-5 md:p-8 text-paper text-center relative overflow-hidden vignette">
+      <div className="bg-ink px-4 py-5 md:p-8 text-paper text-center relative overflow-hidden vignette">
          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-20"></div>
-        <h1 className="text-3xl md:text-5xl font-display font-bold text-gold mb-1 md:mb-2 tracking-[0.15em] md:tracking-[0.25em] relative z-10 text-embossed animate-candle">CHRONOS</h1>
-        <p className="text-gold-light/70 font-antique text-sm md:text-lg tracking-widest relative z-10">Deep History Explorer</p>
+        <h1 className="text-2xl md:text-5xl font-display font-bold text-gold mb-0.5 md:mb-2 tracking-[0.12em] md:tracking-[0.25em] relative z-10 text-embossed animate-candle">CHRONOS</h1>
+        <p className="text-gold-light/70 font-antique text-xs md:text-lg tracking-widest relative z-10">Deep History Explorer</p>
 
         {/* Surprise Me Button */}
         <button
           type="button"
           onClick={handleSurpriseMe}
           disabled={isLoading}
-          className="relative z-10 mt-4 px-6 py-2 bg-gold/20 hover:bg-gold/40 border border-gold/50 rounded-full text-gold font-bold text-sm uppercase tracking-widest transition-archival hover:scale-105 glow-gold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 mx-auto"
+          className="relative z-10 mt-3 md:mt-4 px-5 md:px-6 py-1.5 md:py-2 bg-gold/20 hover:bg-gold/40 border border-gold/50 rounded-full text-gold font-bold text-xs md:text-sm uppercase tracking-widest transition-archival hover:scale-105 glow-gold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 mx-auto"
         >
-          <Shuffle className="w-4 h-4" />
+          <Shuffle className="w-3.5 h-3.5 md:w-4 md:h-4" />
           Surprise Me
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="p-4 md:p-8 space-y-6 md:space-y-8 bg-paper dark:bg-night-light relative">
+      <form onSubmit={handleSubmit} className="px-3 py-4 md:p-8 space-y-5 md:space-y-8 bg-paper dark:bg-night-light relative">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] dark:bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-30 dark:opacity-10 pointer-events-none"></div>
 
         {/* Region Section */}
@@ -279,7 +279,25 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
              </div>
           )}
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+          {/* Mobile: horizontal scroll chips | Desktop: grid */}
+          <div className="flex md:hidden gap-2 overflow-x-auto pb-2 mb-3 -mx-1 px-1 scrollbar-none">
+            {PRESET_REGIONS.map((preset) => (
+              <button
+                key={preset.region}
+                type="button"
+                onClick={() => handlePresetClick(preset)}
+                disabled={isLoading}
+                className={`whitespace-nowrap text-xs px-3.5 py-2 rounded-full border transition-archival font-elegant flex-shrink-0 ${
+                  region === preset.region
+                    ? 'bg-ink dark:bg-gold text-gold dark:text-ink border-gold shadow-md'
+                    : 'bg-paper-cream dark:bg-night-lighter text-sepia dark:text-paper border-gold/30 active:bg-paper-dark'
+                } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                {preset.region}
+              </button>
+            ))}
+          </div>
+          <div className="hidden md:grid grid-cols-4 gap-2 mb-4">
             {PRESET_REGIONS.map((preset) => (
               <button
                 key={preset.region}
@@ -305,7 +323,7 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
               onChange={(e) => { setRegion(e.target.value); setShowSuggestions(true); }}
               onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true); }}
               disabled={isLoading}
-              className="w-full p-4 border-2 border-gold/40 rounded focus:ring-2 focus:ring-gold focus:border-gold focus:outline-none bg-paper-cream dark:bg-night font-elegant text-lg card-inset disabled:opacity-50 text-ink dark:text-paper placeholder:text-sepia/50 dark:placeholder:text-stone-500"
+              className="w-full p-3 md:p-4 border-2 border-gold/40 rounded focus:ring-2 focus:ring-gold focus:border-gold focus:outline-none bg-paper-cream dark:bg-night font-elegant text-base md:text-lg card-inset disabled:opacity-50 text-ink dark:text-paper placeholder:text-sepia/50 dark:placeholder:text-stone-500"
               required
             />
             {isSuggestionsLoading && (
@@ -386,9 +404,41 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
         </div>
 
         {/* Mode Selection */}
-        <div className="space-y-4">
-          <label className="block text-ink dark:text-paper font-dramatic font-bold text-lg border-b border-gold/30 pb-2">Investigation Depth</label>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-3 md:space-y-4">
+          <label className="block text-ink dark:text-paper font-dramatic font-bold text-base md:text-lg border-b border-gold/30 pb-2">Investigation Depth</label>
+
+          {/* Mobile: compact toggle pills */}
+          <div className="flex md:hidden gap-2">
+            <button
+              type="button"
+              onClick={() => setMode(GenerationMode.QUICK)}
+              disabled={isLoading}
+              className={`flex-1 py-2.5 px-3 rounded-full border-2 text-center transition-archival text-sm font-bold ${
+                mode === GenerationMode.QUICK
+                  ? 'border-gold bg-gold/15 dark:bg-gold/25 text-gold shadow-md'
+                  : 'border-gold/30 bg-paper-cream dark:bg-night text-sepia dark:text-stone-400'
+              } ${isLoading ? 'opacity-50' : ''}`}
+            >
+              <Zap className={`w-4 h-4 inline mr-1.5 -mt-0.5 ${mode === GenerationMode.QUICK ? 'text-gold' : ''}`} />
+              Quick
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode(GenerationMode.DEEP)}
+              disabled={isLoading}
+              className={`flex-1 py-2.5 px-3 rounded-full border-2 text-center transition-archival text-sm font-bold ${
+                mode === GenerationMode.DEEP
+                  ? 'border-gold bg-gold/15 dark:bg-gold/25 text-gold shadow-md'
+                  : 'border-gold/30 bg-paper-cream dark:bg-night text-sepia dark:text-stone-400'
+              } ${isLoading ? 'opacity-50' : ''}`}
+            >
+              <BookOpen className={`w-4 h-4 inline mr-1.5 -mt-0.5 ${mode === GenerationMode.DEEP ? 'text-gold' : ''}`} />
+              Deep Search
+            </button>
+          </div>
+
+          {/* Desktop: full cards */}
+          <div className="hidden md:grid grid-cols-2 gap-4">
             <button
               type="button"
               onClick={() => setMode(GenerationMode.QUICK)}
@@ -431,7 +481,7 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
             <button
               type="submit"
               disabled={!region || isLoading}
-              className={`w-full py-5 text-xl font-display font-bold text-gold dark:text-ink tracking-[0.2em] uppercase transition-archival transform active:scale-[0.99] rounded shadow-tome bg-ink dark:bg-gold hover:shadow-archive border-2 border-gold glow-gold disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`w-full py-4 md:py-5 text-lg md:text-xl font-display font-bold text-gold dark:text-ink tracking-[0.15em] md:tracking-[0.2em] uppercase transition-archival transform active:scale-[0.99] rounded shadow-tome bg-ink dark:bg-gold hover:shadow-archive border-2 border-gold glow-gold disabled:opacity-50 disabled:cursor-not-allowed`}
             >
               Construct Timeline
             </button>

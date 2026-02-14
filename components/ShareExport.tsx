@@ -117,8 +117,8 @@ https://chronos-history.vercel.app
   };
 
   return (
-    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-ink/50 dark:bg-black/70 backdrop-blur-sm">
-      <div className="bg-paper dark:bg-night-light rounded-lg shadow-2xl w-full max-w-md overflow-hidden border border-gold/30">
+    <div className="fixed inset-0 z-[2000] flex items-end md:items-center justify-center p-0 md:p-4 bg-ink/50 dark:bg-black/70 backdrop-blur-sm">
+      <div className="bg-paper dark:bg-night-light rounded-t-2xl md:rounded-lg shadow-2xl w-full max-w-full md:max-w-md overflow-hidden border-t md:border border-gold/30">
         {/* Header */}
         <div className="bg-ink dark:bg-night p-4 flex justify-between items-center">
           <div className="flex items-center gap-2 text-gold">

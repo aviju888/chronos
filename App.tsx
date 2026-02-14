@@ -14,7 +14,7 @@ import { ShareExport } from './components/ShareExport';
 import { generateTimeline, ProgressUpdate } from './services/apiService';
 import { loadTimelines, saveTimelines, deleteTimeline as deleteTimelineFromStorage } from './services/storageService';
 import { TimelineData, GenerationMode, HistoricalEvent } from './types';
-import { Layout, Map, List, BookOpen, MessageCircle, Menu, HelpCircle, Share2 } from 'lucide-react';
+import { Layout, Map, List, BookOpen, MessageCircle, Menu, HelpCircle, Share2, ArrowLeft } from 'lucide-react';
 import { formatYearRange } from './utils';
 
 // URL hash parsing and generation for deep linking
@@ -308,7 +308,16 @@ const App: React.FC = () => {
              {/* Gold strip at bottom */}
              <div className="absolute bottom-0 left-0 right-0 gold-strip"></div>
 
-            <div className="flex items-center gap-4 relative z-10 ml-12 md:ml-0 min-w-0">
+            <div className="flex items-center gap-2 md:gap-4 relative z-10 min-w-0">
+              {/* Mobile: back arrow */}
+              <button
+                onClick={() => setActiveTimelineId(null)}
+                className="md:hidden p-1.5 -ml-1 rounded-full text-ink dark:text-paper active:bg-gold/20 transition-colors flex-shrink-0"
+                aria-label="Back to Home"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+              {/* Desktop: CHRONOS wordmark */}
               <button
                 onClick={() => setActiveTimelineId(null)}
                 className="font-display font-bold text-xl text-ink dark:text-gold hidden md:block tracking-[0.2em] text-embossed animate-candle hover:text-gold dark:hover:text-paper transition-colors cursor-pointer flex-shrink-0"
@@ -316,8 +325,8 @@ const App: React.FC = () => {
               >CHRONOS</button>
               <div className="h-8 w-px bg-gradient-to-b from-transparent via-gold to-transparent hidden md:block"></div>
               <div className="min-w-0">
-                <span className="block font-dramatic font-bold text-ink dark:text-paper text-base md:text-lg leading-none truncate max-w-[45vw] md:max-w-none">{activeData.region}</span>
-                <span className="text-xs text-gold-dark dark:text-gold font-bold tracking-widest uppercase font-antique">
+                <span className="block font-dramatic font-bold text-ink dark:text-paper text-sm md:text-lg leading-tight truncate max-w-[50vw] md:max-w-none">{activeData.region}</span>
+                <span className="text-[10px] md:text-xs text-gold-dark dark:text-gold font-bold tracking-widest uppercase font-antique">
                     {formatYearRange(activeData.timeRange.start, activeData.timeRange.end)}
                 </span>
               </div>
