@@ -10,11 +10,10 @@ import { HistorySidebar } from './components/HistorySidebar';
 import { OnboardingOverlay, useOnboarding } from './components/OnboardingOverlay';
 import { useToast, parseApiError } from './components/Toast';
 import { ThemeToggle } from './components/ThemeToggle';
-import { ShareExport } from './components/ShareExport';
 import { generateTimeline, ProgressUpdate } from './services/apiService';
 import { loadTimelines, saveTimelines, deleteTimeline as deleteTimelineFromStorage } from './services/storageService';
 import { TimelineData, GenerationMode, HistoricalEvent } from './types';
-import { Layout, Map, List, BookOpen, MessageCircle, Menu, HelpCircle, Share2 } from 'lucide-react';
+import { Layout, Map, List, BookOpen, MessageCircle, Menu, HelpCircle } from 'lucide-react';
 import { formatYearRange, parseHash, updateHash } from './utils';
 
 const App: React.FC = () => {
@@ -31,7 +30,6 @@ const App: React.FC = () => {
   const [selectedEvent, setSelectedEvent] = useState<HistoricalEvent | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isShareOpen, setIsShareOpen] = useState(false);
   const [pendingChatQuery, setPendingChatQuery] = useState<string | null>(null);
   const [pendingSearchQuery, setPendingSearchQuery] = useState<string | null>(null);
 
@@ -203,7 +201,7 @@ const App: React.FC = () => {
 
   return (
     <div className="h-screen flex flex-col bg-paper dark:bg-night overflow-hidden text-ink dark:text-paper transition-colors duration-300">
-      <ThemeToggle />
+      {!activeData && <ThemeToggle placement="fixed" />}
       <ToastContainer />
 
       {/* Onboarding overlay for first-time users */}
@@ -293,13 +291,7 @@ const App: React.FC = () => {
             </div>
 
             <div className="flex gap-1 md:gap-2 items-center relative z-10 flex-shrink-0">
-              <button
-                onClick={() => setIsShareOpen(true)}
-                aria-label="Share & Export"
-                className="p-2 md:p-3 rounded-full transition-archival min-w-[44px] min-h-[44px] flex items-center justify-center bg-paper dark:bg-night-lighter text-sepia dark:text-paper border border-gold/30 hover:border-gold hover:text-gold glow-gold"
-              >
-                <Share2 className="w-5 h-5" />
-              </button>
+              <ThemeToggle placement="inline" />
 
               <button
                 onClick={() => setIsChatOpen(!isChatOpen)}
@@ -355,13 +347,6 @@ const App: React.FC = () => {
             event={selectedEvent}
             onClose={() => setSelectedEvent(null)}
             onAskHistorian={handleAskHistorian}
-          />
-
-          {/* Share/Export Modal */}
-          <ShareExport
-            timeline={activeData}
-            isOpen={isShareOpen}
-            onClose={() => setIsShareOpen(false)}
           />
         </>
       )}
