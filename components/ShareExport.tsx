@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Share2, Download, Copy, Check, X, FileText, Image, Link2 } from 'lucide-react';
 import { TimelineData } from '../types';
 import { formatYear, formatYearRange } from '../utils';
@@ -12,6 +12,16 @@ interface ShareExportProps {
 export const ShareExport: React.FC<ShareExportProps> = ({ timeline, isOpen, onClose }) => {
   const [copied, setCopied] = useState(false);
   const [exporting, setExporting] = useState(false);
+
+  // Close on Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -117,8 +127,8 @@ https://chronos-history.vercel.app
   };
 
   return (
-    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-ink/50 dark:bg-black/70 backdrop-blur-sm">
-      <div className="bg-paper dark:bg-night-light rounded-lg shadow-2xl w-full max-w-md overflow-hidden border border-gold/30">
+    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-ink/50 dark:bg-black/70 backdrop-blur-sm" onClick={onClose}>
+      <div onClick={(e) => e.stopPropagation()} className="bg-paper dark:bg-night-light rounded-lg shadow-2xl w-full max-w-md overflow-hidden border border-gold/30">
         {/* Header */}
         <div className="bg-ink dark:bg-night p-4 flex justify-between items-center">
           <div className="flex items-center gap-2 text-gold">

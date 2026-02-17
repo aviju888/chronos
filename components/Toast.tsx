@@ -44,9 +44,9 @@ const Toast: React.FC<ToastProps> = ({ toast, onDismiss }) => {
   };
 
   const bgColors = {
-    error: 'bg-red-50 border-red-200',
-    success: 'bg-green-50 border-green-200',
-    info: 'bg-blue-50 border-blue-200',
+    error: 'bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800',
+    success: 'bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800',
+    info: 'bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800',
   };
 
   return (
@@ -58,8 +58,8 @@ const Toast: React.FC<ToastProps> = ({ toast, onDismiss }) => {
     >
       <div className="flex-shrink-0 mt-0.5">{icons[toast.type]}</div>
       <div className="flex-1 min-w-0">
-        <h4 className="font-bold text-ink text-sm">{toast.title}</h4>
-        <p className="text-sm text-slate mt-0.5">{toast.message}</p>
+        <h4 className="font-bold text-ink dark:text-paper text-sm">{toast.title}</h4>
+        <p className="text-sm text-slate dark:text-stone-400 mt-0.5">{toast.message}</p>
         {toast.action && (
           <button
             onClick={toast.action.onClick}
@@ -72,10 +72,10 @@ const Toast: React.FC<ToastProps> = ({ toast, onDismiss }) => {
       </div>
       <button
         onClick={handleDismiss}
-        className="flex-shrink-0 p-1 rounded hover:bg-black/5 transition-colors"
+        className="flex-shrink-0 p-1 rounded hover:bg-black/5 dark:hover:bg-white/10 transition-colors"
         aria-label="Dismiss"
       >
-        <X className="w-4 h-4 text-slate" />
+        <X className="w-4 h-4 text-slate dark:text-stone-400" />
       </button>
     </div>
   );
@@ -142,7 +142,7 @@ export const parseApiError = (error: unknown): { title: string; message: string 
   if (errorStr.includes('API_KEY') || errorStr.includes('api key') || errorStr.includes('401')) {
     return {
       title: 'API Key Issue',
-      message: 'Please check that your Gemini API key is valid and properly configured.',
+      message: 'Please check that your API key is valid and properly configured.',
     };
   }
 

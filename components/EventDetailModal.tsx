@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { HistoricalEvent } from '../types';
 import { X, ExternalLink, AlertTriangle, ShieldCheck, HelpCircle, MessageSquare, Clock } from 'lucide-react';
 import { EventImage } from './EventImage';
@@ -11,6 +11,18 @@ interface EventDetailModalProps {
 }
 
 export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClose, onAskHistorian }) => {
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // Close on Escape key
+  useEffect(() => {
+    if (!event) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [event, onClose]);
+
   if (!event) return null;
 
   const ConfidenceIcon = {
@@ -26,8 +38,8 @@ export const EventDetailModal: React.FC<EventDetailModalProps> = ({ event, onClo
   }[event.confidenceScore];
 
   return (
-    <div className="fixed inset-0 z-[2000] flex items-end md:items-center justify-center p-0 md:p-4 bg-ink/60 backdrop-blur-sm">
-      <div className="bg-paper dark:bg-night-light rounded-t-2xl md:rounded-lg shadow-archive w-full max-w-full md:max-w-2xl h-[95vh] md:h-auto md:max-h-[90vh] overflow-y-auto flex flex-col md:border-manuscript animate-page-turn">
+    <div className="fixed inset-0 z-[2000] flex items-end md:items-center justify-center p-0 md:p-4 bg-ink/60 backdrop-blur-sm" onClick={onClose}>
+      <div ref={contentRef} onClick={(e) => e.stopPropagation()} className="bg-paper dark:bg-night-light rounded-t-2xl md:rounded-lg shadow-archive w-full max-w-full md:max-w-2xl h-[95vh] md:h-auto md:max-h-[90vh] overflow-y-auto flex flex-col md:border-manuscript animate-page-turn">
 
         {/* Banner Image */}
         <div className="w-full h-36 md:h-48 relative shrink-0">

@@ -3,6 +3,20 @@ export enum GenerationMode {
   DEEP = 'Deep'
 }
 
+export enum QueryType {
+  CITY = 'city',           // Specific city/town
+  REGION = 'region',       // State, province, geographic area
+  COUNTRY = 'country',     // Nation/country level
+  TOPIC = 'topic',         // Thematic (e.g., "Silk Road", "Industrial Revolution")
+  ERA = 'era'              // Time period focus (e.g., "Renaissance", "Bronze Age")
+}
+
+export enum RelevanceType {
+  DIRECT = 'direct',       // Happened at this exact location/directly about this topic
+  REGIONAL = 'regional',   // Happened in the broader region/closely related
+  CONTEXTUAL = 'contextual' // Global/national events that provide historical context
+}
+
 export enum EventCategory {
   POLITICS = 'Politics',
   WAR = 'War',
@@ -45,6 +59,7 @@ export interface HistoricalEvent {
   parentEventId?: string;        // Links sub-events to anchor events
   isSubEvent?: boolean;          // True for events discovered from Wikipedia links
   sourceType?: 'llm' | 'wikipedia' | 'search';  // Origin of the event data
+  relevanceType?: RelevanceType;  // How directly relevant to the user's query
 }
 
 export interface Era {
@@ -55,6 +70,13 @@ export interface Era {
   summary: string;
 }
 
+export interface QueryAnalysis {
+  queryType: QueryType;
+  specificLocation?: string;  // The specific place if city/region
+  broadContext?: string;      // Broader geographic context
+  topics?: string[];          // Detected themes/topics
+}
+
 export interface TimelineData {
   id: string; // Unique ID for persistence
   createdAt: number; // Timestamp
@@ -63,6 +85,7 @@ export interface TimelineData {
   eras: Era[];
   events: HistoricalEvent[];
   narrative: string;
+  queryAnalysis?: QueryAnalysis;  // Analysis of user's search intent
 }
 
 export interface ChatMessage {

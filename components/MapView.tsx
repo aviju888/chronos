@@ -221,9 +221,12 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
     return clusterEvents(visibleEvents, gridSize);
   }, [visibleEvents, zoomLevel]);
 
+  // Safe duration calculation to avoid division by zero
+  const duration = timeRange.end - timeRange.start;
+  const safeDuration = Math.max(duration, 1);
+
   // Generate ticks for the slider histogram
   const timelineTicks = useMemo(() => {
-     const duration = timeRange.end - timeRange.start;
      if (duration <= 0) return [];
      
      // Create a density map for the background track
@@ -346,29 +349,26 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
         {/* Overlay Gradient for vintage look */}
         <div className="absolute inset-0 pointer-events-none z-[400] bg-[radial-gradient(circle_at_center,transparent_0%,rgba(92,77,60,0.1)_100%)]"></div>
 
-        {/* Empty State Overlay - no location data */}
-        {!hasAnyLocations && (
-          <div className="absolute inset-0 z-[500] flex items-center justify-center bg-stone-100/80 backdrop-blur-sm">
-            <div className="text-center p-8 bg-paper rounded-lg shadow-xl border-2 border-gold/30 max-w-md mx-4">
-              <MapPinOff className="w-16 h-16 mx-auto mb-4 text-gold-dark opacity-60" />
-              <h3 className="text-xl font-display font-bold text-ink mb-2">No Location Data Available</h3>
-              <p className="text-slate text-sm leading-relaxed">
-                The events in this timeline don't have specific geographic coordinates.
-                Try the <span className="font-bold text-gold-dark">Timeline</span> or <span className="font-bold text-gold-dark">Events</span> view to explore the historical records.
+        {/* Empty State Overlay - show the most relevant message */}
+        {events.length === 0 ? (
+          <div className="absolute inset-0 z-[500] flex items-center justify-center bg-stone-100/80 dark:bg-night/80 backdrop-blur-sm">
+            <div className="text-center p-8 bg-paper dark:bg-night-light rounded-lg shadow-xl border-2 border-gold/30 max-w-md mx-4">
+              <MapPinOff className="w-16 h-16 mx-auto mb-4 text-stone-400 dark:text-stone-600" />
+              <h3 className="text-xl font-display font-bold text-ink dark:text-paper mb-2">No Events Found</h3>
+              <p className="text-slate dark:text-stone-400 text-sm leading-relaxed">
+                No historical events were generated for this timeline.
+                Try adjusting the time range or selecting a different region.
               </p>
             </div>
           </div>
-        )}
-
-        {/* Empty State Overlay - no events at all */}
-        {events.length === 0 && (
-          <div className="absolute inset-0 z-[500] flex items-center justify-center bg-stone-100/80 backdrop-blur-sm">
-            <div className="text-center p-8 bg-paper rounded-lg shadow-xl border-2 border-gold/30 max-w-md mx-4">
-              <MapPinOff className="w-16 h-16 mx-auto mb-4 text-stone-400" />
-              <h3 className="text-xl font-display font-bold text-ink mb-2">No Events Found</h3>
-              <p className="text-slate text-sm leading-relaxed">
-                No historical events were generated for this timeline.
-                Try adjusting the time range or selecting a different region.
+        ) : !hasAnyLocations && (
+          <div className="absolute inset-0 z-[500] flex items-center justify-center bg-stone-100/80 dark:bg-night/80 backdrop-blur-sm">
+            <div className="text-center p-8 bg-paper dark:bg-night-light rounded-lg shadow-xl border-2 border-gold/30 max-w-md mx-4">
+              <MapPinOff className="w-16 h-16 mx-auto mb-4 text-gold-dark opacity-60" />
+              <h3 className="text-xl font-display font-bold text-ink dark:text-paper mb-2">No Location Data Available</h3>
+              <p className="text-slate dark:text-stone-400 text-sm leading-relaxed">
+                The events in this timeline don't have specific geographic coordinates.
+                Try the <span className="font-bold text-gold-dark dark:text-gold">Timeline</span> or <span className="font-bold text-gold-dark dark:text-gold">Events</span> view to explore the historical records.
               </p>
             </div>
           </div>
@@ -454,7 +454,7 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
                             {/* Progress Fill */}
                             <div 
                                 className="h-full bg-gold rounded-l-full" 
-                                style={{ width: `${((currentYear - timeRange.start) / (timeRange.end - timeRange.start)) * 100}%` }}
+                                style={{ width: `${((currentYear - timeRange.start) / safeDuration) * 100}%` }}
                             ></div>
                         </div>
                         
@@ -462,7 +462,7 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
                         <div
                             className="absolute top-1/2 w-10 h-10 md:w-6 md:h-6 bg-paper border-4 border-gold rounded-full shadow-[0_0_15px_rgba(197,160,89,0.8)] transition-transform group-hover:scale-110 z-30"
                             style={{
-                                left: `${((currentYear - timeRange.start) / (timeRange.end - timeRange.start)) * 100}%`,
+                                left: `${((currentYear - timeRange.start) / safeDuration) * 100}%`,
                                 transform: `translate(-50%, -50%)`
                             }}
                         ></div>

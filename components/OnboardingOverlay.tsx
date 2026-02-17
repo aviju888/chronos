@@ -66,6 +66,16 @@ export const OnboardingOverlay: React.FC<OnboardingOverlayProps> = ({ onComplete
     }
   }, [forceShow]);
 
+  // Close on Escape key
+  useEffect(() => {
+    if (!isVisible) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') handleSkip();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isVisible]);
+
   const handleNext = () => {
     if (currentStep < ONBOARDING_STEPS.length - 1) {
       setCurrentStep(prev => prev + 1);
@@ -99,14 +109,14 @@ export const OnboardingOverlay: React.FC<OnboardingOverlayProps> = ({ onComplete
       />
 
       {/* Modal */}
-      <div className="relative bg-paper rounded-xl shadow-2xl max-w-md w-full overflow-hidden animate-in fade-in zoom-in duration-300">
+      <div className="relative bg-paper dark:bg-night-light rounded-xl shadow-2xl max-w-md w-full overflow-hidden animate-in fade-in zoom-in duration-300">
         {/* Header decoration */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold-dark via-gold to-gold-dark" />
 
         {/* Close button */}
         <button
           onClick={handleSkip}
-          className="absolute top-4 right-4 p-2 text-stone-400 hover:text-ink transition-colors rounded-full hover:bg-stone-100"
+          className="absolute top-4 right-4 p-2 text-stone-400 hover:text-ink dark:hover:text-paper transition-colors rounded-full hover:bg-stone-100 dark:hover:bg-night"
           aria-label="Skip onboarding"
         >
           <X className="w-5 h-5" />
@@ -120,12 +130,12 @@ export const OnboardingOverlay: React.FC<OnboardingOverlayProps> = ({ onComplete
           </div>
 
           {/* Title */}
-          <h2 className="font-display text-2xl font-bold text-ink mb-3">
+          <h2 className="font-display text-2xl font-bold text-ink dark:text-paper mb-3">
             {step.title}
           </h2>
 
           {/* Description */}
-          <p className="text-stone-600 font-serif leading-relaxed mb-8">
+          <p className="text-stone-600 dark:text-stone-400 font-serif leading-relaxed mb-8">
             {step.description}
           </p>
 
@@ -159,7 +169,7 @@ export const OnboardingOverlay: React.FC<OnboardingOverlayProps> = ({ onComplete
             )}
             <button
               onClick={handleNext}
-              className="px-6 py-2 bg-ink text-paper font-bold text-sm rounded-full hover:bg-ink-light transition-colors flex items-center gap-2 shadow-md"
+              className="px-6 py-2 bg-ink dark:bg-gold text-paper dark:text-ink font-bold text-sm rounded-full hover:bg-ink-light dark:hover:bg-gold-light transition-colors flex items-center gap-2 shadow-md"
             >
               {isLastStep ? "Get Started" : "Next"}
               <ChevronRight className="w-4 h-4" />
@@ -168,7 +178,7 @@ export const OnboardingOverlay: React.FC<OnboardingOverlayProps> = ({ onComplete
         </div>
 
         {/* Step indicator */}
-        <div className="bg-stone-100 px-8 py-3 text-center text-xs text-stone-500 font-mono">
+        <div className="bg-stone-100 dark:bg-night px-8 py-3 text-center text-xs text-stone-500 dark:text-stone-400 font-mono">
           Step {currentStep + 1} of {ONBOARDING_STEPS.length}
         </div>
       </div>

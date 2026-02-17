@@ -99,6 +99,16 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
     setMessages([getWelcomeMessage()]);
   }, [timelineData.id, getWelcomeMessage]);
 
+  // Close on Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -111,7 +121,8 @@ export const ChatPanel: React.FC<ChatPanelProps> = ({
         handleSend(pendingMessage);
         onMessageHandled();
     }
-  }, [pendingMessage]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- handleSend changes on every render, we only want to trigger on new pendingMessage
+  }, [pendingMessage, onMessageHandled]);
 
   const handleSend = async (textOverride?: string) => {
     const textToSend = textOverride || input;

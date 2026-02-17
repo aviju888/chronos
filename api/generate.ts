@@ -1,5 +1,255 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { batchEnrichEvents, discoverSubEvents, fetchWikipediaArticle } from './services/wikipediaService';
+import {
+  sanitizeString,
+  validateCoordinates,
+  validateYear,
+  validateTimeRange,
+  validateEvent,
+} from '../lib/validation.js';
+import {
+  safeParseJSON,
+  extractYearFromText,
+  extractExactDate,
+  normalizeString,
+  areTitlesSimilar,
+  categorizeEvent,
+  quickDetectQueryType,
+  extractKeyFigures,
+  deduplicateEvents,
+  type QueryAnalysis,
+} from '../lib/parsing.js';
+import { enrichFromWikidata } from '../lib/wikidata.js';
+
+// ============================================
+// WIKIPEDIA API SERVICE (inlined for Vercel compatibility)
+// ============================================
+
+const WIKI_API = 'https://en.wikipedia.org/w/api.php';
+
+// Helper to delay execution (rate limiting)
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Truncate text at the last complete sentence within maxLen
+function truncateAtSentence(text: string, maxLen: number): string {
+  if (text.length <= maxLen) return text;
+  const truncated = text.slice(0, maxLen);
+  // Find last sentence-ending punctuation
+  const lastPeriod = truncated.lastIndexOf('. ');
+  const lastExcl = truncated.lastIndexOf('! ');
+  const lastQ = truncated.lastIndexOf('? ');
+  const lastBreak = Math.max(lastPeriod, lastExcl, lastQ);
+  if (lastBreak > maxLen * 0.3) {
+    return truncated.slice(0, lastBreak + 1);
+  }
+  // If no sentence boundary found in a reasonable range, try end-of-string period
+  if (truncated.endsWith('.')) return truncated;
+  const veryLastPeriod = truncated.lastIndexOf('.');
+  if (veryLastPeriod > maxLen * 0.3) {
+    return truncated.slice(0, veryLastPeriod + 1);
+  }
+  return truncated + '...';
+}
+
+interface WikiArticle {
+  title: string;
+  extract: string;
+  url: string;
+  coordinates?: { lat: number; lng: number };
+  links: string[];
+  categories: string[];
+}
+
+interface WikiEvent {
+  title: string;
+  year: number | null;
+  summary: string;
+  wikipediaTitle: string;
+  wikipediaUrl: string;
+  coordinates?: { lat: number; lng: number };
+  keyFigures: string[];
+  exactDate?: string;
+}
+
+async function searchWikipedia(query: string, limit: number = 5): Promise<string[]> {
+  try {
+    const url = `${WIKI_API}?action=opensearch&search=${encodeURIComponent(query)}&limit=${limit}&format=json&origin=*`;
+    const response = await fetch(url);
+    if (!response.ok) return [];
+    const data = await response.json();
+    return Array.isArray(data[1]) ? data[1] : [];
+  } catch (error) {
+    console.error('Wikipedia search error:', error);
+    return [];
+  }
+}
+
+async function fetchWikipediaArticle(title: string): Promise<WikiArticle | null> {
+  try {
+    const params = new URLSearchParams({
+      action: 'query',
+      titles: title,
+      prop: 'extracts|links|coordinates|categories',
+      exintro: '1',
+      explaintext: '1',
+      pllimit: '100',
+      cllimit: '20',
+      format: 'json',
+      origin: '*'
+    });
+
+    const response = await fetch(`${WIKI_API}?${params}`);
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    const pages = data.query?.pages;
+    if (!pages) return null;
+
+    const pageId = Object.keys(pages)[0];
+    if (pageId === '-1') return null;
+
+    const page = pages[pageId];
+
+    return {
+      title: page.title,
+      extract: page.extract || '',
+      url: `https://en.wikipedia.org/wiki/${encodeURIComponent(page.title.replace(/ /g, '_'))}`,
+      coordinates: page.coordinates?.[0] ? {
+        lat: page.coordinates[0].lat,
+        lng: page.coordinates[0].lon
+      } : undefined,
+      links: (page.links || []).map((l: any) => l.title),
+      categories: (page.categories || []).map((c: any) => c.title.replace('Category:', ''))
+    };
+  } catch (error) {
+    console.error('Wikipedia fetch error:', error);
+    return null;
+  }
+}
+
+async function discoverSubEvents(
+  links: string[],
+  parentYear: number,
+  yearRange: { start: number; end: number },
+  limit: number = 10
+): Promise<WikiEvent[]> {
+  const eventPatterns = [
+    // War & conflict
+    /^Battle of/i, /^Siege of/i, /^Sack of/i, /^Massacre/i,
+    /War$/i, /Campaign$/i, /Crusade$/i,
+    // Politics & governance
+    /^Treaty of/i, /^Act of/i, /^Edict of/i, /^Declaration of/i,
+    /^Coronation of/i, /^Assassination of/i, /^Abdication of/i,
+    /^Fall of/i, /^Unification of/i, /^Partition of/i,
+    /Revolution$/i, /Rebellion$/i, /Uprising$/i,
+    // Culture & architecture
+    /^Construction of/i, /^Founding of/i, /^Opening of/i, /^Building of/i,
+    /University$/i, /Cathedral$/i, /Library$/i, /Academy$/i,
+    // Science & exploration
+    /^Discovery of/i, /^Invention of/i, /^Expedition/i, /^Exploration of/i,
+    /^Voyage of/i,
+    // Religion
+    /^Council of/i, /^Synod of/i, /^Reformation/i, /^Conversion of/i,
+    // Economy & disasters
+    /^Great Fire/i, /^Great Famine/i, /Earthquake$/i, /Plague$/i, /Famine$/i,
+    /^Death of/i, /^Birth of/i,
+  ];
+
+  const potentialEvents = links.filter(link => eventPatterns.some(pattern => pattern.test(link)));
+  const subEvents: WikiEvent[] = [];
+
+  for (const title of potentialEvents.slice(0, limit * 2)) {
+    if (subEvents.length >= limit) break;
+
+    await sleep(50);
+
+    const article = await fetchWikipediaArticle(title);
+    if (!article || !article.extract) continue;
+
+    const year = extractYearFromText(article.extract);
+    if (year === null || year < yearRange.start || year > yearRange.end) continue;
+
+    subEvents.push({
+      title: article.title,
+      year,
+      summary: truncateAtSentence(article.extract, 800),
+      wikipediaTitle: article.title,
+      wikipediaUrl: article.url,
+      coordinates: article.coordinates,
+      keyFigures: extractKeyFigures(article.extract, article.links),
+      exactDate: extractExactDate(article.extract)
+    });
+  }
+
+  return subEvents;
+}
+
+async function enrichEventFromWikipedia(
+  seedEvent: { title: string; year: number; wikipediaTitle?: string },
+  yearRange: { start: number; end: number }
+): Promise<{ enriched: WikiEvent | null; subEvents: WikiEvent[] }> {
+  let articleTitle = seedEvent.wikipediaTitle;
+
+  if (!articleTitle) {
+    const results = await searchWikipedia(seedEvent.title, 3);
+    articleTitle = results[0];
+  }
+
+  if (!articleTitle) return { enriched: null, subEvents: [] };
+
+  await sleep(50);
+
+  const article = await fetchWikipediaArticle(articleTitle);
+  if (!article) return { enriched: null, subEvents: [] };
+
+  const enriched: WikiEvent = {
+    title: seedEvent.title,
+    year: seedEvent.year,
+    summary: truncateAtSentence(article.extract, 800),
+    wikipediaTitle: article.title,
+    wikipediaUrl: article.url,
+    coordinates: article.coordinates,
+    keyFigures: extractKeyFigures(article.extract, article.links),
+    exactDate: extractExactDate(article.extract)
+  };
+
+  const subEvents = await discoverSubEvents(article.links, seedEvent.year, yearRange, 8);
+
+  return { enriched, subEvents };
+}
+
+async function batchEnrichEvents(
+  seedEvents: Array<{ title: string; year: number; wikipediaTitle?: string }>,
+  yearRange: { start: number; end: number }
+): Promise<{ enrichedEvents: WikiEvent[]; allSubEvents: WikiEvent[] }> {
+  const enrichedEvents: WikiEvent[] = [];
+  const allSubEvents: WikiEvent[] = [];
+  const seenTitles = new Set<string>();
+
+  // Process in parallel batches of 5 to speed up enrichment while respecting rate limits
+  const batchSize = 5;
+  for (let i = 0; i < seedEvents.length; i += batchSize) {
+    const batch = seedEvents.slice(i, i + batchSize);
+    const results = await Promise.all(
+      batch.map(seed => enrichEventFromWikipedia(seed, yearRange).catch(() => ({ enriched: null, subEvents: [] })))
+    );
+
+    for (const { enriched, subEvents } of results) {
+      if (enriched && !seenTitles.has(enriched.title.toLowerCase())) {
+        enrichedEvents.push(enriched);
+        seenTitles.add(enriched.title.toLowerCase());
+      }
+
+      for (const sub of subEvents) {
+        if (!seenTitles.has(sub.title.toLowerCase())) {
+          allSubEvents.push(sub);
+          seenTitles.add(sub.title.toLowerCase());
+        }
+      }
+    }
+  }
+
+  return { enrichedEvents, allSubEvents };
+}
 
 // ============================================
 // SECURITY & RATE LIMITING
@@ -78,213 +328,13 @@ function incrementGlobalCount(action: string) {
   }
 }
 
-// Input validation & sanitization
-function sanitizeString(input: unknown, maxLength: number = 200): string | null {
-  if (typeof input !== 'string') return null;
-  // Remove any potential XSS or injection attempts
-  const sanitized = input
-    .trim()
-    .slice(0, maxLength)
-    .replace(/<[^>]*>/g, '') // Remove HTML tags
-    .replace(/[^\w\s\-.,'"()]/gi, ''); // Only allow safe characters
-  return sanitized.length > 0 ? sanitized : null;
-}
-
-function validateCoordinates(lat: unknown, lng: unknown): { lat: number; lng: number } | null {
-  if (typeof lat !== 'number' || typeof lng !== 'number') return null;
-  if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return null;
-  return { lat, lng };
-}
-
-function validateYear(year: unknown): number | null {
-  if (typeof year !== 'number') return null;
-  if (!Number.isInteger(year)) return null;
-  if (year < -10000 || year > 2100) return null; // Reasonable range for history
-  return year;
-}
-
-function validateTimeRange(start: unknown, end: unknown): { start: number; end: number } | null {
-  const startYear = validateYear(start);
-  const endYear = validateYear(end);
-  if (startYear === null || endYear === null) return null;
-  if (startYear >= endYear) return null;
-  if (endYear - startYear > 5000) return null; // Max 5000 year span
-  return { start: startYear, end: endYear };
-}
-
 // ============================================
-// JSON PARSING HELPERS
+// QUERY INTENT DETECTION
 // ============================================
-
-/**
- * Safely parse JSON with recovery for common LLM issues:
- * - Truncated responses (missing closing brackets)
- * - Extra text before/after JSON
- * - Markdown code blocks wrapping JSON
- */
-function safeParseJSON<T>(text: string, fallback: T): { data: T; recovered: boolean } {
-  if (!text || typeof text !== 'string') {
-    return { data: fallback, recovered: true };
-  }
-
-  // Step 1: Try direct parse first
-  try {
-    return { data: JSON.parse(text), recovered: false };
-  } catch {
-    // Continue to recovery
-  }
-
-  let cleaned = text;
-
-  // Step 2: Remove markdown code blocks if present
-  cleaned = cleaned.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '');
-
-  // Step 3: Extract JSON object/array from surrounding text
-  const jsonMatch = cleaned.match(/(\{[\s\S]*\}|\[[\s\S]*\])/);
-  if (jsonMatch) {
-    cleaned = jsonMatch[1];
-  }
-
-  // Step 4: Try parsing cleaned version
-  try {
-    return { data: JSON.parse(cleaned), recovered: true };
-  } catch {
-    // Continue to bracket repair
-  }
-
-  // Step 5: Attempt to repair truncated JSON by adding closing brackets
-  let repaired = cleaned.trim();
-
-  // Count open brackets
-  const openBraces = (repaired.match(/\{/g) || []).length;
-  const closeBraces = (repaired.match(/\}/g) || []).length;
-  const openBrackets = (repaired.match(/\[/g) || []).length;
-  const closeBrackets = (repaired.match(/\]/g) || []).length;
-
-  // Add missing closing brackets (limit to prevent runaway)
-  const maxRepairs = 10;
-  let repairs = 0;
-
-  // Remove trailing comma if present
-  repaired = repaired.replace(/,\s*$/, '');
-
-  // Add missing braces
-  while (repairs < maxRepairs && (repaired.match(/\{/g) || []).length > (repaired.match(/\}/g) || []).length) {
-    repaired += '}';
-    repairs++;
-  }
-
-  // Add missing brackets
-  while (repairs < maxRepairs && (repaired.match(/\[/g) || []).length > (repaired.match(/\]/g) || []).length) {
-    repaired += ']';
-    repairs++;
-  }
-
-  // Step 6: Try parsing repaired version
-  try {
-    const parsed = JSON.parse(repaired);
-    console.log(`JSON recovered with ${repairs} bracket repairs`);
-    return { data: parsed, recovered: true };
-  } catch (e) {
-    console.error('JSON parse failed even after recovery attempts:', e);
-    return { data: fallback, recovered: true };
-  }
-}
 
 // ============================================
 // EVENT DEDUPLICATION
 // ============================================
-
-/**
- * Normalize a string for comparison (lowercase, remove punctuation, extra spaces)
- */
-function normalizeString(str: string): string {
-  return str
-    .toLowerCase()
-    .replace(/[^\w\s]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-/**
- * Check if two event titles are similar enough to be considered duplicates
- * Uses simple substring matching and word overlap
- */
-function areTitlesSimilar(title1: string, title2: string): boolean {
-  const norm1 = normalizeString(title1);
-  const norm2 = normalizeString(title2);
-
-  // Exact match
-  if (norm1 === norm2) return true;
-
-  // One contains the other
-  if (norm1.includes(norm2) || norm2.includes(norm1)) return true;
-
-  // Word overlap (at least 70% of words match)
-  const words1 = new Set(norm1.split(' ').filter(w => w.length > 2));
-  const words2 = new Set(norm2.split(' ').filter(w => w.length > 2));
-
-  if (words1.size === 0 || words2.size === 0) return false;
-
-  const intersection = [...words1].filter(w => words2.has(w)).length;
-  const unionSize = Math.min(words1.size, words2.size);
-
-  return intersection / unionSize >= 0.7;
-}
-
-/**
- * Deduplicate events by removing near-duplicates (same year + similar title)
- * Keeps the event with more citations/detail
- */
-function deduplicateEvents(events: any[]): any[] {
-  if (!Array.isArray(events) || events.length === 0) return events;
-
-  const seen: Map<string, any> = new Map();
-  const duplicatesRemoved: string[] = [];
-
-  for (const event of events) {
-    if (!event || typeof event.year !== 'number' || typeof event.title !== 'string') {
-      continue;
-    }
-
-    // Create a key based on year and normalized title start
-    const yearKey = event.year.toString();
-    let isDuplicate = false;
-
-    // Check against all events in the same year
-    for (const [key, existing] of seen.entries()) {
-      if (key.startsWith(yearKey + ':')) {
-        if (areTitlesSimilar(event.title, existing.title)) {
-          isDuplicate = true;
-
-          // Keep the one with more citations
-          const eventCitations = Array.isArray(event.citations) ? event.citations.length : 0;
-          const existingCitations = Array.isArray(existing.citations) ? existing.citations.length : 0;
-
-          if (eventCitations > existingCitations) {
-            // Replace with the better one
-            seen.delete(key);
-            seen.set(`${yearKey}:${normalizeString(event.title).slice(0, 20)}`, event);
-            duplicatesRemoved.push(existing.title);
-          } else {
-            duplicatesRemoved.push(event.title);
-          }
-          break;
-        }
-      }
-    }
-
-    if (!isDuplicate) {
-      seen.set(`${yearKey}:${normalizeString(event.title).slice(0, 20)}`, event);
-    }
-  }
-
-  if (duplicatesRemoved.length > 0) {
-    console.log(`Removed ${duplicatesRemoved.length} duplicate events:`, duplicatesRemoved);
-  }
-
-  return Array.from(seen.values());
-}
 
 // ============================================
 // GROQ API INTEGRATION
@@ -296,9 +346,6 @@ const MODELS = {
   fast: 'llama-3.1-8b-instant',
   deep: 'llama-3.3-70b-versatile'
 };
-
-// Helper to delay execution
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function callGroq(
   messages: { role: 'system' | 'user' | 'assistant'; content: string }[],
@@ -361,6 +408,75 @@ async function callGroq(
   }
 
   throw lastError || new Error('Failed after retries');
+}
+
+// ============================================
+// QUERY ANALYSIS (LLM-based for complex cases)
+// ============================================
+
+async function analyzeQueryIntent(query: string): Promise<QueryAnalysis> {
+  // First try quick detection
+  const quickResult = quickDetectQueryType(query);
+  if (quickResult) {
+    console.log(`Quick query detection: ${quickResult.queryType}`);
+    return quickResult;
+  }
+
+  // Fall back to LLM analysis
+  console.log('Using LLM for query intent analysis...');
+  const response = await callGroq([
+    {
+      role: 'system',
+      content: `You are a query analyzer. Determine what type of historical query the user is making.
+Always respond with valid JSON.`
+    },
+    {
+      role: 'user',
+      content: `Analyze this historical search query: "${query}"
+
+Determine:
+1. queryType: Is this a specific "city", broader "region", a "country", a thematic "topic", or a time "era"?
+2. specificLocation: If it's a place, what's the specific location name?
+3. broadContext: What's the broader geographic or historical context?
+4. topics: What themes or topics might be relevant?
+
+Examples:
+- "San Francisco" -> {"queryType": "city", "specificLocation": "San Francisco", "broadContext": "California, United States", "topics": ["Gold Rush", "tech industry", "earthquakes"]}
+- "Ancient Mesopotamia" -> {"queryType": "region", "specificLocation": "Mesopotamia", "broadContext": "Middle East", "topics": ["Sumer", "Babylon", "early civilization"]}
+- "Industrial Revolution" -> {"queryType": "topic", "broadContext": "Europe", "topics": ["manufacturing", "steam power", "urbanization"]}
+- "Ming Dynasty" -> {"queryType": "era", "specificLocation": "China", "topics": ["Chinese empire", "trade", "porcelain"]}
+
+Return JSON: {"queryType": "city|region|country|topic|era", "specificLocation": "string or null", "broadContext": "string or null", "topics": ["array", "of", "topics"]}`
+    }
+  ], MODELS.fast);
+
+  const parsed = safeParseJSON<{
+    queryType?: string;
+    specificLocation?: string;
+    broadContext?: string;
+    topics?: string[];
+  }>(response, { queryType: 'region' });
+
+  const queryType = (['city', 'region', 'country', 'topic', 'era'].includes(parsed.data.queryType || '')
+    ? parsed.data.queryType
+    : 'region') as QueryAnalysis['queryType'];
+
+  // Set event ratios based on query type
+  const ratioMap: Record<string, { direct: number; regional: number; contextual: number }> = {
+    city: { direct: 70, regional: 20, contextual: 10 },
+    region: { direct: 55, regional: 30, contextual: 15 },
+    country: { direct: 50, regional: 30, contextual: 20 },
+    topic: { direct: 50, regional: 30, contextual: 20 },
+    era: { direct: 60, regional: 25, contextual: 15 }
+  };
+
+  return {
+    queryType,
+    specificLocation: parsed.data.specificLocation || undefined,
+    broadContext: parsed.data.broadContext || undefined,
+    topics: parsed.data.topics,
+    eventRatios: ratioMap[queryType]
+  };
 }
 
 // ============================================
@@ -447,9 +563,12 @@ async function getSmartTimeRange(region: string): Promise<{ start: number; end: 
     }
   ]);
 
-  const parsed = safeParseJSON<{ start?: number; end?: number }>(response, {});
-  if (typeof parsed.data.start === 'number' && typeof parsed.data.end === 'number') {
-    return { start: parsed.data.start, end: parsed.data.end };
+  const parsed = safeParseJSON<{ start?: number | string; end?: number | string }>(response, {});
+  // Coerce strings to numbers (LLMs sometimes return "1776" instead of 1776)
+  const start = typeof parsed.data.start === 'string' ? parseInt(parsed.data.start, 10) : parsed.data.start;
+  const end = typeof parsed.data.end === 'string' ? parseInt(parsed.data.end, 10) : parsed.data.end;
+  if (typeof start === 'number' && typeof end === 'number' && !isNaN(start) && !isNaN(end) && start < end) {
+    return { start, end };
   }
   return null;
 }
@@ -468,6 +587,18 @@ async function generateTimelineData(
   const startDisplay = formatYearForPrompt(startYear);
   const endDisplay = formatYearForPrompt(endYear);
   const yearRange = { start: startYear, end: endYear };
+
+  // ============================================
+  // STEP 0: Analyze Query Intent
+  // ============================================
+  console.log('Step 0: Analyzing query intent...');
+  const queryAnalysis = await analyzeQueryIntent(region);
+  console.log(`Query type: ${queryAnalysis.queryType}, Ratios: ${JSON.stringify(queryAnalysis.eventRatios)}`);
+
+  // Calculate minimum event counts by relevance type
+  const directCount = Math.ceil(seedEventCount * queryAnalysis.eventRatios.direct / 100);
+  const regionalCount = Math.ceil(seedEventCount * queryAnalysis.eventRatios.regional / 100);
+  const contextualCount = Math.ceil(seedEventCount * queryAnalysis.eventRatios.contextual / 100);
 
   // ============================================
   // STEP 1: Generate Eras (unchanged)
@@ -517,35 +648,122 @@ CRITICAL DATE FORMAT:
     console.log('Eras response required JSON recovery');
   }
 
+  // Coerce era years from strings to numbers (LLMs sometimes return "1760" instead of 1760)
+  eras = eras.map((era: any) => {
+    if (typeof era.startYear === 'string') era.startYear = parseInt(era.startYear, 10);
+    if (typeof era.endYear === 'string') era.endYear = parseInt(era.endYear, 10);
+    return era;
+  }).filter((era: any) => typeof era.startYear === 'number' && typeof era.endYear === 'number' && !isNaN(era.startYear) && !isNaN(era.endYear));
+
+  // Fix LLM year sign errors: if user requested AD range but LLM returned negative years, flip them
+  if (startYear > 0 && endYear > 0) {
+    eras = eras.map((era: any) => {
+      let { startYear: eStart, endYear: eEnd } = era;
+      // If era years are negative but should be positive (AD range requested)
+      if (typeof eStart === 'number' && eStart < 0 && Math.abs(eStart) >= 100) {
+        eStart = Math.abs(eStart);
+        console.warn(`Fixed era "${era.title}" startYear: ${era.startYear} -> ${eStart}`);
+      }
+      if (typeof eEnd === 'number' && eEnd < 0 && Math.abs(eEnd) >= 100) {
+        eEnd = Math.abs(eEnd);
+        console.warn(`Fixed era "${era.title}" endYear: ${era.endYear} -> ${eEnd}`);
+      }
+      return { ...era, startYear: eStart, endYear: eEnd };
+    });
+  }
+
   // ============================================
-  // STEP 2: Generate SEED Events (major anchor events with Wikipedia titles)
+  // STEP 2: Generate SEED Events (with relevance typing)
   // ============================================
-  console.log('Step 2: Generating seed events...');
+  console.log('Step 2: Generating seed events with relevance typing...');
+
+  // Build context-aware prompt based on query analysis
+  const queryTypeGuidance = {
+    city: `The user is searching for a SPECIFIC CITY: "${region}".
+           PRIORITY: Events that happened IN or AT this exact location.
+           - "direct" events: Things that physically occurred in ${region} (founding, local incidents, buildings, local figures, city-specific events)
+           - "regional" events: Events in the surrounding area/state/province that affected ${region}
+           - "contextual" events: National/global events that provide historical backdrop (limit these!)`,
+    region: `The user is searching for a REGION: "${region}".
+           - "direct" events: Events that occurred within this region
+           - "regional" events: Events in neighboring areas that significantly impacted this region
+           - "contextual" events: Broader events that shaped the region's history`,
+    country: `The user is searching for a COUNTRY: "${region}".
+           - "direct" events: Major national events (independence, wars, political changes)
+           - "regional" events: Events in specific parts of the country
+           - "contextual" events: International events affecting the country`,
+    topic: `The user is searching for a TOPIC: "${region}".
+           - "direct" events: Core events directly about this topic
+           - "regional" events: Related developments and parallel movements
+           - "contextual" events: Background events that set the stage`,
+    era: `The user is searching for an ERA: "${region}".
+           - "direct" events: Defining events of this time period
+           - "regional" events: Regional variations and manifestations
+           - "contextual" events: Preceding/following events for context`
+  };
+
   const seedEventsResponse = await callGroq([
     {
       role: 'system',
-      content: `You are a rigorous academic historian. Your task is to identify MAJOR ANCHOR events that have dedicated Wikipedia articles.
+      content: `You are a rigorous academic historian. Your task is to identify historically significant events with ACCURATE RELEVANCE CLASSIFICATION.
+
+${queryTypeGuidance[queryAnalysis.queryType]}
 
 CRITICAL RULES:
-1. Focus on PIVOTAL events only (wars, regime changes, major treaties, revolutions, famous battles)
-2. Each event MUST have its own Wikipedia article
-3. Include the EXACT Wikipedia article title - this will be used to fetch more details
+1. Each event MUST have its own Wikipedia article
+2. Include the EXACT Wikipedia article title
+3. ACCURATELY classify each event's relevance:
+   - "direct": Happened AT this exact place or is DIRECTLY about this topic
+   - "regional": Happened nearby or is closely related
+   - "contextual": Broader historical context (world events, national events for local searches)
 4. AD years are POSITIVE (1776), BC years are NEGATIVE (-44)
+5. CATEGORY DIVERSITY: Do NOT over-represent War events. History includes culture, science, religion, economics, and politics beyond warfare. Aim for:
+   - No more than 30% War events
+   - Include at least 2 Culture/Science/Economy events (founding of universities, architectural achievements, inventions, trade developments, artistic movements, etc.)
+   - Include political events that are NOT wars (constitutions, reforms, elections, diplomatic achievements)
+6. DISPUTED EVENTS: Set isDisputed=true when:
+   - The event's date is debated by historians (e.g., founding of Rome, dating of Troy)
+   - The event's causes or details are contested (e.g., assassination conspiracies, disputed succession claims)
+   - The event is based on tradition rather than documented evidence (e.g., legendary founders, mythological origins)
+   - Modern historians disagree about the event's significance or interpretation
+   Mark at least 1-2 events as disputed if any exist in the timeline — most historical periods have scholarly debates.
 
 Always respond with valid JSON.`
     },
     {
       role: 'user',
-      content: `Generate ${seedEventCount} MAJOR anchor events for ${region} from ${startDisplay} (year ${startYear}) to ${endDisplay} (year ${endYear}).
+      content: `Generate ${seedEventCount} historically significant events for "${region}" from ${startDisplay} to ${endDisplay}.
 
         The eras are: ${eras.map((e: any) => e.title).join(', ')}
+        ${queryAnalysis.broadContext ? `Broader context: ${queryAnalysis.broadContext}` : ''}
+        ${queryAnalysis.topics ? `Related topics: ${queryAnalysis.topics.join(', ')}` : ''}
+
+        REQUIRED EVENT DISTRIBUTION:
+        - At least ${directCount} events must be "direct" (happened HERE, specifically about THIS)
+        - About ${regionalCount} events can be "regional" (nearby or closely related)
+        - At most ${contextualCount} events should be "contextual" (broader historical backdrop)
+
+        IMPORTANT: For a ${queryAnalysis.queryType} search like "${region}", users expect to see LOCAL/SPECIFIC events first!
+        ${queryAnalysis.queryType === 'city' ? `Find events that ACTUALLY happened in ${region} - founding date, notable incidents, important buildings, local historical figures, city milestones, local disasters, etc.` : ''}
+
+        CATEGORY DIVERSITY (important!):
+        - Maximum 30% of events should be "War" category
+        - Include cultural milestones (art, architecture, literature, universities, inventions)
+        - Include economic events (trade routes, market changes, famines, prosperity)
+        - Include political events beyond wars (reforms, constitutions, elections, diplomatic breakthroughs)
+        - Include religious/scientific events where relevant
+        - Wars are important but history is MORE than just conflicts!
+
+        DISPUTED EVENTS:
+        - Mark isDisputed=true for events where dates, causes, or details are debated by historians
+        - Most timelines should have 1-3 disputed events (legendary founders, contested dates, debated causes)
 
         REQUIREMENTS:
         1. Each event MUST have a corresponding Wikipedia article
         2. Include the EXACT Wikipedia article title in "wikipediaTitle" field
-        3. Focus on: Wars, Battles, Treaties, Revolutions, Coronations, Deaths of rulers, Major laws/edicts
-        4. Spread events across the entire time period
-        5. Include coordinates (lat/lng) for each event location
+        3. Include relevanceType for EVERY event
+        4. Include coordinates (lat/lng) - for "direct" events, these MUST be in/at ${region}
+        5. Spread events across the time period AND across categories
 
         Return JSON in format:
         {
@@ -553,10 +771,12 @@ Always respond with valid JSON.`
             {
               "id": "string",
               "title": "string (common name)",
-              "wikipediaTitle": "string (EXACT Wikipedia article title, e.g., 'Battle of Thermopylae' or 'Julius Caesar')",
+              "wikipediaTitle": "string (EXACT Wikipedia article title)",
               "year": number (positive for AD, negative for BC),
               "category": "Politics" | "War" | "Culture" | "Economy" | "Religion" | "Science" | "Other",
               "summary": "string (1 sentence)",
+              "relevanceType": "direct" | "regional" | "contextual",
+              "relevanceReason": "string (why this event is relevant to ${region})",
               "imageQuery": "string (2-4 words for image search)",
               "location": {"lat": number, "lng": number, "name": "string"},
               "isDisputed": boolean,
@@ -573,9 +793,27 @@ Always respond with valid JSON.`
   }
 
   const seedEvents = (Array.isArray(seedEventsParsed.data?.events) ? seedEventsParsed.data.events : [])
-    .filter((evt: any) => evt && typeof evt.year === 'number' && evt.year >= startYear && evt.year <= endYear);
+    .map((evt: any) => {
+      if (!evt) return null;
+      // Coerce year from string to number (LLMs often return "1776" instead of 1776)
+      if (typeof evt.year === 'string') {
+        const parsed = parseInt(evt.year, 10);
+        if (!isNaN(parsed)) evt.year = parsed;
+      }
+      return evt;
+    })
+    .filter((evt: any) => {
+      if (!evt || typeof evt.year !== 'number' || !Number.isFinite(evt.year)) return false;
+      if (evt.year < startYear || evt.year > endYear) return false;
+      const validation = validateEvent(evt);
+      if (!validation.valid) {
+        console.warn(`Dropping invalid seed event "${evt.title}": ${validation.errors.join(', ')}`);
+        return false;
+      }
+      return true;
+    });
 
-  console.log(`Generated ${seedEvents.length} seed events`);
+  console.log(`Generated ${seedEvents.length} valid seed events`);
 
   // ============================================
   // STEP 3: Wikipedia Enrichment
@@ -629,7 +867,9 @@ Always respond with valid JSON.`
         exactDate: enriched?.exactDate,
         keyFigures: enriched?.keyFigures,
         sourceType: 'llm' as const,
-        isSubEvent: false
+        isSubEvent: false,
+        relevanceType: seed.relevanceType || 'direct',
+        relevanceReason: seed.relevanceReason
       });
     }
 
@@ -664,7 +904,10 @@ Always respond with valid JSON.`
         keyFigures: sub.keyFigures,
         sourceType: 'wikipedia' as const,
         isSubEvent: true,
-        parentEventId: parent?.id
+        parentEventId: parent?.id,
+        // Sub-events inherit parent's relevance or default to regional
+        relevanceType: parent?.relevanceType || 'regional',
+        relevanceReason: `Related to ${parent?.title || 'discovered events'}`
       });
     }
   } catch (wikiError) {
@@ -674,18 +917,110 @@ Always respond with valid JSON.`
       ...e,
       id: e.id || crypto.randomUUID(),
       citations: e.citations || [],
-      sourceType: 'llm' as const
+      sourceType: 'llm' as const,
+      relevanceType: e.relevanceType || 'direct',
+      relevanceReason: e.relevanceReason
     }));
   }
 
+  // ============================================
+  // STEP 3.5: Wikidata SPARQL Enrichment
+  // ============================================
+  // Only for location-based queries where Wikidata adds the most value
+  if (['city', 'region', 'country'].includes(queryAnalysis.queryType)) {
+    try {
+      console.log('Step 3.5: Querying Wikidata SPARQL for additional events...');
+      const wikidataEvents = await enrichFromWikidata(region, startYear, endYear);
+
+      if (wikidataEvents.length > 0) {
+        // Build a set of existing event titles for quick duplicate checking
+        const existingTitles = new Set(
+          allEvents.map((e: any) => normalizeString(e.title))
+        );
+
+        let added = 0;
+        for (const wdEvent of wikidataEvents) {
+          // Skip if we already have this event (by normalized title)
+          const normTitle = normalizeString(wdEvent.title);
+          if (existingTitles.has(normTitle)) continue;
+
+          // Skip if similar to an existing event
+          if (allEvents.some((e: any) => areTitlesSimilar(e.title, wdEvent.title))) continue;
+
+          allEvents.push({
+            id: crypto.randomUUID(),
+            title: wdEvent.title,
+            year: wdEvent.year,
+            category: categorizeEvent(wdEvent.title),
+            summary: wdEvent.description || `Historical event: ${wdEvent.title}`,
+            imageQuery: wdEvent.title.split(' ').slice(0, 3).join(' '),
+            citations: wdEvent.wikipediaTitle ? [{
+              source: `Wikipedia: ${wdEvent.wikipediaTitle}`,
+              url: `https://en.wikipedia.org/wiki/${encodeURIComponent(wdEvent.wikipediaTitle.replace(/ /g, '_'))}`
+            }] : [],
+            location: wdEvent.coordinates ? {
+              lat: wdEvent.coordinates.lat,
+              lng: wdEvent.coordinates.lng,
+              name: wdEvent.title,
+            } : undefined,
+            isDisputed: false,
+            confidenceScore: 'High',
+            wikipediaTitle: wdEvent.wikipediaTitle,
+            exactDate: wdEvent.exactDate,
+            sourceType: 'search' as const, // Wikidata-sourced events use 'search' type
+            isSubEvent: false,
+            relevanceType: 'direct',
+            relevanceReason: `Discovered from Wikidata (${wdEvent.wikidataId})`,
+          });
+
+          existingTitles.add(normTitle);
+          added++;
+        }
+
+        console.log(`Wikidata: added ${added} new events (${wikidataEvents.length - added} were duplicates)`);
+      }
+    } catch (wdError) {
+      console.error('Wikidata enrichment failed (non-fatal):', wdError);
+      // Continue without Wikidata — it's supplementary
+    }
+  } else {
+    console.log('Step 3.5: Skipping Wikidata (query type is topic/era, not location)');
+  }
+
   // Deduplicate events
-  const events = deduplicateEvents(allEvents);
-  console.log(`Final event count after deduplication: ${events.length}`);
+  const deduped = deduplicateEvents(allEvents);
+  console.log(`Event count after deduplication: ${deduped.length}`);
+
+  // Final validation pass - ensure all events have required fields (coerce types first)
+  const events = deduped
+    .map((evt: any) => {
+      if (!evt) return null;
+      // Coerce year from string to number one more time for Wikipedia/Wikidata-sourced events
+      if (typeof evt.year === 'string') {
+        const parsed = parseInt(evt.year, 10);
+        if (!isNaN(parsed)) evt.year = parsed;
+      }
+      return evt;
+    })
+    .filter((evt: any) => {
+      if (!evt) return false;
+      if (!evt.title || typeof evt.title !== 'string' || evt.title.trim().length === 0) return false;
+      if (typeof evt.year !== 'number' || !Number.isFinite(evt.year) || evt.year === 0) return false;
+      if (!evt.summary || typeof evt.summary !== 'string') return false;
+      return true;
+    });
+
+  if (events.length < deduped.length) {
+    console.warn(`Dropped ${deduped.length - events.length} invalid events in final validation`);
+  }
+  console.log(`Final event count: ${events.length}`);
 
   // ============================================
   // STEP 4: Generate Narrative (enhanced with more events)
   // ============================================
   console.log('Step 4: Generating narrative...');
+  const eraNames = eras.map((e: any) => e.title).join(', ');
+  const eventNames = events.slice(0, 15).map((e: any) => `${e.title} (${formatYearForPrompt(e.year)})`).join(', ');
   const narrativeResponse = await callGroq([
     {
       role: 'system',
@@ -695,8 +1030,8 @@ Always respond with valid JSON.`
       role: 'user',
       content: `Write a factual historical overview (3-4 paragraphs) of ${region} from ${startDisplay} to ${endDisplay}.
 
-        Reference these eras: ${eras.map((e: any) => e.title).join(', ')}
-        Key events include: ${events.slice(0, 15).map((e: any) => `${e.title} (${formatYearForPrompt(e.year)})`).join(', ')}
+        ${eraNames ? `Reference these eras: ${eraNames}` : ''}
+        ${eventNames ? `Key events include: ${eventNames}` : ''}
 
         REQUIREMENTS:
         - Write in encyclopedia style (factual, neutral tone)
@@ -716,6 +1051,13 @@ Always respond with valid JSON.`
   }
   narrative = narrativeParsed.data?.narrative || '';
 
+  // Log relevance distribution
+  const relevanceCounts = events.reduce((acc: any, e: any) => {
+    acc[e.relevanceType || 'unknown'] = (acc[e.relevanceType || 'unknown'] || 0) + 1;
+    return acc;
+  }, {});
+  console.log('Event relevance distribution:', relevanceCounts);
+
   return {
     id: crypto.randomUUID(),
     createdAt: Date.now(),
@@ -724,22 +1066,13 @@ Always respond with valid JSON.`
     eras,
     events,
     narrative,
+    queryAnalysis: {
+      queryType: queryAnalysis.queryType,
+      specificLocation: queryAnalysis.specificLocation,
+      broadContext: queryAnalysis.broadContext,
+      topics: queryAnalysis.topics
+    }
   };
-}
-
-// Helper to categorize events based on title
-function categorizeEvent(title: string): string {
-  const lower = title.toLowerCase();
-  if (/battle|war|siege|invasion|conquest|campaign|crusade/.test(lower)) return 'War';
-  if (/treaty|peace|alliance|agreement|accord/.test(lower)) return 'Politics';
-  if (/coronation|death of|assassination|reign|emperor|king|queen/.test(lower)) return 'Politics';
-  if (/act|law|edict|decree|constitution/.test(lower)) return 'Politics';
-  if (/revolution|rebellion|uprising|revolt/.test(lower)) return 'Politics';
-  if (/church|pope|council|religious|monastery/.test(lower)) return 'Religion';
-  if (/trade|commerce|economic|famine|plague/.test(lower)) return 'Economy';
-  if (/art|literature|philosophy|university|discovery/.test(lower)) return 'Culture';
-  if (/invention|science|astronomy|mathematics/.test(lower)) return 'Science';
-  return 'Other';
 }
 
 async function askFollowUp(

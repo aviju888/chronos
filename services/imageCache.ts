@@ -13,22 +13,29 @@ const MAX_CACHE_ENTRIES = 500;
 // In-memory cache for faster lookups during session
 const memoryCache = new Map<string, string>();
 
-// Load cache from localStorage
+// Persistent cache loaded lazily once per session
+let persistentCache: Map<string, CacheEntry> | null = null;
+
+// Load cache from localStorage (cached after first load)
 const loadCache = (): Map<string, CacheEntry> => {
+  if (persistentCache) return persistentCache;
   try {
     const stored = localStorage.getItem(CACHE_KEY);
     if (stored) {
       const parsed = JSON.parse(stored);
-      return new Map(Object.entries(parsed));
+      persistentCache = new Map(Object.entries(parsed));
+      return persistentCache;
     }
   } catch (e) {
     console.warn('Failed to load image cache', e);
   }
-  return new Map();
+  persistentCache = new Map();
+  return persistentCache;
 };
 
-// Save cache to localStorage
+// Save cache to localStorage (and update persistent cache reference)
 const saveCache = (cache: Map<string, CacheEntry>): void => {
+  persistentCache = cache;
   try {
     // Convert Map to object for JSON storage
     const obj: Record<string, CacheEntry> = {};
@@ -99,6 +106,7 @@ export const cacheImage = (query: string, url: string): void => {
 // Clear all cached images
 export const clearImageCache = (): void => {
   memoryCache.clear();
+  persistentCache = null;
   localStorage.removeItem(CACHE_KEY);
 };
 

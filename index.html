@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>Chronos - Deep History Explorer</title>
     <meta name="description" content="Explore history through AI-powered interactive timelines. Discover events, eras, and narratives from Ancient Rome to Modern China." />
 
@@ -358,6 +358,11 @@
       /* Transition Utilities */
       .transition-archival {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* Safe area padding for iPhone notch/home indicator */
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
       }
     </style>
   <script type="importmap">

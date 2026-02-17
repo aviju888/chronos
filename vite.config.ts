@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import path from 'path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -21,5 +22,17 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: [],
+    coverage: {
+      provider: 'v8',
+      include: ['lib/**/*.ts', 'utils.ts', 'services/**/*.ts'],
+      exclude: ['**/*.test.ts', '**/*.d.ts', 'services/apiService.ts', 'services/geminiService.ts'],
+      reporter: ['text', 'text-summary', 'json-summary'],
+      reportsDirectory: './coverage',
+    },
   },
 });

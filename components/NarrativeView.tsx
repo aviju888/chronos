@@ -1,11 +1,15 @@
 import React from 'react';
 import { FileText } from 'lucide-react';
+import { RelatedSearches } from './RelatedSearches';
+import { TimelineData } from '../types';
 
 interface NarrativeViewProps {
   text: string;
+  timeline?: TimelineData;
+  onRelatedSearch?: (query: string) => void;
 }
 
-export const NarrativeView: React.FC<NarrativeViewProps> = ({ text }) => {
+export const NarrativeView: React.FC<NarrativeViewProps> = ({ text, timeline, onRelatedSearch }) => {
   // Simple paragraph splitter for better readability
   const paragraphs = text.split('\n\n').filter(p => p.trim().length > 0);
 
@@ -51,6 +55,11 @@ export const NarrativeView: React.FC<NarrativeViewProps> = ({ text }) => {
             Generated based on structured event data. Always verify with primary sources.
           </p>
         </div>
+
+        {/* Related Searches for Discovery */}
+        {timeline && onRelatedSearch && (
+          <RelatedSearches timeline={timeline} onSearch={onRelatedSearch} />
+        )}
       </div>
     </div>
   );

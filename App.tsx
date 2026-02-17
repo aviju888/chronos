@@ -15,49 +15,7 @@ import { generateTimeline, ProgressUpdate } from './services/apiService';
 import { loadTimelines, saveTimelines, deleteTimeline as deleteTimelineFromStorage } from './services/storageService';
 import { TimelineData, GenerationMode, HistoricalEvent } from './types';
 import { Layout, Map, List, BookOpen, MessageCircle, Menu, HelpCircle, Share2 } from 'lucide-react';
-import { formatYearRange } from './utils';
-
-// URL hash parsing and generation for deep linking
-const parseHash = (): { timelineId?: string; view?: string; eventId?: string } => {
-  const hash = window.location.hash.slice(1); // Remove #
-  if (!hash) return {};
-
-  const parts = hash.split('/').filter(Boolean);
-  const result: { timelineId?: string; view?: string; eventId?: string } = {};
-
-  // Format: /timeline/{id}/{view} or /timeline/{id}/{view}/event/{eventId}
-  if (parts[0] === 'timeline' && parts[1]) {
-    result.timelineId = parts[1];
-    if (parts[2] && ['map', 'timeline', 'list', 'narrative'].includes(parts[2])) {
-      result.view = parts[2];
-    }
-    if (parts[3] === 'event' && parts[4]) {
-      result.eventId = parts[4];
-    }
-  }
-
-  return result;
-};
-
-const updateHash = (timelineId: string | null, view: string, eventId: string | null = null): void => {
-  if (!timelineId) {
-    // Clear hash when no timeline is active
-    if (window.location.hash) {
-      history.pushState(null, '', window.location.pathname);
-    }
-    return;
-  }
-
-  let hash = `#/timeline/${timelineId}/${view}`;
-  if (eventId) {
-    hash += `/event/${eventId}`;
-  }
-
-  // Only update if different to avoid unnecessary history entries
-  if (window.location.hash !== hash) {
-    history.pushState(null, '', hash);
-  }
-};
+import { formatYearRange, parseHash, updateHash } from './utils';
 
 const App: React.FC = () => {
   // Persistence State
@@ -75,6 +33,7 @@ const App: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [pendingChatQuery, setPendingChatQuery] = useState<string | null>(null);
+  const [pendingSearchQuery, setPendingSearchQuery] = useState<string | null>(null);
 
   // Toast notifications
   const { showError, showSuccess, ToastContainer } = useToast();
@@ -263,23 +222,25 @@ const App: React.FC = () => {
       />
 
       {!activeData ? (
-        <div className="flex-1 overflow-auto bg-grid-pattern relative">
-             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] opacity-50 pointer-events-none"></div>
-             <div className="absolute inset-0 bg-gradient-to-b from-stone-100/50 to-stone-300/50 pointer-events-none"></div>
+        <div className="flex-1 overflow-auto bg-grid-pattern dark:bg-night relative">
+             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] dark:bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-50 dark:opacity-20 pointer-events-none"></div>
+             <div className="absolute inset-0 bg-gradient-to-b from-stone-100/50 to-stone-300/50 dark:from-night/50 dark:to-night-light/50 pointer-events-none"></div>
              
              <div className="relative z-10 pt-10 px-4">
-                 <SetupForm 
-                    onGenerate={handleGenerate} 
-                    isLoading={loading} 
+                 <SetupForm
+                    onGenerate={handleGenerate}
+                    isLoading={loading}
                     progress={progress}
                     logs={logs}
+                    initialQuery={pendingSearchQuery}
+                    onQueryHandled={() => setPendingSearchQuery(null)}
                  />
                  
                  {/* Decorative Hero Elements if empty */}
                  {!loading && (
                      <div className="mt-10 md:mt-16 text-center opacity-30 select-none pointer-events-none">
-                         <p className="font-display text-3xl md:text-7xl text-stone-400 font-bold uppercase tracking-[0.3rem] md:tracking-[1rem]">History Awaits</p>
-                         <p className="font-serif italic text-stone-500 mt-2 md:mt-4 text-sm md:text-base px-4 md:px-0">Select an existing archive from the sidebar or start a new investigation.</p>
+                         <p className="font-display text-3xl md:text-7xl text-stone-400 dark:text-stone-600 font-bold uppercase tracking-[0.3rem] md:tracking-[1rem]">History Awaits</p>
+                         <p className="font-serif italic text-stone-500 dark:text-stone-500 mt-2 md:mt-4 text-sm md:text-base px-4 md:px-0">Select an existing archive from the sidebar or start a new investigation.</p>
                      </div>
                  )}
 
@@ -356,8 +317,18 @@ const App: React.FC = () => {
              {view === 'map' && <MapView events={activeData.events} timeRange={activeData.timeRange} onEventClick={setSelectedEvent} />}
              {view === 'timeline' && <div className="h-full overflow-y-auto"><TimelineView eras={activeData.eras} events={activeData.events} onEventClick={setSelectedEvent} /></div>}
              {view === 'list' && <EventListView events={activeData.events} onEventClick={setSelectedEvent} />}
-             {view === 'narrative' && <div className="h-full overflow-y-auto"><NarrativeView text={activeData.narrative} /></div>}
-
+             {view === 'narrative' && (
+               <div className="h-full overflow-y-auto">
+                 <NarrativeView
+                   text={activeData.narrative}
+                   timeline={activeData}
+                   onRelatedSearch={(query) => {
+                     setPendingSearchQuery(query);
+                     setActiveTimelineId(null);
+                   }}
+                 />
+               </div>
+             )}
              {/* Chat Panel Overlay */}
              <ChatPanel
                 timelineData={activeData}

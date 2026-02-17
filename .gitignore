@@ -54,3 +54,5 @@ coverage/
 
 # Claude/AI
 .claude/
+.vercel
+.env*.local

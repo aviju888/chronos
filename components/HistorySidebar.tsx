@@ -23,8 +23,9 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
         <div className="fixed left-0 top-24 z-40">
           <button
             onClick={onToggle}
-            className="bg-ink text-gold border-r border-y border-gold p-2 rounded-r-md shadow-lg hover:bg-ink-light transition-all"
+            className="bg-ink text-gold border-r border-y border-gold p-3 rounded-r-md shadow-lg hover:bg-ink-light transition-all min-w-[44px] min-h-[44px] flex items-center justify-center"
             title="Open Archives"
+            aria-label="Open Archives"
           >
             <Scroll className="w-5 h-5" />
           </button>
@@ -40,7 +41,11 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
             <Scroll className="w-5 h-5" />
             Archives
           </h2>
-          <button onClick={onToggle} className="text-gold/50 hover:text-gold text-2xl transition-colors">
+          <button
+            onClick={onToggle}
+            className="text-gold/50 hover:text-gold text-2xl transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+            aria-label="Close sidebar"
+          >
             ×
           </button>
         </div>
@@ -61,7 +66,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
              </div>
           )}
 
-          {timelines.sort((a,b) => b.createdAt - a.createdAt).map(t => (
+          {[...timelines].sort((a,b) => b.createdAt - a.createdAt).map(t => (
             <div
               key={t.id}
               className={`relative group rounded border-2 transition-archival ${
@@ -88,6 +93,7 @@ export const HistorySidebar: React.FC<HistorySidebarProps> = ({
                 onClick={(e) => { e.stopPropagation(); onDelete(t.id); }}
                 className="absolute top-2 right-2 p-1.5 rounded hover:bg-crimson/30 hover:text-crimson-light text-stone-600 transition-colors opacity-100 md:opacity-0 md:group-hover:opacity-100 min-w-[36px] min-h-[36px] flex items-center justify-center"
                 title="Delete Archive"
+                aria-label={`Delete ${t.region} archive`}
               >
                 <Trash2 className="w-4 h-4 md:w-3 md:h-3" />
               </button>
