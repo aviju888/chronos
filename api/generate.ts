@@ -278,7 +278,14 @@ let globalTimelineCount = 0;
 let globalResetTime = Date.now() + 24 * 60 * 60 * 1000;
 
 function getClientIP(req: VercelRequest): string {
-  // Get real IP from various headers (Vercel/Cloudflare/etc)
+  // Prefer the platform-set header; Vercel writes the verified client IP here.
+  // Client-supplied values never survive Vercel's proxy, but preferring the
+  // platform header keeps rate limiting safe if this ever runs elsewhere.
+  const vercelIp = req.headers['x-vercel-forwarded-for'];
+  if (typeof vercelIp === 'string' && vercelIp.length > 0) {
+    return vercelIp.split(',')[0].trim();
+  }
+
   const forwarded = req.headers['x-forwarded-for'];
   const realIp = req.headers['x-real-ip'];
 
@@ -1117,6 +1124,21 @@ Context from timeline: ${contextSummary.slice(0, 2000)}`, // Limit context size
 // MAIN HANDLER
 // ============================================
 
+// Production domains plus this project's Vercel preview deployments and local dev
+const ALLOWED_ORIGINS = new Set([
+  'https://chronos-history.vercel.app',
+  'https://chronos-ten-delta.vercel.app',
+]);
+
+function isAllowedOrigin(origin: string): boolean {
+  if (ALLOWED_ORIGINS.has(origin)) return true;
+  // Preview deployments: https://chronos-<hash>-aviju888s-projects.vercel.app
+  if (/^https:\/\/chronos-[a-z0-9-]+-aviju888s-projects\.vercel\.app$/.test(origin)) return true;
+  // Local development
+  if (/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return true;
+  return false;
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Security headers
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -1124,12 +1146,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
 
-  // CORS - allow all origins for now (Vercel handles security)
+  // CORS - only allow this app's own origins. Same-origin requests (the normal
+  // case) don't need these headers; without an allowlist any third-party site
+  // could call this API from the browser and consume the Groq quota.
   const origin = req.headers.origin;
-  if (origin) {
+  if (origin && isAllowedOrigin(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
-  } else {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Vary', 'Origin');
   }
 
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
