@@ -120,6 +120,22 @@ export function normalizeString(str: string): string {
   return str.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim();
 }
 
+// Ordinal qualifiers that mark similarly-named titles as distinct events
+// (e.g. the First and Second Battle of Zurich both took place in 1799)
+const ORDINAL_QUALIFIERS = new Set([
+  'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth',
+  '1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th',
+  'ii', 'iii', 'iv', 'vi', 'vii', 'viii', 'ix',
+]);
+
+function ordinalSignature(normalizedTitle: string): string {
+  return normalizedTitle
+    .split(' ')
+    .filter(w => ORDINAL_QUALIFIERS.has(w))
+    .sort()
+    .join(' ');
+}
+
 /**
  * Check if two event titles are similar enough to be considered duplicates
  */
@@ -129,6 +145,10 @@ export function areTitlesSimilar(a: string, b: string): boolean {
 
   // Exact match after normalization
   if (na === nb) return true;
+
+  // Titles that differ by an ordinal qualifier describe distinct events,
+  // even when one otherwise contains the other
+  if (ordinalSignature(na) !== ordinalSignature(nb)) return false;
 
   // One contains the other
   if (na.includes(nb) || nb.includes(na)) return true;
@@ -287,7 +307,7 @@ export function deduplicateEvents(events: any[]): any[] {
 
           if (eventCitations > existingCitations) {
             seen.delete(key);
-            seen.set(`${yearKey}:${normalizeString(event.title).slice(0, 20)}`, event);
+            seen.set(`${yearKey}:${normalizeString(event.title)}`, event);
             duplicatesRemoved.push(existing.title);
           } else {
             duplicatesRemoved.push(event.title);
@@ -298,7 +318,9 @@ export function deduplicateEvents(events: any[]): any[] {
     }
 
     if (!isDuplicate) {
-      seen.set(`${yearKey}:${normalizeString(event.title).slice(0, 20)}`, event);
+      // Key on the full normalized title: a truncated key would let distinct
+      // same-year events sharing a prefix silently overwrite each other
+      seen.set(`${yearKey}:${normalizeString(event.title)}`, event);
     }
   }
 

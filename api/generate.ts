@@ -220,9 +220,9 @@ async function enrichEventFromWikipedia(
 async function batchEnrichEvents(
   seedEvents: Array<{ title: string; year: number; wikipediaTitle?: string }>,
   yearRange: { start: number; end: number }
-): Promise<{ enrichedEvents: WikiEvent[]; allSubEvents: WikiEvent[] }> {
+): Promise<{ enrichedEvents: WikiEvent[]; allSubEvents: Array<WikiEvent & { parentTitle: string }> }> {
   const enrichedEvents: WikiEvent[] = [];
-  const allSubEvents: WikiEvent[] = [];
+  const allSubEvents: Array<WikiEvent & { parentTitle: string }> = [];
   const seenTitles = new Set<string>();
 
   // Process in parallel batches of 5 to speed up enrichment while respecting rate limits
@@ -233,7 +233,9 @@ async function batchEnrichEvents(
       batch.map(seed => enrichEventFromWikipedia(seed, yearRange).catch(() => ({ enriched: null, subEvents: [] })))
     );
 
-    for (const { enriched, subEvents } of results) {
+    results.forEach(({ enriched, subEvents }, idx) => {
+      const seed = batch[idx];
+
       if (enriched && !seenTitles.has(enriched.title.toLowerCase())) {
         enrichedEvents.push(enriched);
         seenTitles.add(enriched.title.toLowerCase());
@@ -241,11 +243,12 @@ async function batchEnrichEvents(
 
       for (const sub of subEvents) {
         if (!seenTitles.has(sub.title.toLowerCase())) {
-          allSubEvents.push(sub);
+          // Remember which seed's article this sub-event was discovered from
+          allSubEvents.push({ ...sub, parentTitle: seed.title });
           seenTitles.add(sub.title.toLowerCase());
         }
       }
-    }
+    });
   }
 
   return { enrichedEvents, allSubEvents };
@@ -875,10 +878,14 @@ Always respond with valid JSON.`
 
     // Add discovered sub-events
     for (const sub of allSubEvents) {
-      // Find parent event
+      // Attach to the seed whose Wikipedia article the sub-event was discovered
+      // from; fall back to the chronologically closest seed if that seed was
+      // dropped during enrichment
       const parent = allEvents.find(e =>
-        Math.abs(e.year - sub.year) < 50 // Within 50 years
-      );
+        !e.isSubEvent && e.title.toLowerCase() === sub.parentTitle?.toLowerCase()
+      ) ?? allEvents
+        .filter(e => !e.isSubEvent && Math.abs(e.year - sub.year) < 50)
+        .sort((a, b) => Math.abs(a.year - sub.year) - Math.abs(b.year - sub.year))[0];
 
       allEvents.push({
         id: crypto.randomUUID(),
