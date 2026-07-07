@@ -255,6 +255,60 @@ async function batchEnrichEvents(
 }
 
 // ============================================
+// REGION VALIDATION
+// ============================================
+
+type RegionLookup = 'found' | 'not-found' | 'error';
+
+async function lookupWikipedia(region: string): Promise<RegionLookup> {
+  try {
+    const url = `${WIKI_API}?action=opensearch&search=${encodeURIComponent(region)}&limit=3&format=json&origin=*`;
+    const response = await fetch(url);
+    if (!response.ok) return 'error';
+    const data = await response.json();
+    return Array.isArray(data[1]) && data[1].length > 0 ? 'found' : 'not-found';
+  } catch {
+    return 'error';
+  }
+}
+
+async function lookupWikidata(region: string): Promise<RegionLookup> {
+  try {
+    const params = new URLSearchParams({
+      action: 'wbsearchentities',
+      search: region,
+      language: 'en',
+      type: 'item',
+      limit: '3',
+      format: 'json',
+      origin: '*',
+    });
+    const response = await fetch(`https://www.wikidata.org/w/api.php?${params}`);
+    if (!response.ok) return 'error';
+    const data = await response.json();
+    return Array.isArray(data.search) && data.search.length > 0 ? 'found' : 'not-found';
+  } catch {
+    return 'error';
+  }
+}
+
+/**
+ * The LLM invents a plausible-looking fictional history for nonsense input
+ * (e.g. "xyzabc123notarealplace"), presented with the same confidence styling
+ * as real events. Block generation only when BOTH Wikipedia and Wikidata
+ * definitively know nothing about the query; lookup failures fail open so an
+ * outage never blocks legitimate queries.
+ */
+async function regionHasHistoricalRecord(region: string): Promise<boolean> {
+  const [wikipedia, wikidata] = await Promise.all([
+    lookupWikipedia(region),
+    lookupWikidata(region),
+  ]);
+  if (wikipedia === 'found' || wikidata === 'found') return true;
+  return !(wikipedia === 'not-found' && wikidata === 'not-found');
+}
+
+// ============================================
 // SECURITY & RATE LIMITING
 // ============================================
 
@@ -1258,6 +1312,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
         if (!region || !timeRange) {
           return res.status(400).json({ error: 'Valid region and time range required' });
+        }
+
+        // Refuse to fabricate history for places with no historical record
+        if (!(await regionHasHistoricalRecord(region))) {
+          return res.status(422).json({
+            error: `We couldn't find any historical records for "${region}". Check the spelling, or try a nearby region, civilization, or era.`,
+          });
         }
 
         // Increment global counter for timeline generations

@@ -174,6 +174,13 @@ export const parseApiError = (error: unknown): { title: string; message: string 
     };
   }
 
+  if (errorStr.includes("couldn't find any historical records")) {
+    return {
+      title: 'Region Not Found',
+      message: errorStr,
+    };
+  }
+
   return {
     title: 'Generation Failed',
     message: 'Something went wrong while generating your timeline. Please try again.',
