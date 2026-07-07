@@ -128,6 +128,7 @@ const App: React.FC = () => {
       });
 
       setTimelines(prev => [...prev, result]);
+      setSelectedEvent(null);
       setActiveTimelineId(result.id);
       setView('map');
 
@@ -209,11 +210,18 @@ const App: React.FC = () => {
         <OnboardingOverlay onComplete={completeOnboarding} />
       )}
 
-      <HistorySidebar 
+      <HistorySidebar
         timelines={timelines}
         activeId={activeTimelineId}
-        onSelect={setActiveTimelineId}
-        onNew={() => setActiveTimelineId(null)}
+        onSelect={(id) => {
+          // Close any open event modal so it can't show an event from the previous timeline
+          if (id !== activeTimelineId) setSelectedEvent(null);
+          setActiveTimelineId(id);
+        }}
+        onNew={() => {
+          setSelectedEvent(null);
+          setActiveTimelineId(null);
+        }}
         onDelete={handleDeleteTimeline}
         isOpen={isSidebarOpen}
         onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
