@@ -216,6 +216,13 @@ describe('areTitlesSimilar', () => {
     expect(areTitlesSimilar('Battle of Thermopylae', 'Treaty of Paris')).toBe(false);
   });
 
+  it('treats titles differing by an ordinal qualifier as distinct events', () => {
+    // First and Second Battle of Zurich both happened in 1799
+    expect(areTitlesSimilar('Battle of Zurich', 'Second Battle of Zurich')).toBe(false);
+    expect(areTitlesSimilar('First Battle of Panipat', 'Second Battle of Panipat')).toBe(false);
+    expect(areTitlesSimilar('Council of Nicaea', 'Second Council of Nicaea')).toBe(false);
+  });
+
   it('handles empty strings', () => {
     expect(areTitlesSimilar('', '')).toBe(true); // Both normalize to empty, so equal
   });
@@ -417,6 +424,22 @@ describe('deduplicateEvents', () => {
     const events = [
       { title: 'Battle of Vienna', year: 1529, summary: 'First' },
       { title: 'Battle of Vienna', year: 1683, summary: 'Second' },
+    ];
+    expect(deduplicateEvents(events)).toHaveLength(2);
+  });
+
+  it('keeps ordinal-qualified events in the same year as separate events', () => {
+    const events = [
+      { title: 'Battle of Zurich', year: 1799, summary: 'June battle' },
+      { title: 'Second Battle of Zurich', year: 1799, summary: 'September battle' },
+    ];
+    expect(deduplicateEvents(events)).toHaveLength(2);
+  });
+
+  it('keeps distinct same-year events that share a long title prefix', () => {
+    const events = [
+      { title: 'Construction of the Colosseum begins', year: 72, summary: 'Amphitheatre' },
+      { title: 'Construction of the Temple of Peace', year: 72, summary: 'Temple' },
     ];
     expect(deduplicateEvents(events)).toHaveLength(2);
   });
