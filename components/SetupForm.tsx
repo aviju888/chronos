@@ -8,7 +8,7 @@ import L from 'leaflet';
 // Categorize suggestions
 interface CategorizedSuggestion {
   name: string;
-  category: 'city' | 'region' | 'topic' | 'era';
+  category: 'city' | 'region' | 'topic' | 'era' | 'other';
 }
 
 function categorizeSuggestion(suggestion: string): CategorizedSuggestion {
@@ -19,16 +19,17 @@ function categorizeSuggestion(suggestion: string): CategorizedSuggestion {
   if (topicPatterns.some(p => s.includes(p))) return { name: suggestion, category: 'topic' };
   const regionPatterns = ['kingdom', 'republic', 'confederation', 'states', 'union', 'federation', 'territory', 'province', 'empire'];
   if (regionPatterns.some(p => s.includes(p))) return { name: suggestion, category: 'region' };
-  const words = suggestion.split(' ');
-  if (words.length <= 2) return { name: suggestion, category: 'city' };
-  return { name: suggestion, category: 'region' };
+  // Nothing matched: don't confidently label unknown input as a city —
+  // group it under a neutral "Search for..." bucket instead
+  return { name: suggestion, category: 'other' };
 }
 
 const categoryConfig = {
   city: { label: 'Cities', icon: MapPin, order: 1 },
   region: { label: 'Regions', icon: Compass, order: 2 },
   topic: { label: 'Topics', icon: BookMarked, order: 3 },
-  era: { label: 'Eras', icon: History, order: 4 }
+  era: { label: 'Eras', icon: History, order: 4 },
+  other: { label: 'Search for...', icon: Search, order: 5 }
 };
 
 // Leaflet Icon fix
@@ -93,7 +94,7 @@ const CategorizedSuggestionsDropdown: React.FC<{
   onSelect: (suggestion: string) => void;
 }> = ({ suggestions, onSelect }) => {
   const categorized = useMemo(() => {
-    const grouped: Record<string, CategorizedSuggestion[]> = { city: [], region: [], topic: [], era: [] };
+    const grouped: Record<string, CategorizedSuggestion[]> = { city: [], region: [], topic: [], era: [], other: [] };
     suggestions.forEach(s => {
       const cat = categorizeSuggestion(s);
       grouped[cat.category].push(cat);

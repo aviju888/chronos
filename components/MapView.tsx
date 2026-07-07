@@ -273,7 +273,7 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
           <MapBoundsController events={events} />
           <ZoomTracker onZoomChange={handleZoomChange} />
 
-          {clusteredEvents.map((cluster, idx) => {
+          {clusteredEvents.map((cluster) => {
             const isSingleEvent = cluster.events.length === 1;
             const hasDisputed = cluster.events.some(e => e.isDisputed);
 
@@ -306,10 +306,12 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
               );
             }
 
-            // Cluster marker
+            // Cluster marker: key by content, not array index — clusters are
+            // recomputed every playback tick and index-keys let React reuse a
+            // marker whose events have changed, showing a stale popup
             return (
               <Marker
-                key={`cluster-${idx}`}
+                key={`cluster-${cluster.events[0].id}-${cluster.events.length}`}
                 position={[cluster.lat, cluster.lng]}
                 icon={createClusterIcon(cluster.events.length, hasDisputed)}
               >
