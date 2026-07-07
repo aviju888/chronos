@@ -15,13 +15,14 @@ export interface ProgressUpdate {
   timeLeft: number;
 }
 
-async function callApi<T>(body: Record<string, unknown>): Promise<T> {
+async function callApi<T>(body: Record<string, unknown>, signal?: AbortSignal): Promise<T> {
   const response = await fetch(getApiUrl(), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(body),
+    signal,
   });
 
   if (!response.ok) {
@@ -99,6 +100,11 @@ export const generateTimeline = async (
     onProgress({ message, percent, timeLeft });
   }, 500);
 
+  // The serverless function is capped at 60s; without a client-side timeout a
+  // hung request leaves the progress bar stuck at 90% forever
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 90_000);
+
   try {
     const result = await callApi<{ timeline: TimelineData }>({
       action: 'timeline',
@@ -106,7 +112,7 @@ export const generateTimeline = async (
       startYear,
       endYear,
       mode: mode === GenerationMode.DEEP ? 'deep' : 'quick',
-    });
+    }, controller.signal);
 
     clearInterval(progressInterval);
     onProgress({ message: "Finalizing archives...", percent: 100, timeLeft: 0 });
@@ -114,7 +120,12 @@ export const generateTimeline = async (
     return result.timeline;
   } catch (error) {
     clearInterval(progressInterval);
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      throw new Error('The request timed out. The archives may be busy — please try again.');
+    }
     throw error;
+  } finally {
+    clearTimeout(timeoutId);
   }
 };
 

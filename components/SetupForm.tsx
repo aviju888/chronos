@@ -151,6 +151,7 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
   const [mapSuggestions, setMapSuggestions] = useState<string[]>([]);
   const [isMapLoading, setIsMapLoading] = useState(false);
   const suggestionBoxRef = useRef<HTMLDivElement>(null);
+  const timeRangeRequestId = useRef(0);
   const logContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -190,8 +191,12 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
   }, [region]);
 
   const optimizeTimeRange = async (selectedRegion: string) => {
+    // Guard against out-of-order responses: if the user picks another region
+    // while this request is in flight, the stale result must not win
+    const requestId = ++timeRangeRequestId.current;
     setIsTimeOptimizing(true);
     const range = await getSmartTimeRange(selectedRegion);
+    if (requestId !== timeRangeRequestId.current) return;
     if (range) { setStartYear(range.start); setEndYear(range.end); }
     setIsTimeOptimizing(false);
   };
