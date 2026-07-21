@@ -347,10 +347,29 @@ const MODELS = {
   deep: 'llama-3.3-70b-versatile'
 };
 
+// Groq free tier enforces tokens-per-minute limits (fast: 6000 TPM, deep: 12000 TPM)
+// and pre-checks prompt + max_tokens per request, so every call must request only
+// the completion budget it actually needs or Groq rejects it outright with a 413.
+const MAX_TOKENS = {
+  suggestions: 400,
+  regions: 300,
+  timeRange: 150,
+  intent: 400,
+  eras: 2000,
+  seedEventsQuick: 3500,
+  seedEventsDeep: 4500,
+  narrative: 1500,
+  followUp: 800,
+};
+
+// Errors where retrying the same request can never succeed (bad key, oversized request)
+class NonRetryableError extends Error {}
+
 async function callGroq(
   messages: { role: 'system' | 'user' | 'assistant'; content: string }[],
   model: string = MODELS.fast,
   jsonMode: boolean = true,
+  maxTokens: number = 1024,
   retries: number = 3
 ): Promise<string> {
   const apiKey = process.env.GROQ_API_KEY;
@@ -372,7 +391,7 @@ async function callGroq(
           model,
           messages,
           temperature: 0.3, // Lower temperature for factual accuracy
-          max_tokens: 6000, // Reduced to stay under token limits
+          max_tokens: maxTokens,
           ...(jsonMode ? { response_format: { type: 'json_object' } } : {}),
         }),
       });
@@ -390,7 +409,11 @@ async function callGroq(
         const error = await response.text();
         console.error('Groq API error:', response.status, error);
         if (response.status === 401) {
-          throw new Error('API key issue. Please check configuration.');
+          throw new NonRetryableError('API key issue. Please check configuration.');
+        }
+        if (response.status === 413) {
+          // Request exceeds the model's per-request token limit; identical retries can't succeed
+          throw new NonRetryableError('The AI service is at capacity right now. Please try again in a minute.');
         }
         throw new Error(`AI service error (${response.status})`);
       }
@@ -398,6 +421,9 @@ async function callGroq(
       const data = await response.json();
       return data.choices[0]?.message?.content || '';
     } catch (error) {
+      if (error instanceof NonRetryableError) {
+        throw error;
+      }
       lastError = error as Error;
       if (attempt < retries - 1) {
         const waitTime = Math.min(1000 * Math.pow(2, attempt), 10000);
@@ -448,7 +474,7 @@ Examples:
 
 Return JSON: {"queryType": "city|region|country|topic|era", "specificLocation": "string or null", "broadContext": "string or null", "topics": ["array", "of", "topics"]}`
     }
-  ], MODELS.fast);
+  ], MODELS.fast, true, MAX_TOKENS.intent);
 
   const parsed = safeParseJSON<{
     queryType?: string;
@@ -505,7 +531,7 @@ async function getSuggestions(query: string): Promise<string[]> {
 
                Return JSON in format: {"suggestions": ["item1", "item2", ...]}`
     }
-  ]);
+  ], MODELS.fast, true, MAX_TOKENS.suggestions);
 
   const parsed = safeParseJSON<{ suggestions?: string[] }>(response, { suggestions: [] });
   return Array.isArray(parsed.data.suggestions) ? parsed.data.suggestions.slice(0, 5) : [];
@@ -524,7 +550,7 @@ async function getRegionsFromCoordinates(lat: number, lng: number): Promise<stri
                Example for Rome coords: ["Roman Empire", "Papal States", "Kingdom of Italy", "City of Rome"].
                Return JSON in format: {"suggestions": ["item1", "item2", ...]}`
     }
-  ]);
+  ], MODELS.fast, true, MAX_TOKENS.regions);
 
   const parsed = safeParseJSON<{ suggestions?: string[] }>(response, { suggestions: [] });
   return Array.isArray(parsed.data.suggestions) ? parsed.data.suggestions.slice(0, 4) : [];
@@ -561,7 +587,7 @@ async function getSmartTimeRange(region: string): Promise<{ start: number; end: 
 
                Return JSON in format: {"start": number, "end": number}`
     }
-  ]);
+  ], MODELS.fast, true, MAX_TOKENS.timeRange);
 
   const parsed = safeParseJSON<{ start?: number | string; end?: number | string }>(response, {});
   // Coerce strings to numbers (LLMs sometimes return "1776" instead of 1776)
@@ -639,7 +665,7 @@ CRITICAL DATE FORMAT:
           ]
         }`
     }
-  ], model);
+  ], model, true, MAX_TOKENS.eras);
 
   let eras = [];
   const erasParsed = safeParseJSON<{ eras?: any[] }>(erasResponse, { eras: [] });
@@ -785,7 +811,7 @@ Always respond with valid JSON.`
           ]
         }`
     }
-  ], model);
+  ], model, true, mode === 'deep' ? MAX_TOKENS.seedEventsDeep : MAX_TOKENS.seedEventsQuick);
 
   const seedEventsParsed = safeParseJSON<{ events?: any[] }>(seedEventsResponse, { events: [] });
   if (seedEventsParsed.recovered) {
@@ -1042,7 +1068,7 @@ Always respond with valid JSON.`
 
         Return JSON in format: {"narrative": "string"}`
     }
-  ], model);
+  ], model, true, MAX_TOKENS.narrative);
 
   let narrative = '';
   const narrativeParsed = safeParseJSON<{ narrative?: string }>(narrativeResponse, { narrative: '' });
@@ -1110,7 +1136,7 @@ Context from timeline: ${contextSummary.slice(0, 2000)}`, // Limit context size
     },
   ];
 
-  return callGroq(messages, MODELS.fast, false);
+  return callGroq(messages, MODELS.fast, false, MAX_TOKENS.followUp);
 }
 
 // ============================================
@@ -1240,6 +1266,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
   } catch (error) {
     console.error('API Error:', error);
+    if (error instanceof NonRetryableError) {
+      return res.status(503).json({ error: error.message });
+    }
     return res.status(500).json({
       error: 'Something went wrong. Please try again.'
     });
