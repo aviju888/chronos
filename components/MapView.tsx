@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
+import { BASEMAP_ATTRIBUTION, BASEMAP_MAX_NATIVE_ZOOM, BASEMAP_URL } from '../lib/basemap';
 import L from 'leaflet';
 import { HistoricalEvent } from '../types';
 import { ChevronLeft, ChevronRight, Play, Pause, Book, MapPinOff } from 'lucide-react';
@@ -267,8 +268,9 @@ export const MapView: React.FC<MapViewProps> = ({ events, timeRange, onEventClic
             zoomControl={false}
         >
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png"
+            attribution={BASEMAP_ATTRIBUTION}
+            url={BASEMAP_URL}
+            maxNativeZoom={BASEMAP_MAX_NATIVE_ZOOM}
           />
           <MapBoundsController events={events} />
           <ZoomTracker onZoomChange={handleZoomChange} />

@@ -3,6 +3,7 @@ import { GenerationMode } from '../types';
 import { Calendar, Zap, BookOpen, Clock, Loader2, CheckCircle2, Hourglass, Wand2, Search, Globe, Shuffle, MapPin, Compass, BookMarked, History } from 'lucide-react';
 import { ProgressUpdate, getSearchSuggestions, getSmartTimeRange, getRegionsFromCoordinates } from '../services/apiService';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import { BASEMAP_ATTRIBUTION, BASEMAP_MAX_NATIVE_ZOOM, BASEMAP_URL } from '../lib/basemap';
 import L from 'leaflet';
 
 // Categorize suggestions
@@ -333,7 +334,7 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
             <div className="border border-gold/30 rounded-lg overflow-hidden">
               <div className="h-40 w-full relative z-0">
                 <MapContainer center={[20, 0]} zoom={2} style={{ height: '100%', width: '100%' }}>
-                  <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" />
+                  <TileLayer url={BASEMAP_URL} attribution={BASEMAP_ATTRIBUTION} maxNativeZoom={BASEMAP_MAX_NATIVE_ZOOM} />
                   <MapClickReceiver onLocationSelected={handleMapClick} />
                   {selectedCoords && <Marker position={selectedCoords} />}
                 </MapContainer>
