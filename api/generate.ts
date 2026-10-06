@@ -406,12 +406,18 @@ function incrementGlobalCount(action: string) {
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
+// Groq shut down llama-3.1-8b-instant and llama-3.3-70b-versatile on 2026-08-16;
+// these are its recommended replacements.
 const MODELS = {
-  fast: 'llama-3.1-8b-instant',
-  deep: 'llama-3.3-70b-versatile'
+  fast: 'openai/gpt-oss-20b',
+  deep: 'openai/gpt-oss-120b'
 };
 
-// Groq free tier enforces tokens-per-minute limits (fast: 6000 TPM, deep: 12000 TPM)
+// gpt-oss models reason before answering, and reasoning tokens count against
+// max_tokens. Low effort keeps that to a few dozen tokens; this covers it.
+const REASONING_HEADROOM = 256;
+
+// Groq free tier enforces tokens-per-minute limits (8000 TPM for both models)
 // and pre-checks prompt + max_tokens per request, so every call must request only
 // the completion budget it actually needs or Groq rejects it outright with a 413.
 const MAX_TOKENS = {
@@ -455,7 +461,9 @@ async function callGroq(
           model,
           messages,
           temperature: 0.3, // Lower temperature for factual accuracy
-          max_tokens: maxTokens,
+          max_tokens: maxTokens + REASONING_HEADROOM,
+          reasoning_effort: 'low',
+          include_reasoning: false,
           ...(jsonMode ? { response_format: { type: 'json_object' } } : {}),
         }),
       });
