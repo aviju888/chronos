@@ -23,6 +23,10 @@
   "functions": {
     "api/generate.ts": {
       "maxDuration": 60
+    },
+    "api/chronos/stream.ts": {
+      "maxDuration": 60,
+      "supportsCancellation": true
     }
   }
 }
