@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { runChronos } from "../pipeline";
 import { clearHttpCache, setFetcher } from "../http";
 import { findFixture, FIXTURES } from "../fixtures";
@@ -104,6 +104,8 @@ describe("runChronos on a fake network", () => {
     setFetcher(((input: RequestInfo | URL, init?: RequestInit) => fakeNetwork(String(input), init)) as typeof fetch);
   });
   afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
     setFetcher(null);
     clearHttpCache();
   });
@@ -165,6 +167,47 @@ describe("runChronos on a fake network", () => {
     expect(last("dedup").count).toBe(merges.length);
   });
 
+  it.each([
+    ['provider error', 'data: {"error":{"message":"provider stream failed","type":"server_error"}}\n\ndata: [DONE]\n\n', 'provider stream failed'],
+    ['premature EOF', '', 'Groq stream ended before [DONE]'],
+  ])('provider stream failure: %s reaches the honest narrative fallback', async (_name, tail, detail) => {
+    vi.stubEnv('GROQ_API_KEY', 'test-only-placeholder');
+    vi.stubGlobal('fetch', vi.fn(async (_url, init) => {
+      const request = JSON.parse(String(init?.body));
+      if (!request.stream) return Response.json({ choices: [{ message: { content: '{}' } }] });
+      return new Response('data: {"choices":[{"delta":{"content":"Partial model prose. "}}]}\n\n' + tail);
+    }));
+    const frames = await collect('Roman Empire 27 BCE - 476 CE', { live: true, fixtureFallback: false });
+    const fallback = frames.findIndex(f => f.event === 'trace' && String((f.data as { text?: string }).text).includes('Narrative model failed'));
+    expect(fallback).toBeGreaterThan(-1);
+    expect((frames[fallback].data as { text: string }).text).toContain(detail);
+    expect((frames[fallback].data as { text: string }).text).toContain('composing from Wikipedia instead');
+    const narrativeAfterFailure = frames.slice(fallback + 1).filter(f => f.event === 'narrative').map(f => (f.data as { delta: string }).delta).join('');
+    expect(narrativeAfterFailure).toContain('The Roman Empire was a state.');
+    expect(frames.at(-1)?.event).toBe('trace');
+    expect((frames.at(-1)?.data as { text: string }).text).toMatch(/^Done in/);
+  });
+
+  it('provider stream failure: request abort suppresses fallback and successful completion', async () => {
+    vi.stubEnv('GROQ_API_KEY', 'test-only-placeholder');
+    const abort = new AbortController();
+    vi.stubGlobal('fetch', vi.fn(async (_url, init) => {
+      const request = JSON.parse(String(init?.body));
+      if (!request.stream) return Response.json({ choices: [{ message: { content: '{}' } }] });
+      return new Response(new ReadableStream({
+        start(controller) {
+          setTimeout(() => { abort.abort(); controller.error(new DOMException('Aborted', 'AbortError')); }, 0);
+        },
+      }));
+    }));
+    const frames: Frame[] = [];
+    await runChronos({ query: 'Roman Empire 27 BCE - 476 CE', mode: 'quick' }, (event, data) => frames.push({ event, data }), abort.signal, { live: true, pace: false, fixtureFallback: false });
+    expect(abort.signal.aborted).toBe(true);
+    expect(frames.some(f => f.event === 'narrative')).toBe(false);
+    const traces = frames.filter(f => f.event === 'trace').map(f => (f.data as { text: string }).text);
+    expect(traces.some(text => text.includes('Narrative model failed') || text.startsWith('Done in'))).toBe(false);
+  });
+
   it("explains a missing topic", async () => {
     setFetcher(((input: RequestInfo | URL) => {
       const u = new URL(String(input));
@@ -177,6 +220,8 @@ describe("runChronos on a fake network", () => {
 
 describe("degrading to fixtures", () => {
   afterEach(() => {
+    vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
     setFetcher(null);
     clearHttpCache();
   });

@@ -77,31 +77,47 @@ export async function completeJSON<T>(opts: Omit<CompleteOpts, "json">): Promise
   return JSON.parse(text) as T;
 }
 
-/** Streams content deltas as they arrive. */
+/** Streams content deltas; only the provider's [DONE] marker completes a run. */
 export async function* stream(opts: CompleteOpts): AsyncGenerator<string> {
   const res = await post(opts, true);
-  if (!res.body) return;
+  if (!res.body) throw new Error("Groq stream ended before [DONE]");
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
-  for (;;) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    let nl: number;
-    while ((nl = buffer.indexOf("\n")) >= 0) {
-      const line = buffer.slice(0, nl).trim();
-      buffer = buffer.slice(nl + 1);
-      if (!line.startsWith("data:")) continue;
-      const payload = line.slice(5).trim();
-      if (payload === "[DONE]") return;
-      try {
-        const chunk = JSON.parse(payload) as { choices?: { delta?: { content?: string } }[] };
-        const delta = chunk.choices?.[0]?.delta?.content;
+  try {
+    for (;;) {
+      opts.signal?.throwIfAborted();
+      const { done, value } = await reader.read();
+      if (done) throw new Error("Groq stream ended before [DONE]");
+      buffer += decoder.decode(value, { stream: true });
+      let nl: number;
+      while ((nl = buffer.indexOf("\n")) >= 0) {
+        const line = buffer.slice(0, nl).trim();
+        buffer = buffer.slice(nl + 1);
+        if (!line.startsWith("data:")) continue;
+        const payload = line.slice(5).trim();
+        if (payload === "[DONE]") return;
+        let chunk: {
+          error?: { message?: string; type?: string };
+          choices?: { delta?: { content?: string } }[];
+        };
+        try {
+          chunk = JSON.parse(payload);
+        } catch {
+          // Ignore malformed/keep-alive payloads, never provider failures.
+          continue;
+        }
+        if (chunk?.error) {
+          const { message, type } = chunk.error;
+          throw new Error(`Groq stream error (${type ?? "unknown"}): ${message ?? "Unknown provider error"}`);
+        }
+        const delta = chunk?.choices?.[0]?.delta?.content;
         if (delta) yield delta;
-      } catch {
-        // partial or keep-alive line; skip
       }
     }
+  } finally {
+    // Release the upstream body on completion, errors and early consumer exit.
+    await reader.cancel().catch(() => undefined);
+    reader.releaseLock();
   }
 }

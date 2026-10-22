@@ -27,3 +27,39 @@ describe('Chronos provider contract',()=>{
   expect(chunks.join('')).toBe('A history.');expect(body()).toMatchObject({model:'openai/gpt-oss-120b',max_tokens:1756,stream:true,reasoning_effort:'low',include_reasoning:false});
  });
 });
+
+
+describe('provider stream failure handling', () => {
+  async function collectStream() {
+    const chunks: string[] = [];
+    for await (const delta of stream({ messages: [] })) chunks.push(delta);
+    return chunks;
+  }
+
+  it('rejects streamed provider errors even when followed by DONE', async () => {
+    fetchMock.mockResolvedValue(new Response('data: {"error":{"message":"provider stream failed","type":"server_error"}}\n\ndata: [DONE]\n\n'));
+    await expect(collectStream()).rejects.toThrow('Groq stream error (server_error): provider stream failed');
+  });
+
+  it('rejects premature EOF after partial output', async () => {
+    fetchMock.mockResolvedValue(new Response('data: {"choices":[{"delta":{"content":"Partial."}}]}\n\n'));
+    await expect(collectStream()).rejects.toThrow('Groq stream ended before [DONE]');
+  });
+
+  it('rejects a missing response body', async () => {
+    fetchMock.mockResolvedValue(new Response(null));
+    await expect(collectStream()).rejects.toThrow('Groq stream ended before [DONE]');
+  });
+
+  it('keeps valid deltas ordered across byte boundaries and ignores keep-alives', async () => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(': keep-alive\n\ndata: invalid-json\n\ndata: {"choices":[{"delta":{"content":"Ancient "}}]}\n\ndata: {"choices":[{"delta":{"content":"Romé."}}]}\n\ndata: [DONE]\n\n');
+    fetchMock.mockResolvedValue(new Response(new ReadableStream({
+      start(controller) {
+        for (const byte of data) controller.enqueue(new Uint8Array([byte]));
+        controller.close();
+      },
+    })));
+    await expect(collectStream()).resolves.toEqual(['Ancient ', 'Romé.']);
+  });
+});
