@@ -235,10 +235,10 @@ function errorText(err: unknown): string {
 
 /* ── intent helpers ── */
 
-async function findHistoryArticle(title: string, signal: AbortSignal): Promise<{ title: string; qid?: string } | null> {
+async function findHistoryArticle(title: string, signal: AbortSignal, onError: (err: unknown) => void): Promise<{ title: string; qid?: string } | null> {
   if (/^history of /i.test(title)) return null;
   for (const candidate of [`History of ${title}`, `History of the ${title}`]) {
-    const r = await resolveTitle(candidate, signal, { exactOnly: true }).catch(() => null);
+    const r = await resolveTitle(candidate, signal, { exactOnly: true }).catch((err) => { onError(err); return null; });
     if (r && r.title !== title && /^history of/i.test(r.title)) return { title: r.title, qid: r.qid };
   }
   return null;
@@ -298,7 +298,8 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
 
   if (input.replay) {
     const fx = findFixture(input.query);
-    if (fx) return replayFixture(fx, send, signal);
+    if (!fx) throw new Error(`No usable saved run is available for “${input.query}”. Choose a saved example or turn off replay to run live.`);
+    return replayFixture(fx, send, signal, { pace });
   }
 
   const parsed = parseQuery(input.query, now);
@@ -307,6 +308,12 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
   const out = new Outbox(send, signal, pace);
   const tasks = new TaskBoard(out, live);
   tasks.init();
+  const sourceFailures = new Set<SourceId>();
+  const sourceFailure = (source: SourceId, label: string, err: unknown) => {
+    if (signal.aborted) return;
+    sourceFailures.add(source);
+    out.trace({ source, kind: "note", text: `${label}: ${errorText(err)}.` });
+  };
 
   const fallback = async (reason: string): Promise<boolean> => {
     if (opts.fixtureFallback === false) return false;
@@ -336,15 +343,15 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
   }
 
   const [summary, sections, entity, historyOf] = await Promise.all([
-    fetchSummary(resolved.title, signal).catch(() => null),
-    fetchSections(resolved.title, signal).catch(() => [] as Section[]),
+    fetchSummary(resolved.title, signal).catch((err) => { sourceFailure("wikipedia", "Article summary failed", err); return null; }),
+    fetchSections(resolved.title, signal).catch((err) => { sourceFailure("wikipedia", "Article sections failed", err); return [] as Section[]; }),
     resolved.qid
       ? fetchEntity(resolved.qid, signal).catch((err) => {
-          out.trace({ source: "wikidata", kind: "note", text: `Entity lookup failed: ${errorText(err)}` });
+          sourceFailure("wikidata", "Entity lookup failed", err);
           return null;
         })
       : Promise.resolve(null),
-    resolved.fragment ? Promise.resolve(null) : findHistoryArticle(resolved.title, signal),
+    resolved.fragment ? Promise.resolve(null) : findHistoryArticle(resolved.title, signal, (err) => sourceFailure("wikipedia", "History article lookup failed", err)),
   ]);
   if (signal.aborted) return;
 
@@ -361,20 +368,20 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
   const wholeArticle = mode === "deep" && !historyOf && !resolved.fragment;
   const [historyHtml, historyOfSections] = await Promise.all([
     wholeArticle
-      ? fetchHtml(resolved.title, null, signal).catch(() => "")
+      ? fetchHtml(resolved.title, null, signal).catch((err) => { sourceFailure("wikipedia", "Article text failed", err); return ""; })
       : hist.length
-        ? fetchHtml(resolved.title, hist[0].index, signal).catch(() => "")
+        ? fetchHtml(resolved.title, hist[0].index, signal).catch((err) => { sourceFailure("wikipedia", "History text failed", err); return ""; })
         : Promise.resolve(""),
-    historyOf ? fetchSections(historyOf.title, signal).catch(() => [] as Section[]) : Promise.resolve([] as Section[]),
+    historyOf ? fetchSections(historyOf.title, signal).catch((err) => { sourceFailure("wikipedia", "History sections failed", err); return [] as Section[]; }) : Promise.resolve([] as Section[]),
   ]);
   mineInto(historyHtml);
   // a dedicated "History of X" article is the richest source; read it when the section is thin or in deep mode
   if (historyOf && (mode === "deep" || paragraphs.length < 18)) {
-    mineInto(await fetchHtml(historyOf.title, null, signal).catch(() => ""));
+    mineInto(await fetchHtml(historyOf.title, null, signal).catch((err) => { sourceFailure("wikipedia", "History article text failed", err); return ""; }));
   }
   if (!historyHtml && !historyOf && !wholeArticle && summary) {
     // no history section: read the whole article
-    mineInto(await fetchHtml(resolved.title, null, signal).catch(() => ""));
+    mineInto(await fetchHtml(resolved.title, null, signal).catch((err) => { sourceFailure("wikipedia", "Article text failed", err); return ""; }));
   }
   if (signal.aborted) return;
 
@@ -508,7 +515,7 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
       out.trace({ source: "wikidata", kind: "note", text: `${rows.length} items linked to ${resolved.qid}: ${kept} dated events, ${periods} periods, ${rows.length - kept - periods} skipped as noise or undated.` });
     } catch (err) {
       if (signal.aborted) return;
-      out.trace({ source: "wikidata", kind: "note", text: `Linked-events query failed: ${errorText(err)}. Continuing with the other sources.` });
+      sourceFailure("wikidata", "Linked-events query failed; continuing with the other sources", err);
       tasks.step("wikidata", "Linked items", "failed");
     } finally {
       wpQueue.close();
@@ -570,7 +577,7 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
         tasks.step("wikipedia", "Linked articles", `${looked} checked`);
       }
     } catch (err) {
-      if (!signal.aborted) out.trace({ source: "wikipedia", kind: "note", text: `Article lookups stopped: ${errorText(err)}.` });
+      sourceFailure("wikipedia", "Article lookups stopped", err);
     } finally {
       xcQueue.close();
     }
@@ -602,7 +609,7 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
         out.trace({ source: "wikidata", kind: "note", text: `Cross-checked ${batch.length} linked items: ${dated} have dates in range.` });
       }
     } catch (err) {
-      if (!signal.aborted) out.trace({ source: "wikidata", kind: "note", text: `Cross-check failed: ${errorText(err)}.` });
+      sourceFailure("wikidata", "Cross-check failed", err);
     }
   };
 
@@ -621,7 +628,7 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
         tasks.set("llm", { status: "done" });
       } catch (err) {
         if (!signal.aborted) {
-          out.trace({ source: "llm", kind: "note", text: `Model call failed: ${errorText(err)}. Continuing with Wikidata and Wikipedia.` });
+          sourceFailure("llm", "Model call failed; continuing with Wikidata and Wikipedia", err);
           tasks.set("llm", { status: "failed" });
         }
       } finally {
@@ -639,8 +646,8 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
     });
     const linkTitles = picked.map((c) => c.wikipediaTitle).filter((t): t is string => Boolean(t));
     const [basics, coords] = await Promise.all([
-      linkTitles.length ? pageBasics(linkTitles, budget).catch(() => new Map()) : Promise.resolve(new Map()),
-      pageCoords(picked.flatMap((c) => c.linkTitles), budget).catch(() => new Map()),
+      linkTitles.length ? pageBasics(linkTitles, budget).catch((err) => { sourceFailure("wikipedia", "Claim article lookup failed", err); return new Map(); }) : Promise.resolve(new Map()),
+      pageCoords(picked.flatMap((c) => c.linkTitles), budget).catch((err) => { sourceFailure("wikipedia", "Place lookup failed", err); return new Map(); }),
     ]);
     // a claim with no coordinates of its own sits at the first place its sentence mentions
     // (people and ideas have no coordinates on Wikipedia, so the first hit is a place or an event)
@@ -705,8 +712,8 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
   await Promise.all([linkedDone, wikipediaLane(), crossCheckLane(), modelLane()]);
   if (signal.aborted) return;
 
-  tasks.set("wikidata", { status: found.wikidata > 0 ? "done" : resolved.qid ? "failed" : "done", count: found.wikidata });
-  tasks.set("wikipedia", { status: "done", count: found.wikipedia });
+  tasks.set("wikidata", { status: sourceFailures.has("wikidata") ? "failed" : "done", count: found.wikidata });
+  tasks.set("wikipedia", { status: sourceFailures.has("wikipedia") ? "failed" : "done", count: found.wikipedia });
   if (tasks.status("llm") === "running") tasks.set("llm", { status: "done" });
 
   const events = engine.list();
@@ -714,6 +721,12 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
     await out.flush();
     if (await fallback(`No dated events came back for “${resolved.title}”.`)) return;
     throw new Error(`No dated events found for “${resolved.title}” between ${formatRange(range.start, range.end)}. Try a wider range.`);
+  }
+
+  if (sourceFailures.size) {
+    const labels: Record<SourceId, string> = { wikipedia: "Wikipedia", wikidata: "Wikidata", llm: "Model seed events" };
+    const names = [...sourceFailures].map((source) => labels[source]).join(", ");
+    out.push("notice", { kind: "partial", text: `${names} could not finish collecting. Available events are shown; source coverage is incomplete.` });
   }
 
   const high = events.filter((e) => e.confidence === "high").length;
@@ -739,17 +752,19 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
       if (ev) nClaims.push({ year: claim.year, sentence: claim.sentence, eventId: ev.id, weight: claim.weight + ev.sources.length * 2 + Math.log1p(ev.weight) });
     }
     const text = composeNarrative({ lead: summary?.lead ?? "", claims: nClaims, events, range, limit: L.narrative });
-    for await (const chunk of scriptedStream(text, { wordsPerSecond: pace ? 42 : 100000, signal })) send("narrative", { delta: chunk });
+    for await (const chunk of scriptedStream(text, { wordsPerSecond: pace ? 42 : 100000, signal })) send("narrative", { delta: chunk, source: "composed" });
   };
 
   try {
     if (live) {
       const ranked = [...events].sort((a, b) => b.sources.length - a.sources.length || b.weight - a.weight).slice(0, 30).sort((a, b) => a.year - b.year);
       try {
-        for await (const delta of llmNarrative(resolved.title, range, ranked, signal)) send("narrative", { delta });
+        for await (const delta of llmNarrative(resolved.title, range, ranked, signal)) send("narrative", { delta, source: "model" });
       } catch (err) {
         if (signal.aborted) return;
         send("trace", { source: "llm", kind: "note", text: `Narrative model failed (${errorText(err)}); composing from Wikipedia instead.` });
+        send("narrative", { delta: "", replace: true, source: "composed" });
+        send("notice", { kind: "fallback", text: "Narrative model failed. The narrative was composed from Wikipedia and the collected events instead." });
         await writeComposed();
       }
     } else {

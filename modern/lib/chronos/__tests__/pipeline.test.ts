@@ -4,7 +4,33 @@ import { runChronos } from "../pipeline";
 import { clearHttpCache, setFetcher } from "../http";
 import { findFixture, FIXTURES } from "../fixtures";
 import { parseNarrative } from "../cite";
-import type { ChronosEvent, MergeInfo } from "../types";
+import type { ChronosEvent, Fixture, MergeInfo } from "../types";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { initialState, reducer } from "../../../components/chronos/useChronos";
+import { Narrative } from "../../../components/chronos/Narrative";
+import { TaskList } from "../../../components/chronos/PipelinePanel";
+import { createChronosResponse } from "../../../server/chronosResponse";
+
+function finalState(frames: Frame[]) {
+  let state = reducer(initialState, { type: 'start', query: 'test', mode: 'quick', replay: false });
+  for (const frame of frames) state = reducer(state, { type: 'frame', ...frame, at: 1 });
+  return reducer(state, { type: 'finish', at: 2 });
+}
+function narrativeHTML(state: ReturnType<typeof finalState>) {
+  return renderToStaticMarkup(createElement(Narrative, {
+    text: state.narrative, streaming: false, events: state.events, alias: state.alias,
+    intent: state.intent, source: state.narrativeSource, onCite: () => {},
+  }));
+}
+function mockProvider(prefix = 'Complete model prose. ', tail = 'data: [DONE]\n\n') {
+  vi.stubEnv('GROQ_API_KEY', 'test-only-placeholder');
+  vi.stubGlobal('fetch', vi.fn(async (_url, init) => {
+    const request = JSON.parse(String(init?.body));
+    if (!request.stream) return Response.json({ choices: [{ message: { content: '{}' } }] });
+    return new Response((prefix ? `data: ${JSON.stringify({ choices: [{ delta: { content: prefix } }] })}\n\n` : '') + tail);
+  }));
+}
 
 type Frame = { event: string; data: unknown };
 
@@ -101,6 +127,8 @@ function fakeNetwork(url: string, init?: RequestInit): Promise<Response> {
 describe("runChronos on a fake network", () => {
   beforeEach(() => {
     clearHttpCache();
+    const pages = (globalThis as unknown as { __chronosPages?: Record<string, Map<string, unknown>> }).__chronosPages;
+    if (pages) Object.values(pages).forEach(cache => cache.clear());
     setFetcher(((input: RequestInfo | URL, init?: RequestInit) => fakeNetwork(String(input), init)) as typeof fetch);
   });
   afterEach(() => {
@@ -168,24 +196,65 @@ describe("runChronos on a fake network", () => {
   });
 
   it.each([
-    ['provider error', 'data: {"error":{"message":"provider stream failed","type":"server_error"}}\n\ndata: [DONE]\n\n', 'provider stream failed'],
-    ['premature EOF', '', 'Groq stream ended before [DONE]'],
-  ])('provider stream failure: %s reaches the honest narrative fallback', async (_name, tail, detail) => {
-    vi.stubEnv('GROQ_API_KEY', 'test-only-placeholder');
-    vi.stubGlobal('fetch', vi.fn(async (_url, init) => {
-      const request = JSON.parse(String(init?.body));
-      if (!request.stream) return Response.json({ choices: [{ message: { content: '{}' } }] });
-      return new Response('data: {"choices":[{"delta":{"content":"Partial model prose. "}}]}\n\n' + tail);
-    }));
+    ['provider error after prose', 'Partial model prose. ', 'data: {"error":{"message":"provider stream failed"}}\n\ndata: [DONE]\n\n', 'provider stream failed'],
+    ['premature EOF after prose', 'Partial model prose. ', '', 'Groq stream ended before [DONE]'],
+    ['provider error before prose', '', 'data: {"error":{"message":"provider stream failed"}}\n\n', 'provider stream failed'],
+    ['premature EOF before prose', '', '', 'Groq stream ended before [DONE]'],
+  ])('provider stream failure: %s replaces incomplete prose with truthful composed output', async (_name, prefix, tail, detail) => {
+    mockProvider(prefix, tail);
     const frames = await collect('Roman Empire 27 BCE - 476 CE', { live: true, fixtureFallback: false });
-    const fallback = frames.findIndex(f => f.event === 'trace' && String((f.data as { text?: string }).text).includes('Narrative model failed'));
-    expect(fallback).toBeGreaterThan(-1);
-    expect((frames[fallback].data as { text: string }).text).toContain(detail);
-    expect((frames[fallback].data as { text: string }).text).toContain('composing from Wikipedia instead');
-    const narrativeAfterFailure = frames.slice(fallback + 1).filter(f => f.event === 'narrative').map(f => (f.data as { delta: string }).delta).join('');
-    expect(narrativeAfterFailure).toContain('The Roman Empire was a state.');
-    expect(frames.at(-1)?.event).toBe('trace');
+    const state = finalState(frames);
+    expect(state.narrative).not.toContain('Partial model prose');
+    expect(state.narrative).toMatch(/^The Roman Empire was a state\./);
+    expect(state.narrativeSource).toBe('composed');
+    expect(state.intent?.live).toBe(true);
+    expect(state.notices).toEqual(expect.arrayContaining([expect.objectContaining({kind: 'fallback', text: expect.stringContaining('Narrative model failed')})]));
+    const html = narrativeHTML(state);
+    expect(html).toContain('Composed from the Wikipedia lead');
+    expect(html).not.toContain('Written by the model');
+    expect(frames.some(f => f.event === 'trace' && String((f.data as {text: string}).text).includes(detail))).toBe(true);
     expect((frames.at(-1)?.data as { text: string }).text).toMatch(/^Done in/);
+  });
+
+  it('keeps successful model narrative streaming and model attribution', async () => {
+    mockProvider();
+    const frames = await collect('Roman Empire 27 BCE - 476 CE', { live: true, fixtureFallback: false });
+    const state = finalState(frames);
+    expect(state.narrative).toBe('Complete model prose. ');
+    expect(state.narrativeSource).toBe('model');
+    expect(narrativeHTML(state)).toContain('Written by the model');
+    expect(state.notices).toEqual([]);
+  });
+
+  it.each(['wikipedia before records', 'wikipedia after records', 'wikidata before records', 'wikidata after records'])('retains events and a persistent partial source state: %s', async failure => {
+    mockProvider();
+    setFetcher(((input: RequestInfo | URL, init?: RequestInit) => {
+      const u = new URL(String(input));
+      const q = decodeURIComponent(String(init?.body ?? '').replace(/^query=/, ''));
+      if (failure.startsWith('wikidata') && u.hostname === 'query.wikidata.org' && !q.includes('VALUES ?item { wd:Q2277 }')) {
+        if (failure.endsWith('before records') || !q.includes('wdt:P710 wd:Q2277')) return json({}, 500);
+      }
+      if (failure.startsWith('wikipedia')) {
+        const p = u.searchParams;
+        if (p.get('action') === 'parse' && p.get('prop') !== 'sections' && failure.endsWith('after records')) {
+          const extra = Array.from({length: 60}, (_, i) => `<a href="/wiki/Battle_of_Fixture_${i}" title="Battle of Fixture ${i}">Battle of Fixture ${i}</a>`).join(' ');
+          return json({parse: {text: HISTORY_HTML + `<p>${extra}</p>`}});
+        }
+        if (p.get('action') === 'query' && p.get('prop')?.includes('extracts') && failure.endsWith('before records')) return json({}, 500);
+        if (p.get('titles')?.includes('Battle of Fixture 59')) return json({}, 500);
+      }
+      return fakeNetwork(String(input), init);
+    }) as typeof fetch);
+    const frames = await collect('Roman Empire 27 BCE - 476 CE', { live: true, fixtureFallback: false });
+    const state = finalState(frames);
+    const lane = failure.startsWith('wikipedia') ? 'wikipedia' : 'wikidata';
+    expect(state.order.length).toBeGreaterThan(0);
+    expect(state.tasks[lane].status).toBe('failed');
+    expect(state.tasks[lane].count).toEqual(failure.endsWith('before records') ? 0 : expect.any(Number));
+    if (failure.endsWith('after records')) expect(state.tasks[lane].count).toBeGreaterThan(0);
+    expect(state.notices).toEqual(expect.arrayContaining([expect.objectContaining({kind: 'partial', text: expect.stringContaining(lane === 'wikipedia' ? 'Wikipedia' : 'Wikidata')})]));
+    const html = renderToStaticMarkup(createElement(TaskList, {tasks: state.tasks, live: true}));
+    expect(html).toContain('Partial');
   });
 
   it('provider stream failure: request abort suppresses fallback and successful completion', async () => {
@@ -250,5 +319,38 @@ describe("degrading to fixtures", () => {
     clearHttpCache();
     setFetcher((() => Promise.reject(new TypeError("fetch failed"))) as typeof fetch);
     await expect(collect("Ottoman Empire")).rejects.toThrow(/Couldn't reach Wikipedia/);
+  });
+});
+
+
+describe('explicit replay isolation', () => {
+  afterEach(() => { setFetcher(null); clearHttpCache(); vi.unstubAllGlobals(); vi.unstubAllEnvs(); });
+  it.each(['Han dynasty', 'Empty recording', 'Unusable recording'])('fails closed and settles the stream for %s', async query => {
+    const network = vi.fn(async () => json({}, 500));
+    const provider = vi.fn(async () => json({}, 500));
+    setFetcher(network as typeof fetch);
+    vi.stubGlobal('fetch', provider);
+    vi.stubEnv('GROQ_API_KEY', 'test-only-placeholder');
+    const original = FIXTURES.length;
+    if (query !== 'Han dynasty') FIXTURES.push({query, frames: query === 'Empty recording' ? [] : [{t: 0, event: 'trace', data: {text: 'not a usable run'}}]} as Fixture);
+    try {
+      const response = await createChronosResponse(new Request('http://localhost/api/chronos/stream', { method: 'POST', body: JSON.stringify({query, replay: true}) }));
+      const body = await response.text();
+      expect.soft(network).not.toHaveBeenCalled();
+      expect.soft(provider).not.toHaveBeenCalled();
+      expect(body).toContain('event: error');
+      expect(body).toContain('No usable saved run');
+      expect(body).toContain('event: done');
+      expect(network).not.toHaveBeenCalled();
+      expect(provider).not.toHaveBeenCalled();
+    } finally { FIXTURES.splice(original); }
+  });
+  it('still replays a matching recording without external calls', async () => {
+    const network = vi.fn(async () => json({}, 500)); setFetcher(network as typeof fetch); vi.stubGlobal('fetch', network);
+    const frames: Frame[] = [];
+    await runChronos({query: 'Silk Road', mode: 'quick', replay: true}, (event, data) => frames.push({event, data}), new AbortController().signal, {pace: false});
+    expect(frames.some(f => f.event === 'event')).toBe(true);
+    expect(frames.some(f => f.event === 'notice')).toBe(true);
+    expect(network).not.toHaveBeenCalled();
   });
 });

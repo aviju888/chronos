@@ -8,7 +8,7 @@ Chronos explores history through cited events, maps and narratives. The refreshe
 /#/timeline/...   Redirect → /classic/#/timeline/...
 ```
 
-Modern runs stay in memory. Its recorded example buttons replay saved source data and display a replay notice. Custom queries use Wikipedia/Wikidata and, when configured, Groq; missing credentials produce a visibly scripted model lane rather than evidence of live model success. Sound starts off.
+Modern runs stay in memory. Its recorded example buttons replay saved source data and display a replay notice. Custom queries use Wikipedia/Wikidata and, when configured, Groq; missing credentials produce a visibly scripted model lane rather than evidence of live model success. An explicit `replay: true` request only uses a usable repository recording; a missing or empty recording returns an error without external source or model calls. Sound starts off.
 
 ## Run locally
 

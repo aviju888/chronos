@@ -158,6 +158,9 @@ export type MergeInfo = {
   event: ChronosEvent;
 };
 
+export type NarrativeSource = "model" | "composed";
+export type NarrativeUpdate = { delta: string; replace?: boolean; source?: NarrativeSource };
+
 export type Notice = { kind: "replay" | "fallback" | "partial"; text: string };
 
 /** SSE contract for POST /api/chronos/stream */
@@ -168,7 +171,7 @@ export type ChronosFrame =
   | { event: "event"; data: { event: ChronosEvent } }
   | { event: "merge"; data: MergeInfo }
   | { event: "eras"; data: { eras: Era[] } }
-  | { event: "narrative"; data: { delta: string } }
+  | { event: "narrative"; data: NarrativeUpdate }
   | { event: "notice"; data: Notice }
   | { event: "error"; data: { message: string } }
   | { event: "done"; data: Record<string, never> };

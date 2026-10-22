@@ -2,7 +2,7 @@
 
 import { memo, useMemo, useState } from "react";
 import { ArrowUpRight, Check, Copy } from "@phosphor-icons/react";
-import type { ChronosEvent, Intent } from "@/modern/lib/chronos/types";
+import type { ChronosEvent, Intent, NarrativeSource } from "@/modern/lib/chronos/types";
 import { narrativePlain, parseNarrative } from "@/modern/lib/chronos/cite";
 import { formatYear } from "@/modern/lib/chronos/time";
 import { cn } from "@/modern/lib/cn";
@@ -67,6 +67,7 @@ function NarrativeImpl({
   events,
   alias,
   intent,
+  source = null,
   onCite,
   emphasis = null,
 }: {
@@ -75,6 +76,7 @@ function NarrativeImpl({
   events: Record<string, ChronosEvent>;
   alias: Record<string, string>;
   intent: Intent | null;
+  source?: NarrativeSource | null;
   onCite: (id: string) => void;
   /** events inside the map's area filter; citations to them stand out, others recede */
   emphasis?: Set<string> | null;
@@ -103,7 +105,7 @@ function NarrativeImpl({
       <div className="mb-2 flex items-center gap-2">
         <h2 className="text-[13px] font-semibold tracking-[-0.01em] text-ink">Narrative</h2>
         <span className="text-[11.5px] text-ink-3">
-          {intent?.live ? "Written by the model, cited against the events" : "Composed from the Wikipedia lead and the dated sentences behind the events"}
+          {(source ?? (intent?.live ? "model" : "composed")) === "model" ? "Written by the model, cited against the events" : "Composed from the Wikipedia lead and the dated sentences behind the events"}
         </span>
       </div>
 

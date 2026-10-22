@@ -30,10 +30,18 @@ export function findFixture(query: string, fixtures: Fixture[] = FIXTURES): Fixt
   const q = normalizeString(query);
   const topic = titleKey(parseQuery(query).topic);
   if (!q) return null;
+  // A recording must contain both an intent and usable timeline content.
+  // Empty/diagnostic-only recordings must never authorize live work.
+  const usable = fixtures.filter((f) => Array.isArray(f.frames) &&
+    f.frames.some((frame) => frame.event === "intent" && Boolean((frame.data as { topic?: string } | null)?.topic)) &&
+    f.frames.some((frame) => {
+      const event = (frame.data as { event?: { id?: string; title?: string; year?: number } } | null)?.event;
+      return frame.event === "event" && event?.id && event.title && Number.isFinite(event.year);
+    }));
   return (
-    fixtures.find((f) => normalizeString(f.query) === q) ??
-    fixtures.find((f) => titleKey(parseQuery(f.query).topic) === topic) ??
-    fixtures.find((f) => {
+    usable.find((f) => normalizeString(f.query) === q) ??
+    usable.find((f) => titleKey(parseQuery(f.query).topic) === topic) ??
+    usable.find((f) => {
       const t = intentTopic(f);
       return t ? titleKey(t) === topic : false;
     }) ??

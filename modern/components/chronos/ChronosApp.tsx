@@ -124,17 +124,17 @@ const RunHeader = memo(function RunHeader({ state, events, onLive }: { state: Ch
       </div>
       <div className="flex flex-col items-start gap-2 sm:items-end">
         <PixelLoader label={running ? (intent ? "Assembling timeline" : "Resolving topic") : status === "error" ? "Failed" : state.stopped ? "Stopped early" : "Assembled"} startedAt={state.startedAt} finishedAt={state.finishedAt} />
-        {state.notice && (
-          <span role="status" className="inline-flex max-w-full items-center gap-1.5 rounded-card bg-accent-tint py-1 pr-1 pl-2.5 text-[11.5px] text-accent-ink" style={{ animation: "pop-in 220ms cubic-bezier(0.23,1,0.32,1) both" }}>
+        {state.notices.map((notice) => (
+          <span key={notice.kind} role="status" className="inline-flex max-w-full items-center gap-1.5 rounded-card bg-accent-tint py-1 pr-1 pl-2.5 text-[11.5px] text-accent-ink" style={{ animation: "pop-in 220ms cubic-bezier(0.23,1,0.32,1) both" }}>
             <Lightning size={11} weight="fill" />
-            <span className="max-w-[52ch] text-pretty">{state.notice.text}</span>
+            <span className="max-w-[52ch] text-pretty">{notice.text}</span>
             {!running && (
               <button type="button" onClick={onLive} className="press rounded-full bg-surface px-2 py-0.5 font-medium text-ink shadow-btn hover:bg-hover">
                 Run live
               </button>
             )}
           </span>
-        )}
+        ))}
       </div>
     </div>
   );
@@ -351,6 +351,7 @@ export function ChronosApp({ examples, live }: { examples: string[]; live?: bool
               events={state.events}
               alias={state.alias}
               intent={state.intent}
+              source={state.narrativeSource}
               onCite={onCite}
               emphasis={emphasis}
             />

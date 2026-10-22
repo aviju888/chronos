@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useReducer, useRef } from "react";
 import { postSSE } from "@/modern/lib/sse-client";
-import type { ChronosEvent, Era, Intent, MergeInfo, Mode, Notice, TaskId, TaskUpdate, TraceLine } from "@/modern/lib/chronos/types";
+import type { ChronosEvent, Era, Intent, MergeInfo, Mode, NarrativeSource, NarrativeUpdate, Notice, TaskId, TaskUpdate, TraceLine } from "@/modern/lib/chronos/types";
 
 /* ─────────────────────────────────────────────────────────
  * useChronos — one run of the pipeline as React state.
@@ -32,7 +32,8 @@ export type ChronosState = {
   mergeCount: number;
   eras: Era[];
   narrative: string;
-  notice: Notice | null;
+  narrativeSource: NarrativeSource | null;
+  notices: Notice[];
   error: string | null;
   startedAt: number | null;
   finishedAt: number | null;
@@ -72,7 +73,8 @@ export const initialState: ChronosState = {
   mergeCount: 0,
   eras: [],
   narrative: "",
-  notice: null,
+  narrativeSource: null,
+  notices: [],
   error: null,
   startedAt: null,
   finishedAt: null,
@@ -151,10 +153,18 @@ export function reducer(state: ChronosState, action: Action): ChronosState {
         }
         case "eras":
           return { ...state, eras: (data as { eras: Era[] }).eras };
-        case "narrative":
-          return { ...state, narrative: state.narrative + (data as { delta: string }).delta };
-        case "notice":
-          return { ...state, notice: data as Notice };
+        case "narrative": {
+          const update = data as NarrativeUpdate;
+          return {
+            ...state,
+            narrative: (update.replace ? "" : state.narrative) + update.delta,
+            narrativeSource: update.source ?? state.narrativeSource ?? (state.intent?.live ? "model" : "composed"),
+          };
+        }
+        case "notice": {
+          const notice = data as Notice;
+          return { ...state, notices: [...state.notices.filter((n) => n.kind !== notice.kind), notice] };
+        }
         case "error":
           return { ...state, status: "error", error: (data as { message: string }).message, finishedAt: action.at };
         case "done":

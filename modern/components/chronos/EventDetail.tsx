@@ -81,10 +81,14 @@ function EventDetailImpl({ event, live, onClose }: { event: ChronosEvent | null;
 
   useEffect(() => {
     if (!event) return;
+    const returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", onKey);
     closeRef.current?.focus({ preventScroll: true });
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
+    };
   }, [event, onClose]);
 
   return (
