@@ -1,0 +1,136 @@
+/* Chronos-only motion. Prefixed so nothing collides with the shared kit. */
+
+@keyframes chronos-tip-in {
+  from {
+    opacity: 0;
+    scale: 0.97;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* a source dot filling in after a merge */
+@keyframes chronos-dot-pop {
+  0% {
+    transform: scale(0.45);
+  }
+  60% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes chronos-dot-ring {
+  from {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.6);
+  }
+}
+
+/* a map pin when playback reaches its year */
+@keyframes chronos-pin-pulse {
+  from {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(4.2);
+  }
+}
+
+/* a journey-trail segment drawing in as the playback cursor passes its event (paths use pathLength="1") */
+@keyframes chronos-trail-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* a cluster bubble when playback passes one of its events: smaller than a pin's pulse */
+@keyframes chronos-cluster-pulse {
+  from {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.9);
+  }
+}
+
+/* highlight flash on an event card (citation click, merge) */
+@keyframes chronos-flash {
+  0% {
+    background-color: var(--accent-tint);
+  }
+  100% {
+    background-color: var(--surface);
+  }
+}
+
+@keyframes chronos-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.chronos-pin-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: chronos-pin-pulse 900ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+.chronos-dot-pop {
+  animation: chronos-dot-pop 420ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+.chronos-dot-ring {
+  animation: chronos-dot-ring 600ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+.chronos-trail-seg {
+  stroke-dasharray: 1;
+  animation: chronos-trail-draw 380ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+.chronos-cluster-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: chronos-cluster-pulse 900ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+/* hide scrollbars on chip rails but keep them scrollable */
+.chronos-rail {
+  scrollbar-width: none;
+}
+.chronos-rail::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chronos-pin-pulse,
+  .chronos-cluster-pulse,
+  .chronos-dot-ring {
+    animation: none;
+    opacity: 0;
+  }
+  .chronos-trail-seg {
+    animation: none;
+  }
+}
