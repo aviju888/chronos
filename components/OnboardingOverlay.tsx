@@ -58,7 +58,8 @@ export const OnboardingOverlay: React.FC<OnboardingOverlayProps> = ({ onComplete
       return;
     }
 
-    const completed = localStorage.getItem(ONBOARDING_KEY);
+    let completed: string | null = null;
+    try { completed = localStorage.getItem(ONBOARDING_KEY); } catch { /* Show the tour without persistence. */ }
     if (!completed) {
       // Small delay before showing to let the page load
       const timer = setTimeout(() => setIsVisible(true), 500);
@@ -89,7 +90,7 @@ export const OnboardingOverlay: React.FC<OnboardingOverlayProps> = ({ onComplete
   };
 
   const handleComplete = () => {
-    localStorage.setItem(ONBOARDING_KEY, 'true');
+    try { localStorage.setItem(ONBOARDING_KEY, 'true'); } catch { /* Completion remains in session state. */ }
     setIsVisible(false);
     onComplete();
   };
@@ -191,19 +192,20 @@ export const useOnboarding = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
-    const completed = localStorage.getItem(ONBOARDING_KEY);
+    let completed: string | null = null;
+    try { completed = localStorage.getItem(ONBOARDING_KEY); } catch { /* Show the tour without persistence. */ }
     if (!completed) {
       setShowOnboarding(true);
     }
   }, []);
 
   const resetOnboarding = () => {
-    localStorage.removeItem(ONBOARDING_KEY);
+    try { localStorage.removeItem(ONBOARDING_KEY); } catch { /* Reset remains in session state. */ }
     setShowOnboarding(true);
   };
 
   const completeOnboarding = () => {
-    localStorage.setItem(ONBOARDING_KEY, 'true');
+    try { localStorage.setItem(ONBOARDING_KEY, 'true'); } catch { /* Completion remains in session state. */ }
     setShowOnboarding(false);
   };
 

@@ -14,8 +14,10 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [theme, setTheme] = useState<Theme>(() => {
     // Check localStorage first, then system preference
     if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('chronos-theme') as Theme;
-      if (saved) return saved;
+      try {
+        const saved = localStorage.getItem('chronos-theme') as Theme;
+        if (saved) return saved;
+      } catch { /* Storage may be unavailable; keep a session theme. */ }
       if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
     }
     return 'light';
@@ -28,7 +30,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     } else {
       root.classList.remove('dark');
     }
-    localStorage.setItem('chronos-theme', theme);
+    try { localStorage.setItem('chronos-theme', theme); } catch { /* Session theme still applies. */ }
   }, [theme]);
 
   const toggleTheme = () => {
