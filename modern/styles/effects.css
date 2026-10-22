@@ -3,7 +3,26 @@
 @keyframes fade-in{0%{opacity:0}to{opacity:1}}
 @keyframes pop-in{0%{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
 @keyframes pixel-on{0%,to{opacity:.15}18%,42%{opacity:1}62%{opacity:.15}}
+@keyframes caret-blink{0%,to{opacity:1}50%{opacity:0}}
 @layer components {
+  /* Consumed source primitives and narrative/image effects (Beautiful UI + craft). */
+.source-avatar{box-shadow:0 0 0 1px oklch(21% .034 263.436/.1)}
+.dark .source-avatar{box-shadow:0 0 0 1px oklch(100% 0 0/.08)}
+.stream-tail{filter:blur(1.6px);-webkit-mask-image:linear-gradient(90deg,oklch(0 0 0) 20%,oklch(0 0 0/.2));mask-image:linear-gradient(90deg,oklch(0 0 0) 20%,oklch(0 0 0/.2))}
+.stream-caret{background:var(--ink);vertical-align:text-bottom;border-radius:1px;width:2px;height:1.05em;margin-left:1.5px;animation:caret-blink 1s step-end infinite;display:inline-block;translate:0 -.5px}
+.stream-caret.is-streaming{animation:none}
+@media (prefers-reduced-motion:reduce){.stream-caret{animation:none}}
+@media (prefers-reduced-motion:reduce){.stream-tail{filter:none;-webkit-mask-image:none;mask-image:none}}
+.animated-underline{display:inline-block;position:relative}
+.animated-underline:after{content:"";transform-origin:0;height:1px;transition:transform .28s var(--ease-link);background:currentColor;position:absolute;bottom:-1px;left:0;right:0;transform:scaleX(0)}
+a:focus-visible .animated-underline:after,a:hover .animated-underline:after{transform:scaleX(1)}
+.primitive-card-bar{padding:10px 12px}
+.primitive-icon-button{border-radius:var(--radius-control);justify-content:center;align-items:center;width:28px;height:28px;display:inline-flex}
+  .image-outline {
+    outline: 1px solid var(--image-outline);
+    outline-offset: -1px;
+  }
+
   .hit-area { position: relative; }
   .hit-area::before { content: ""; position: absolute; inset: -8px; }
   /* Button Press: a quick, small scale on press. Never on hover. */
