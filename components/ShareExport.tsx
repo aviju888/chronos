@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Share2, Download, Copy, Check, X, FileText, Image, Link2 } from 'lucide-react';
 import { TimelineData } from '../types';
 import { formatYear, formatYearRange } from '../utils';
+import { classicTimelineUrl } from '../lib/experienceRouting';
 
 interface ShareExportProps {
   timeline: TimelineData;
@@ -25,7 +26,7 @@ export const ShareExport: React.FC<ShareExportProps> = ({ timeline, isOpen, onCl
 
   if (!isOpen) return null;
 
-  const shareUrl = `${window.location.origin}#/timeline/${timeline.id}/map`;
+  const shareUrl = classicTimelineUrl(window.location.origin, timeline.id, 'map');
 
   const copyLink = async () => {
     try {

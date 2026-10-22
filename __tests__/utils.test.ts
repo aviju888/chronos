@@ -139,6 +139,13 @@ describe('updateHash', () => {
     expect(window.location.hash).toBe('');
   });
 
+  it('preserves the legacy query while clearing the initial timeline hash', () => {
+    history.replaceState(null, '', '/classic/?from=legacy%20link#/timeline/abc-123/list');
+    updateHash(null, 'map');
+    expect(window.location.pathname + window.location.search + window.location.hash)
+      .toBe('/classic/?from=legacy%20link');
+  });
+
   it('does not create unnecessary history entries for same hash', () => {
     updateHash('abc-123', 'map');
     const hashBefore = window.location.hash;

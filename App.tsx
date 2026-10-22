@@ -231,6 +231,7 @@ const App: React.FC = () => {
 
       {!activeData ? (
         <div className="flex-1 overflow-auto bg-grid-pattern dark:bg-night relative">
+             <a href="/" className="absolute top-3 left-4 z-20 inline-flex items-center min-h-[44px] text-sm text-sepia dark:text-paper underline underline-offset-4">Open new Chronos</a>
              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] dark:bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-50 dark:opacity-20 pointer-events-none"></div>
              <div className="absolute inset-0 bg-gradient-to-b from-stone-100/50 to-stone-300/50 dark:from-night/50 dark:to-night-light/50 pointer-events-none"></div>
              
@@ -289,6 +290,7 @@ const App: React.FC = () => {
                 <span className="text-xs text-gold-dark dark:text-gold font-bold tracking-widest uppercase font-antique">
                     {formatYearRange(activeData.timeRange.start, activeData.timeRange.end)}
                 </span>
+                <a href="/" className="block text-xs text-sepia dark:text-paper underline underline-offset-2 py-1">Open new Chronos</a>
               </div>
             </div>
 
