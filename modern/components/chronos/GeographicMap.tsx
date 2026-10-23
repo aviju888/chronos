@@ -74,7 +74,7 @@ function MapContents({ events, cursorYear, selectedId, hoverIds, onFocusEvent, o
       return <Marker key={group.map(e => e.id).join('|')} position={first.location!} icon={icon}
         title={group.length > 1 ? `${group.length} events near ${first.location?.name ?? first.title}` : first.title}
         eventHandlers={{click: () => onFocusEvent?.(first.id), mouseover: () => onHover?.(group.map(e => e.id)), mouseout: () => onHover?.(null)}}>
-        <Popup minWidth={170} maxWidth={240} maxHeight={210} autoPanPadding={[12, 36]}>
+        <Popup minWidth={170} maxWidth={240} maxHeight={Math.min(210, Math.max(80, map.getSize().y - 110))} autoPanPadding={[12, 12]}>
           <div className="chronos-geo-events">{group.map(e => <button type="button" key={e.id} onClick={() => onOpen?.(e.id)}>
             <span>{formatYear(e.year)}{e.location?.approx ? ' · approximate place' : ''}</span>
             <strong>{e.title}</strong>
