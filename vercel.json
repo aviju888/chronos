@@ -8,6 +8,14 @@
       "destination": "/api/:path*"
     },
     {
+      "source": "/classic",
+      "destination": "/classic/index.html"
+    },
+    {
+      "source": "/classic/:path*",
+      "destination": "/classic/index.html"
+    },
+    {
       "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
@@ -15,6 +23,10 @@
   "functions": {
     "api/generate.ts": {
       "maxDuration": 60
+    },
+    "api/chronos/stream.ts": {
+      "maxDuration": 60,
+      "supportsCancellation": true
     }
   }
 }

@@ -1,0 +1,147 @@
+{
+  "sourceProject": "avijuan-lab",
+  "sourceRevision": null,
+  "note": "Source is a read-only directory without Git metadata. SHA-256 identifies the exact extraction inputs, before namespace, lifecycle, shell and copy adaptations.",
+  "files": [
+    {
+      "path": "app/globals.css",
+      "sha256": "05dece4c296b9540433961088a329d78dbc071a851f5a9fcbc98db2b7c9dd05f"
+    },
+    {
+      "path": "components/atoms/Button.tsx",
+      "sha256": "58b4121da84aa8a02ed2a769ae08e20fcb90e6cc78eca9df65ece8002e6b9eec"
+    },
+    {
+      "path": "components/chronos/CategoryGlyph.tsx",
+      "sha256": "b79d3114ef33362476c22792c487c4afb24dc196e6e17c4f15757ac3643a712d"
+    },
+    {
+      "path": "components/chronos/ChronosApp.tsx",
+      "sha256": "56e39e02a1743303ce166e76d556b859d0ba6f455f0de704077dd66f2cd057ac"
+    },
+    {
+      "path": "components/chronos/DotMap.tsx",
+      "sha256": "7dacebf191939e2d2feab858bb573b9fe1f1fd3cc00077c309bb5f2119b82155"
+    },
+    {
+      "path": "components/chronos/EventCard.tsx",
+      "sha256": "619a8b54791e12956ffeff060ca5e4610ccd331315c4b16806f5831f07b11689"
+    },
+    {
+      "path": "components/chronos/EventDetail.tsx",
+      "sha256": "dd843442dc79c7802b239426348921025cc08d680b0ba2a2a0cba46c8ef685b6"
+    },
+    {
+      "path": "components/chronos/EventList.tsx",
+      "sha256": "3556c21fe33f1bf0bc1587671d01f9de9cf98f1c79a208a1d0a63a41ed1d4c9a"
+    },
+    {
+      "path": "components/chronos/Narrative.tsx",
+      "sha256": "b2ab1bda6bcbfb11b885309edff83bfc67d79c76f6b6e05ea873852bc43c282a"
+    },
+    {
+      "path": "components/chronos/PipelinePanel.tsx",
+      "sha256": "77d4afc79c4006e36658d8ff5bd6787fb61bb4194dd19e10fadf91638aa27111"
+    },
+    {
+      "path": "components/chronos/PromptComposer.tsx",
+      "sha256": "42473b4607b5e717a1b6a47ab598f04a1485e9d0cd0e598a1265ec7195f220b5"
+    },
+    {
+      "path": "components/chronos/SuggestionChips.tsx",
+      "sha256": "86ae9f7ec962aaba6a208a7d2d6685a2d33758de7fcfd3ffb88ab123ef17f9b8"
+    },
+    {
+      "path": "components/chronos/TimeScrubber.tsx",
+      "sha256": "e693da6aceb10b1a994b495f39480134ca3a011eef8b36d2f7e53eb199fa483a"
+    },
+    {
+      "path": "components/chronos/Tooltip.tsx",
+      "sha256": "1e76a7ccdf46d7165f3bf0c0edbb8e17523d78cdc0a62b9ba5b06e80b904474c"
+    },
+    {
+      "path": "components/chronos/chronos.css",
+      "sha256": "9f3ad0e3f0b81ebcf9b403559bb355e476909dd9dfd338b28acda3b5794a8423"
+    },
+    {
+      "path": "components/chronos/map/LandCanvas.tsx",
+      "sha256": "e25f4f9b0b5a2c9234ee3f675d10d5147435e33cb0b49b6488a355aaced9824d"
+    },
+    {
+      "path": "components/chronos/map/MapControls.tsx",
+      "sha256": "481ec9dc2f99d39a23abd063e9eeac6cd4c9a2f691e4e678022e8fb898e54d71"
+    },
+    {
+      "path": "components/chronos/map/PinCard.tsx",
+      "sha256": "a917f87b696b104ace050079d0d5748bc34cce5e26e6dddbf76ae60073a02e0b"
+    },
+    {
+      "path": "components/chronos/map/land.ts",
+      "sha256": "30caf62eb5f0d4519d4d31d7fd4bcd620c60f2670a9ab2555e274faba5c87ba9"
+    },
+    {
+      "path": "components/chronos/sources.tsx",
+      "sha256": "28b1f459d045a1a1bf92f7433dc43d01f7209131cfe582e6ce4d7f4dda404c6c"
+    },
+    {
+      "path": "components/chronos/useChronos.ts",
+      "sha256": "4fa3016e683ad86496cf5658b29e43c0b28260743d76f5bad206452fdec435d2"
+    },
+    {
+      "path": "components/chronos/usePlayback.ts",
+      "sha256": "10ef0508f0b5ca879b2868392f853287f9716ce770ad86698901f9cedf515ee2"
+    },
+    {
+      "path": "components/craft/RollingNumber.tsx",
+      "sha256": "30045c1e5e75300205c3f3570daa376fc042582a26b07c89dee65e4bf49f5256"
+    },
+    {
+      "path": "components/craft/ScrollFade.tsx",
+      "sha256": "9e31a6d8dd15233e3113187827dd3508709c1ad8a04dbb3063981b11a7bc2c40"
+    },
+    {
+      "path": "design-library/sources/beautiful-ui/LICENSE",
+      "sha256": "dcd98784bcd83e727fad4612bfdd20d1363860149e2ca6829f546273b2f8d063"
+    },
+    {
+      "path": "design-library/sources/fonts/inter-OFL.txt",
+      "sha256": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a"
+    },
+    {
+      "path": "lib/cn.ts",
+      "sha256": "d1f1e0d62cb8d8d1e04c26e14de842d8a151f75812d81b046c65b5d1fe8e4b27"
+    },
+    {
+      "path": "lib/sfx.ts",
+      "sha256": "2a0515b3e575f925d01c6dbeb43bf758d5cd3aa5213ebd4f72957e6bf67d17d0"
+    },
+    {
+      "path": "lib/sse-client.ts",
+      "sha256": "c189ced3907195b7f11ce2f487a11e4375a0f940315468864a8ba8721af4b95c"
+    },
+    {
+      "path": "public/library/craft/fonts/InterVariable-Italic.woff2",
+      "sha256": "e564f652916db6c139570fefb9524a77c4d48f30c92928de9db19b6b5c7a262a"
+    },
+    {
+      "path": "public/library/craft/fonts/InterVariable.woff2",
+      "sha256": "693b77d4f32ee9b8bfc995589b5fad5e99adf2832738661f5402f9978429a8e3"
+    },
+    {
+      "path": "public/library/craft/fonts/JetBrainsMono-OFL.txt",
+      "sha256": "a76abf002c49097d146e86740a3105a5d00450b1592e820a1109a8c5680cd697"
+    },
+    {
+      "path": "public/library/craft/fonts/JetBrainsMono-Regular.woff2",
+      "sha256": "f1a7a03672cdd494ce0d5543fac6e4360fe22403c6de297fdc2e55a815f7baff"
+    },
+    {
+      "path": "styles/bui.css",
+      "sha256": "57bb407c25cc621dd328516f97d47c25cd7388dcaeb347afda01bb73e9afc5b7"
+    },
+    {
+      "path": "styles/craft.css",
+      "sha256": "1fad89d67274bc6fbffebc066e87d7c21e15c85785552fbf65fe2188d2c07077"
+    }
+  ]
+}

@@ -55,7 +55,7 @@ export function parseHash(): { timelineId?: string; view?: string; eventId?: str
 export function updateHash(timelineId: string | null, view: string, eventId: string | null = null): void {
   if (!timelineId) {
     if (window.location.hash) {
-      history.pushState(null, '', window.location.pathname);
+      history.pushState(null, '', window.location.pathname + window.location.search);
     }
     return;
   }
