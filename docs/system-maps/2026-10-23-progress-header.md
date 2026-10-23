@@ -20,3 +20,5 @@ Header: Chronos wordmark | New search (+), Archives, Export, sound, theme. Searc
 Only modern UI changes. Classic routes, storage keys, API contracts and public live-only research remain unchanged. Local browser validation uses an isolated fixture stream. Release requires typecheck, focused component tests, native Node API guard, build, desktop/mobile browser checks, and public verification.
 
 Follow-up correction: only the initial loading task stack is narrow. Source-ready and completed panels use the full results width. Completion collapses height only; the finished status is left aligned.
+
+Latest correction: loading status and range/source metadata are also left aligned. A single compact header row toggles disclosure, with a right-side chevron and separate Stop control. The bottom chevron row is removed; collapsed height is about 60px.

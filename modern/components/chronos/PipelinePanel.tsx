@@ -54,11 +54,11 @@ export function PixelLoader({ label, startedAt, finishedAt }: { label: string; s
   const running = !finishedAt;
   const text = elapsed < 60 ? `${elapsed.toFixed(1)}s` : `${Math.floor(elapsed / 60)}m ${(elapsed % 60).toFixed(1)}s`;
   return (
-    <div className="flex min-h-11 min-w-0 items-center gap-2.5">
+    <span className="flex min-h-11 min-w-0 items-center gap-2.5">
       <LoaderGrid still={!running} />
       <span role="status" className={cn("text-[14px] font-medium", running ? "text-ink" : "text-ink-2")}>{label}</span>
       <span aria-hidden="true" className="num min-w-[5ch] shrink-0 font-mono text-[12px] text-ink-3">{text}</span>
-    </div>
+    </span>
   );
 }
 
