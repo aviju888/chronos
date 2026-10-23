@@ -6,8 +6,8 @@ Follow-up to reading-flow.md: completion now collapses research details, replaci
 
 ```
 Start → centered tasks (640px maximum)
-      → real source trace → expanded tasks + details (1040px maximum)
-      → success → compact status + centered disclosure chevron
+      → real source trace → full results-width tasks + details
+      → success → full results-width status + centered disclosure chevron
                     ↕ reopen research details
 ```
 
@@ -18,3 +18,5 @@ Header: Chronos wordmark | New search (+), Archives, Export, sound, theme. Searc
 ## Boundaries
 
 Only modern UI changes. Classic routes, storage keys, API contracts and public live-only research remain unchanged. Local browser validation uses an isolated fixture stream. Release requires typecheck, focused component tests, native Node API guard, build, desktop/mobile browser checks, and public verification.
+
+Follow-up correction: only the initial loading task stack is narrow. Source-ready and completed panels use the full results width. Completion collapses height only; the finished status is left aligned.

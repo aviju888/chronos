@@ -178,12 +178,12 @@
   max-width: 640px;
   transition: max-width 260ms cubic-bezier(0.23, 1, 0.32, 1);
 }
+.chronos-research[data-compact="false"] { max-width: 100%; }
 .chronos-research-grid { display: grid; gap: 0; }
 .chronos-research-traces { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 260ms cubic-bezier(0.23, 1, 0.32, 1); }
 .chronos-research[data-source-ready="true"] .chronos-research-grid { gap: 16px; }
 .chronos-research[data-source-ready="true"] .chronos-research-traces { grid-template-rows: 1fr; animation: chronos-enter 220ms ease-out both; }
 @media (min-width: 768px) {
-  .chronos-research[data-expanded="true"][data-source-ready="true"] { max-width: 1040px; }
   .chronos-research-grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 0fr);
     transition: grid-template-columns 260ms cubic-bezier(0.23, 1, 0.32, 1), gap 260ms ease-out;

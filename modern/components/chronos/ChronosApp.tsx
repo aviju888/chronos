@@ -128,9 +128,9 @@ export const PipelineSection = memo(function PipelineSection({ state, onStop }: 
   const hasDetails = state.traces.some(trace => trace.source !== 'intent');
   const toggleLabel = open ? 'Collapse research details' : 'Expand research details';
   return (
-    <section aria-label="Investigation progress" data-expanded={open} data-source-ready={hasDetails}
+    <section aria-label="Investigation progress" data-expanded={open} data-source-ready={hasDetails} data-compact={running && !hasDetails}
       className="chronos-research mx-auto w-full rounded-[18px] border border-line bg-inset p-3 sm:p-4">
-      <div className="flex min-h-11 items-center justify-center gap-2">
+      <div className={cn("flex min-h-11 items-center gap-2", running ? "justify-center" : "justify-start")}>
         <PixelLoader label={progressLabel(state)} startedAt={state.startedAt} finishedAt={state.finishedAt} />
         {running && <Tooltip content="Stop research"><button type="button" aria-label="Stop research" onClick={onStop} className={iconToolClass}><Square size={14} weight="fill" /></button></Tooltip>}
       </div>
