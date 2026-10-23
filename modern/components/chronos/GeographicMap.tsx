@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { MapContainer, TileLayer, Marker, Popup, Rectangle, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -9,7 +10,7 @@ import { formatYear } from '@/modern/lib/chronos/time';
 import type { ChronosEvent } from '@/modern/lib/chronos/types';
 import type { DotMapProps } from './DotMap';
 
-function MapContents({ events, cursorYear, selectedId, hoverIds, onFocusEvent, onHover, onOpen, area, onAreaChange }: DotMapProps) {
+function MapContents({ events, cursorYear, selectedId, hoverIds, onFocusEvent, onHover, onOpen, area, onAreaChange, controlsHost }: DotMapProps & { controlsHost: HTMLDivElement | null }) {
   const map = useMap();
   const [revision, setRevision] = useState(0);
   const [panning, setPanning] = useState(false);
@@ -49,7 +50,7 @@ function MapContents({ events, cursorYear, selectedId, hoverIds, onFocusEvent, o
     return groups;
   }, [located, revision, map]);
   return <>
-    <div className="chronos-geo-tools">
+    {controlsHost && createPortal(<div className="chronos-geo-tools" role="group" aria-label="Map controls">
       <button type="button" onClick={recenter}>Recenter</button>
       <button type="button" aria-label="Zoom in" onClick={() => map.zoomIn()}>+</button>
       <button type="button" aria-label="Zoom out" onClick={() => map.zoomOut()}>−</button>
@@ -61,7 +62,7 @@ function MapContents({ events, cursorYear, selectedId, hoverIds, onFocusEvent, o
           onAreaChange?.({west: Math.max(-180, b.getWest()), east: Math.min(180, b.getEast()), south: b.getSouth(), north: b.getNorth()});
         }
       }}>{area ? 'Clear area' : 'Filter this area'}</button>
-    </div>
+    </div>, controlsHost)}
     {area && <Rectangle bounds={[[area.south, area.west], [area.north, area.east]]} pathOptions={{color: '#a87d27', weight: 1, fillOpacity: 0.08}} interactive={false} />}
     {clusters.map(({events: group}) => {
       const first = group[0];
@@ -87,14 +88,16 @@ function MapContents({ events, cursorYear, selectedId, hoverIds, onFocusEvent, o
 
 export default function GeographicMap(props: DotMapProps) {
   const [tileError, setTileError] = useState(false);
+  const [controlsHost, setControlsHost] = useState<HTMLDivElement | null>(null);
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   return <div className="chronos-geographic-map">
+    <div ref={setControlsHost} />
     <MapContainer center={[25, 0]} zoom={2} minZoom={2} maxZoom={18} maxBounds={[[-85, -180], [85, 180]]}
       maxBoundsViscosity={1} zoomControl={false} scrollWheelZoom={false} dragging={!matchMedia('(pointer: coarse)').matches}
       zoomAnimation={!reduced} fadeAnimation={!reduced} markerZoomAnimation={!reduced} aria-label="Geographic event map">
       <TileLayer url={BASEMAP_URL} attribution={BASEMAP_ATTRIBUTION} maxNativeZoom={BASEMAP_MAX_NATIVE_ZOOM} noWrap
         eventHandlers={{tileerror: () => setTileError(true), tileload: () => setTileError(false)}} />
-      <MapContents {...props} />
+      <MapContents {...props} controlsHost={controlsHost} />
     </MapContainer>
     <div className="chronos-geo-caption">
       {tileError ? <span role="status">Map tiles are unavailable. You can still use Dots.</span> : <span>Present-day geography · {props.events.filter(e => e.location).length} of {props.events.length} events placed</span>}
