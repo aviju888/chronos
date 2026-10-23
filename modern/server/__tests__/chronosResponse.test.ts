@@ -66,3 +66,16 @@ describe('Chronos response', () => {
     expect(pipeline).not.toHaveBeenCalled();
   });
 });
+
+it('passes selected dates as structured input', async () => {
+  await (await createChronosResponse(request({query:'Rome',range:{start:-27,end:476}}))).text();
+  expect(pipeline.mock.calls[0][0]).toEqual({query:'Rome',mode:'quick',replay:false,range:{start:-27,end:476}});
+});
+it.each([{start:0,end:476},{start:476,end:-27},{start:1},null,'1-2'])('rejects invalid range before starting research (%j)', async range => {
+  expect((await createChronosResponse(request({query:'Rome',range}))).status).toBe(400);
+  expect(pipeline).not.toHaveBeenCalled();
+});
+it('does not silently ignore selected dates for a recorded run', async () => {
+  expect((await createChronosResponse(request({query:'Rome',range:{start:1,end:10},replay:true}))).status).toBe(400);
+  expect(pipeline).not.toHaveBeenCalled();
+});

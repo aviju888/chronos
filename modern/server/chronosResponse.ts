@@ -1,6 +1,8 @@
 import { sseResponse } from '../lib/sse.js';
 import { runChronos } from '../lib/chronos/pipeline.js';
 import { sanitizeString } from '../lib/chronos/query.js';
+import { rangeError } from '../lib/chronos/discovery.js';
+import type { YearRange } from '../lib/chronos/types.js';
 
 /** Standard Request/Response boundary, shared by Vercel and focused tests. */
 export async function createChronosResponse(req: Request): Promise<Response> {
@@ -15,5 +17,10 @@ export async function createChronosResponse(req: Request): Promise<Response> {
   }
   const mode = body.mode === 'deep' ? 'deep' : 'quick';
   const replay = body.replay === true;
-  return sseResponse(req, (send, signal) => runChronos({ query, mode, replay }, send, signal));
+  if (body.range !== undefined) {
+    const error = rangeError(body.range);
+    if (error || replay) return Response.json({ error: error ?? 'Saved examples use their recorded dates. Run live to choose dates.' }, { status: 400 });
+  }
+  const range = body.range as YearRange | undefined;
+  return sseResponse(req, (send, signal) => runChronos({ query, mode, replay, ...(range ? { range } : {}) }, send, signal));
 }

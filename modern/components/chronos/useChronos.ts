@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useReducer, useRef } from "react";
 import { postSSE } from "@/modern/lib/sse-client";
+import type { YearRange } from '@/modern/lib/chronos/types';
 import type { ChronosEvent, Era, Intent, MergeInfo, Mode, NarrativeSource, NarrativeUpdate, Notice, TaskId, TaskUpdate, TraceLine } from "@/modern/lib/chronos/types";
 
 /* ─────────────────────────────────────────────────────────
@@ -88,6 +89,7 @@ type Action =
   | { type: "finish"; at: number }
   | { type: "stop"; at: number }
   | { type: "fail"; message: string; at: number }
+  | { type: "restore"; state: ChronosState }
   | { type: "reset" };
 
 function sortIds(events: Record<string, ChronosEvent>): string[] {
@@ -117,6 +119,8 @@ export function reducer(state: ChronosState, action: Action): ChronosState {
         startedAt: Date.now(),
         runId: state.runId + 1,
       };
+    case "restore":
+      return { ...action.state, runId: state.runId + 1, merges: [] };
     case "reset":
       return { ...initialState, runId: state.runId + 1 };
     case "finish":
@@ -186,7 +190,7 @@ export function useChronos() {
     dispatch({ type: "stop", at: Date.now() });
   }, []);
 
-  const run = useCallback(async (query: string, mode: Mode, { replay = false }: { replay?: boolean } = {}) => {
+  const run = useCallback(async (query: string, mode: Mode, { replay = false, range }: { replay?: boolean; range?: YearRange } = {}) => {
     abortRef.current?.abort();
     const controller = new AbortController();
     abortRef.current = controller;
@@ -194,7 +198,7 @@ export function useChronos() {
     try {
       await postSSE(
         "/api/chronos/stream",
-        { query, mode, replay },
+        { query, mode, replay, ...(range ? { range } : {}) },
         (event, data) => {
           if (controller.signal.aborted) return;
           dispatch({ type: "frame", event, data, at: Date.now() });
@@ -226,5 +230,11 @@ export function useChronos() {
 
   useEffect(() => () => abortRef.current?.abort(), []);
 
-  return { state, run, stop, reset };
+  const restore = useCallback((saved: ChronosState) => {
+    abortRef.current?.abort();
+    abortRef.current = null;
+    dispatch({ type: "restore", state: saved });
+  }, []);
+
+  return { state, run, stop, reset, restore };
 }

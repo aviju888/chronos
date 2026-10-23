@@ -54,10 +54,10 @@ export function PixelLoader({ label, startedAt, finishedAt }: { label: string; s
   const running = !finishedAt;
   const text = elapsed < 60 ? `${elapsed.toFixed(1)}s` : `${Math.floor(elapsed / 60)}m ${(elapsed % 60).toFixed(1)}s`;
   return (
-    <div role="status" className="flex w-fit items-center gap-2.5">
+    <div className="flex min-w-0 items-center gap-2.5">
       <LoaderGrid still={!running} />
-      <span className={cn("text-[13px] font-medium", running ? "text-ink" : "text-ink-2")}>{label}</span>
-      <span className="num font-mono text-[12px] text-ink-3">{text}</span>
+      <span role="status" className={cn("text-[14px] font-medium", running ? "text-ink" : "text-ink-2")}>{label}</span>
+      <span aria-hidden="true" className="num shrink-0 font-mono text-[12px] text-ink-3">{text}</span>
     </div>
   );
 }
@@ -93,14 +93,14 @@ function Badge({ tone, children }: { tone: "red" | "green"; children: React.Reac
 
 const ORDER: TaskId[] = ["llm", "wikidata", "wikipedia", "dedup"];
 
-export function TaskList({ tasks, live }: { tasks: Record<TaskId, TaskUpdate>; live: boolean | null }) {
+export function TaskList({ tasks, live, active = true }: { tasks: Record<TaskId, TaskUpdate>; live: boolean | null; active?: boolean }) {
   const [open, setOpen] = useState<Record<string, boolean>>({});
   return (
     <div className="flex flex-col gap-2">
       {ORDER.map((id, i) => {
         const t = tasks[id];
         const isOpen = open[id] ?? false;
-        const label = id === "llm" ? (live === null ? "Model pass" : live ? "Model seed events" : "Model pass (scripted)") : t.label;
+        const label = id === "llm" ? (live === false ? "Scripted events" : "Model research") : id === "dedup" ? "Cross-checking" : id === "wikidata" ? "Wikidata" : "Wikipedia";
         const badge =
           t.status === "done" ? (
             <Badge tone="green">
@@ -111,20 +111,11 @@ export function TaskList({ tasks, live }: { tasks: Record<TaskId, TaskUpdate>; l
               <X size={11} weight="bold" />
             </Badge>
           ) : (
-            <SpinnerRing active={t.status === "running"}>
+            <SpinnerRing active={active && t.status === "running"}>
               <SourceGlyph source={id} size={11} />
             </SpinnerRing>
           );
-        const pill =
-          t.status === "done" ? (
-            <span className="inline-flex h-5.5 items-center rounded-full bg-green-tint px-2 text-[11.5px] font-medium text-green" style={{ animation: "fade-in 200ms ease-out both" }}>
-              Done
-            </span>
-          ) : t.status === "failed" ? (
-            <span className="inline-flex h-5.5 items-center rounded-full bg-red-tint px-2 text-[11.5px] font-medium text-red">Partial</span>
-          ) : t.status === "skipped" ? (
-            <span className="inline-flex h-5.5 items-center rounded-full bg-field px-2 text-[11.5px] font-medium text-ink-2">Skipped</span>
-          ) : null;
+        const pill = t.status === "failed" ? <span className="text-[11px] text-red">Partial</span> : t.status === "skipped" ? <span className="text-[11px] text-ink-3">Skipped</span> : null;
         const steps = t.steps ?? [];
         return (
           <div
@@ -146,9 +137,9 @@ export function TaskList({ tasks, live }: { tasks: Record<TaskId, TaskUpdate>; l
                 <span>{t.unit === "merges" ? ((t.count ?? 0) === 1 ? "merge" : "merges") : (t.count ?? 0) === 1 ? "event" : "events"}</span>
               </span>
               {pill}
-              <span aria-hidden className={cn("-ml-1 flex size-6 shrink-0 items-center justify-center rounded-full text-ink-3", steps.length === 0 && "opacity-0")}>
+              {steps.length > 0 && <span aria-hidden className="-ml-1 flex size-4 shrink-0 items-center justify-center text-ink-3">
                 <CaretDown size={13} weight="bold" className="transition-transform duration-300" style={{ transform: isOpen ? "rotate(180deg)" : "none" }} />
-              </span>
+              </span>}
             </button>
             <div
               className="grid transition-[grid-template-rows,opacity] duration-300"
@@ -225,7 +216,7 @@ function highlight(line: string) {
 
 export function TraceLog({ traces, running }: { traces: TraceLine[]; running: boolean }) {
   const [manual, setManual] = useState<boolean | null>(null);
-  const expanded = manual ?? running;
+  const expanded = manual ?? false;
   const contentRef = useRef<HTMLDivElement>(null);
   const stick = useRef(true);
 
@@ -243,14 +234,14 @@ export function TraceLog({ traces, running }: { traces: TraceLine[]; running: bo
         type="button"
         aria-expanded={expanded}
         onClick={() => setManual(!expanded)}
-        className="-mx-1.5 flex w-fit items-center gap-2 rounded-control px-1.5 py-1 hover:bg-hover-2"
+        className="-mx-1.5 flex min-h-11 w-fit items-center gap-2 rounded-control px-1.5 py-1 hover:bg-hover-2"
       >
         <svg width="15" height="15" viewBox="0 0 24 24" fill={running ? "var(--ink-2)" : "var(--ink-3)"} aria-hidden>
           <path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z" />
         </svg>
-        <span role="status" className="contents">
+        <span className="contents">
           {running ? (
-            <span className="text-[13px] font-medium whitespace-nowrap text-ink">Tracing sources</span>
+            <span className="text-[13px] font-medium whitespace-nowrap text-ink">Source details</span>
           ) : (
             <span className="text-[13px] font-medium whitespace-nowrap text-ink-2" style={{ animation: "fade-in 350ms ease-out both" }}>
               Traced {traces.length} steps{merges ? `, ${merges} merges` : ""}
