@@ -29,6 +29,8 @@ export type TimeExpr = {
 };
 
 export type ParseOpts = {
+  /** Search prompts may end in an unmarked early-year range, e.g. 750–1258. */
+  bareRanges?: boolean;
   /** current year, used for "present" and clamping */
   now?: number;
   /** read "1900s" as the century 1900–1999 (how people type it) instead of the decade */
@@ -206,13 +208,19 @@ function collectAtoms(text: string, opts: ParseOpts): Atom[] {
   });
 
   // 31 BC, 476 CE, 476/1453 AD
-  run(new RegExp(String.raw`(?<![\d,.])\b(\d{1,4})(?:\s*\/\s*\d{1,4})?\s*${ERA}`, "gi"), (m) => {
+  run(new RegExp(String.raw`(?<![\d,.])\b(\d{1,5})(?:\s*\/\s*\d{1,5})?\s*${ERA}`, "gi"), (m) => {
     const n = parseInt(m[1], 10);
     if (n <= 0) return;
     push(m, { era: eraOf(m[2]), kind: "year", fuzzy: false, n, span: (e) => [signed(n, e), signed(n, e)] });
   });
 
   // bare 4-digit years 1000–2099
+  if (opts.bareRanges) {
+    run(/(?<![\d,.])\b(\d{1,4})(?=\s*(?:–|—|-|to)\s*(?:AD\s*)?\d{1,4}\b)/gi, (m) => {
+      const n = Number(m[1]);
+      if (n > 0) push(m, { era: null, kind: 'year', fuzzy: false, n, span: (e) => [signed(n, e), signed(n, e)] });
+    });
+  }
   run(new RegExp(String.raw`(?<![\d,.$£€#])\b(1\d{3}|20\d{2})\b(?![\d,]\d)(?!\s*${UNITS})`, "gi"), (m) => {
     const n = parseInt(m[1], 10);
     push(m, { era: null, kind: "year", fuzzy: false, n, span: (e) => [signed(n, e), signed(n, e)] });

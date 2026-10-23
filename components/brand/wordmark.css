@@ -1,0 +1,24 @@
+@font-face {
+  font-family: 'Chronos Wordmark';
+  src: url('/fonts/modern/Cinzel-Variable.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+}
+
+.chronos-wordmark {
+  display: inline-block;
+  font-family: 'Chronos Wordmark', 'Times New Roman', serif;
+  font-size: clamp(2rem, 7vw, 3.75rem);
+  font-weight: 700;
+  font-feature-settings: normal;
+  line-height: 1.15;
+  letter-spacing: 0.18em;
+  text-indent: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: oklch(50% 0.1 74);
+}
+.dark .chronos-wordmark, .chronos-wordmark--on-dark { color: oklch(86% 0.1 90); }
+.chronos-wordmark--compact { font-size: 18px; }
+.chronos-wordmark--inline { font-size: 12px; }

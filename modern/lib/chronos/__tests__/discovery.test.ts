@@ -1,5 +1,6 @@
 import { expect, it } from 'vitest';
-import { rangeError, relatedTopics } from '../discovery';
+import { rangeError, relatedTopics, SURPRISE_TOPICS, READY_SURPRISE_TOPICS, createSurprisePicker, surpriseQuery } from '../discovery';
+import { parseQuery } from '../query';
 import { progressLabel } from '../progress';
 import { initialState } from '../../../components/chronos/useChronos';
 
@@ -19,4 +20,30 @@ it('derives progress only from received evidence', () => {
 });
 it('suggests real event topics and places without duplicating the topic', () => {
   expect(relatedTopics('Rome',[{title:'Rome',weight:1,location:{name:'Rome'}},{title:'Actium',weight:5,location:{name:'Greece'}},{title:'Actium',weight:2}] as any)).toEqual(['Actium','Greece']);
+});
+
+it('keeps the curated catalog unique, valid and parseable with explicit dates', () => {
+  expect(SURPRISE_TOPICS).toHaveLength(500);
+  expect(new Set(SURPRISE_TOPICS.map(t => t.id)).size).toBe(500);
+  expect(new Set(SURPRISE_TOPICS.map(t => t.topic.toLowerCase())).size).toBe(500);
+  for (const topic of SURPRISE_TOPICS) {
+    expect(rangeError(topic.range, 2026), topic.topic).toBeNull();
+    expect(parseQuery(surpriseQuery(topic)).range, topic.topic).toEqual(topic.range);
+    expect(surpriseQuery(topic).length).toBeLessThanOrEqual(200);
+  }
+});
+
+it('visits every pick before repeating, including across deck boundaries', () => {
+  const pick = createSurprisePicker(SURPRISE_TOPICS, () => 0.5);
+  const seen = Array.from({length: 500}, () => pick()!.id);
+  expect(new Set(seen).size).toBe(500);
+  expect(pick()!.id).not.toBe(seen.at(-1));
+  expect(createSurprisePicker([])()).toBeUndefined();
+});
+
+it('only offers evaluated topics in the production Surprise me deck', () => {
+  expect(READY_SURPRISE_TOPICS.length).toBeGreaterThan(0);
+  const pick = createSurprisePicker();
+  const allowed = new Set(READY_SURPRISE_TOPICS.map(t => t.id));
+  for (let i = 0; i < READY_SURPRISE_TOPICS.length + 1; i++) expect(allowed.has(pick()!.id)).toBe(true);
 });

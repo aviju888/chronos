@@ -1,3 +1,4 @@
+import { ChronosWordmark } from './brand/ChronosWordmark';
 import React, { useState, useEffect } from 'react';
 import { Share2, Download, Copy, Check, X, FileText, Image, Link2 } from 'lucide-react';
 import { TimelineData } from '../types';
@@ -218,7 +219,7 @@ https://chronos-history.vercel.app
         {/* Footer */}
         <div className="bg-stone-100 dark:bg-night px-6 py-3 text-center">
           <p className="text-xs text-stone-500 dark:text-stone-400">
-            Powered by <span className="font-bold text-gold">Chronos</span> • AI Historical Research
+            Powered by <ChronosWordmark size="inline" /> • AI Historical Research
           </p>
         </div>
       </div>

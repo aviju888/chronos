@@ -1,0 +1,26 @@
+.chronos-geographic-map { position: relative; isolation: isolate; }
+.chronos-geographic-map .leaflet-container { width: 100%; height: clamp(260px, 30vw, 410px); border-radius: 8px; font-family: inherit; background: #e9e8e3; }
+.chronos-geographic-map .leaflet-control-attribution { font-size: 9px; max-width: 90%; }
+.chronos-geographic-map .leaflet-control-attribution a { color: #4b545a; }
+.chronos-geo-tools { display: flex; flex-wrap: wrap; gap: 4px; position: absolute; top: 8px; left: 8px; right: 8px; z-index: 800; pointer-events: none; }
+.chronos-geo-tools button { pointer-events: auto; min-height: 36px; min-width: 36px; padding: 0 10px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 1px 3px #0002; font-size: 12px; }
+.chronos-geo-tools button:hover { background: var(--hover); }
+.chronos-geo-tools button:focus-visible, .chronos-geo-events button:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+.chronos-geo-hit { display: flex; align-items: center; justify-content: center; }
+.chronos-geo-pin { display: grid; place-items: center; width: 12px; height: 12px; background: #b5872e; color: #241b0b; border: 2px solid white; border-radius: 50%; box-shadow: 0 1px 4px #0005; }
+.chronos-geo-pin.is-cluster { width: 28px; height: 28px; font: 600 12px Inter, sans-serif; }
+.chronos-geo-pin.is-approximate { background: #fff; border: 2px solid #a77b24; }
+.chronos-geo-pin.is-selected { outline: 3px solid #b5872e; outline-offset: 3px; }
+.chronos-geo-pin.is-dim { opacity: .35; }
+.chronos-geographic-map .leaflet-popup-content-wrapper, .chronos-geographic-map .leaflet-popup-tip { background: var(--surface); color: var(--ink); }
+.chronos-geographic-map .leaflet-popup-content { margin: 24px 12px 12px; }
+.chronos-geographic-map .leaflet-popup-close-button { width: 36px; height: 36px; color: var(--ink-2); }
+.chronos-geo-events { display: grid; gap: 4px; }
+.chronos-geo-events button { display: grid; gap: 3px; padding: 8px; min-height: 44px; border-radius: 6px; text-align: left; }
+.chronos-geo-events button:hover { background: var(--hover); }
+.chronos-geo-events span { font-size: 11px; color: var(--ink-2); }
+.chronos-geo-events strong { font-size: 13px; font-weight: 600; }
+.chronos-geo-caption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; padding: 8px 3px 0; font-size: 11px; color: var(--ink-3); }
+@media (pointer: coarse) {
+  .chronos-geo-tools button { min-height: 44px; min-width: 44px; }
+}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Moon, SpeakerHigh, SpeakerSlash, Sun } from '@phosphor-icons/react';
 import { ChronosApp } from './components/chronos/ChronosApp';
-import { EXAMPLE_QUERIES } from './lib/chronos/examples';
+import { ChronosWordmark } from '../components/brand/ChronosWordmark';
 import { getPreferences, setPreferences } from './lib/preferences';
 import { previewSfx } from './lib/sfx';
 import './styles.css';
@@ -32,7 +32,7 @@ export default function App() {
   return (
     <div data-project="chronos" className="flex min-h-dvh flex-col bg-page text-ink">
       <header className="sticky top-0 z-30 flex h-12 items-center justify-end border-b border-line bg-page/95 px-4 backdrop-blur-sm sm:px-6">
-        {hasRun && <a href="/" aria-label="Chronos home" className="mr-auto flex min-h-11 items-center text-[14px] font-semibold tracking-[-0.025em]">Chronos</a>}
+        {hasRun && <a href="/" aria-label="Chronos home" className="mr-auto flex min-h-11 items-center"><ChronosWordmark size="compact" /></a>}
         <nav aria-label="Chronos controls" className="flex items-center gap-2">
           <button type="button" onClick={toggleSound} aria-label={preferences.sfx ? 'Turn sound off' : 'Turn sound on'} aria-pressed={preferences.sfx} className="press flex size-11 items-center justify-center rounded-control text-ink-2 hover:bg-hover sm:size-8">
             {preferences.sfx ? <SpeakerHigh size={17} /> : <SpeakerSlash size={17} />}
@@ -42,7 +42,7 @@ export default function App() {
           </button>
         </nav>
       </header>
-      <main className="flex-1"><ChronosApp examples={EXAMPLE_QUERIES} onRunChange={setHasRun} /></main>
+      <main className="flex-1"><ChronosApp onRunChange={setHasRun} /></main>
       <footer className="flex min-h-16 items-center justify-center px-4 pb-[env(safe-area-inset-bottom)]">
         <a href="/classic/" className="inline-flex min-h-11 items-center rounded-control px-3 text-[12px] font-medium text-ink-3 hover:bg-hover hover:text-ink">Chronos Classic</a>
       </footer>

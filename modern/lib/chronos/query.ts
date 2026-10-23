@@ -105,7 +105,7 @@ export function parseQuery(input: string, now = new Date().getFullYear()): Parse
   let text = raw;
   let range: YearRange | undefined;
 
-  const exprs = parseTimeExprs(text, { now, hundredsAsCentury: true });
+  const exprs = parseTimeExprs(text, { now, hundredsAsCentury: true, bareRanges: true });
   // a time expression at the end ("Roman Empire 27 BCE - 476 CE") or a span at the start ("1900s America")
   const atEnd = (x: TimeExpr) => /^[\s).,\]]*$/.test(text.slice(x.index + x.length));
   const atStart = (x: TimeExpr) => /^[\s(\[]*(?:the\s+|from\s+|in\s+)?$/i.test(text.slice(0, x.index));
