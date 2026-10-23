@@ -9,6 +9,7 @@ import './styles.css';
 export default function App() {
   const [preferences, updatePreferences] = useState(getPreferences);
   const [dark, setDark] = useState(false);
+  const [hasRun, setHasRun] = useState(false);
   useEffect(() => {
     const media = matchMedia('(prefers-color-scheme: dark)');
     const apply = () => {
@@ -30,8 +31,8 @@ export default function App() {
   };
   return (
     <div data-project="chronos" className="min-h-dvh bg-page text-ink">
-      <header className="sticky top-0 z-30 flex h-12 items-center justify-between border-b border-line bg-page/95 px-4 backdrop-blur-sm sm:px-6">
-        <a href="/" className="text-[14px] font-semibold tracking-[-0.025em]">Chronos</a>
+      <header className="sticky top-0 z-30 flex h-12 items-center justify-end border-b border-line bg-page/95 px-4 backdrop-blur-sm sm:px-6">
+        {hasRun && <a href="/" aria-label="Chronos home" className="mr-auto text-[14px] font-semibold tracking-[-0.025em]">Chronos</a>}
         <nav aria-label="Chronos controls" className="flex items-center gap-2">
           <button type="button" onClick={toggleSound} aria-label={preferences.sfx ? 'Turn sound off' : 'Turn sound on'} aria-pressed={preferences.sfx} className="press flex size-8 items-center justify-center rounded-control text-ink-2 hover:bg-hover">
             {preferences.sfx ? <SpeakerHigh size={17} /> : <SpeakerSlash size={17} />}
@@ -42,7 +43,7 @@ export default function App() {
           <a href="/classic/" className="ml-1 rounded-control px-2 py-1.5 text-[12px] font-medium text-ink-2 hover:bg-hover hover:text-ink">Classic</a>
         </nav>
       </header>
-      <main><ChronosApp examples={EXAMPLE_QUERIES} /></main>
+      <main><ChronosApp examples={EXAMPLE_QUERIES} onRunChange={setHasRun} /></main>
     </div>
   );
 }

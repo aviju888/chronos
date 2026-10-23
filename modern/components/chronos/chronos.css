@@ -1,5 +1,22 @@
 /* Chronos-only motion. Prefixed so nothing collides with the shared kit. */
 
+.chronos-wordmark {
+  font-family: Cinzel, 'Times New Roman', serif;
+  font-size: clamp(2rem, 7vw, 3.75rem);
+  font-weight: 700;
+  font-feature-settings: normal;
+  line-height: 1.15;
+  letter-spacing: 0.18em;
+  text-indent: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+}
+
+@keyframes chronos-prompt-suggestion {
+  0%, 100% { opacity: 0; }
+  5%, 95% { opacity: 1; }
+}
+
 @keyframes chronos-tip-in {
   from {
     opacity: 0;

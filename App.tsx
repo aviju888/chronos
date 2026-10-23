@@ -14,7 +14,7 @@ import { ShareExport } from './components/ShareExport';
 import { generateTimeline, ProgressUpdate } from './services/apiService';
 import { loadTimelines, saveTimelines, deleteTimeline as deleteTimelineFromStorage } from './services/storageService';
 import { TimelineData, GenerationMode, HistoricalEvent } from './types';
-import { Layout, Map, List, BookOpen, MessageCircle, Menu, HelpCircle, Share2 } from 'lucide-react';
+import { Layout, Map, List, BookOpen, MessageCircle, Menu, HelpCircle, Share2, ArrowUpRight } from 'lucide-react';
 import { formatYearRange, parseHash, updateHash } from './utils';
 
 const App: React.FC = () => {
@@ -231,11 +231,15 @@ const App: React.FC = () => {
 
       {!activeData ? (
         <div className="flex-1 overflow-auto bg-grid-pattern dark:bg-night relative">
-             <a href="/" className="absolute top-3 left-4 z-20 inline-flex items-center min-h-[44px] text-sm text-sepia dark:text-paper underline underline-offset-4">Open new Chronos</a>
              <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] dark:bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-50 dark:opacity-20 pointer-events-none"></div>
              <div className="absolute inset-0 bg-gradient-to-b from-stone-100/50 to-stone-300/50 dark:from-night/50 dark:to-night-light/50 pointer-events-none"></div>
              
-             <div className="relative z-10 pt-10 px-4">
+             <div className="relative z-10 px-4 pb-8">
+                 <div className="mx-2 flex justify-end py-4 pr-12 md:mx-auto md:max-w-3xl md:pr-0">
+                   <a href="/" className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-gold/40 bg-paper/90 px-4 py-2 text-sm font-bold text-sepia shadow-sm transition-colors hover:border-gold hover:bg-gold/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold dark:bg-night-light dark:text-gold-light">
+                     Try the new Chronos <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                   </a>
+                 </div>
                  <SetupForm
                     onGenerate={handleGenerate}
                     isLoading={loading}
@@ -290,7 +294,7 @@ const App: React.FC = () => {
                 <span className="text-xs text-gold-dark dark:text-gold font-bold tracking-widest uppercase font-antique">
                     {formatYearRange(activeData.timeRange.start, activeData.timeRange.end)}
                 </span>
-                <a href="/" className="block text-xs text-sepia dark:text-paper underline underline-offset-2 py-1">Open new Chronos</a>
+                <a href="/" className="mt-1 inline-flex items-center gap-1 rounded-full border border-gold/40 px-2.5 py-1.5 text-xs font-bold text-sepia transition-colors hover:bg-gold/10 dark:text-gold-light">Try the new Chronos <ArrowUpRight className="h-3 w-3" aria-hidden="true" /></a>
               </div>
             </div>
 

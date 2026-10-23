@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import App from '../App';
 import { setPreferences } from '../lib/preferences';
-vi.mock('../components/chronos/ChronosApp', () => ({ ChronosApp: () => <h1>Owned interface fixture</h1> }));
+vi.mock('../components/chronos/ChronosApp', () => ({ ChronosApp: ({ onRunChange }: { onRunChange: (hasRun: boolean) => void }) => <><h1>Owned interface fixture</h1><button onClick={() => onRunChange(true)}>Start fixture</button></> }));
 vi.mock('../lib/sfx', () => ({ previewSfx: vi.fn() }));
 beforeEach(() => {
   vi.stubGlobal('matchMedia', () => ({ matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() }));
@@ -32,4 +32,11 @@ it('visiting modern leaves Classic keys untouched', () => {
   expect(localStorage.getItem('chronos-theme')).toBe('dark');
   expect(localStorage.getItem('chronos_archives')).toBe('owned-archives');
   expect(localStorage.getItem('chronos_chat_owned')).toBe('owned-chat');
+});
+
+it('shows the home link only after leaving the landing page', () => {
+  render(<App />);
+  expect(screen.queryByRole('link', { name: 'Chronos home' })).toBeNull();
+  fireEvent.click(screen.getByRole('button', { name: 'Start fixture' }));
+  expect(screen.getByRole('link', { name: 'Chronos home' }).getAttribute('href')).toBe('/');
 });

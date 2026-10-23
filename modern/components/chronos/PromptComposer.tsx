@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { ArrowUp, Square } from "@phosphor-icons/react";
 import type { Mode } from "@/modern/lib/chronos/types";
 import { cn } from "@/modern/lib/cn";
@@ -53,6 +53,7 @@ export function PromptComposer({
   tall = false,
   autoFocus = false,
   placeholder = "Type an era, a place or a topic",
+  suggestions,
 }: {
   value: string;
   onChange: (v: string) => void;
@@ -64,9 +65,32 @@ export function PromptComposer({
   tall?: boolean;
   autoFocus?: boolean;
   placeholder?: string;
+  suggestions?: readonly string[];
 }) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const canSend = value.trim().length > 0;
+  const hintId = useId();
+  const [focused, setFocused] = useState(false);
+  const [suggestionIndex, setSuggestionIndex] = useState(0);
+  const [reducedMotion, setReducedMotion] = useState(true);
+  const suggestion = suggestions?.[suggestionIndex % suggestions.length];
+  const showSuggestion = value.length === 0 && !running && Boolean(suggestion);
+
+  useEffect(() => {
+    const media = matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setReducedMotion(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+
+  useEffect(() => {
+    if (!showSuggestion || reducedMotion || !suggestions || suggestions.length < 2) return;
+    const timer = window.setInterval(() => {
+      if (!document.hidden) setSuggestionIndex((index) => (index + 1) % suggestions.length);
+    }, 4500);
+    return () => window.clearInterval(timer);
+  }, [showSuggestion, reducedMotion, suggestions]);
 
   // grow with the text, up to a compact maximum (same rule as the kit's composer)
   useLayoutEffect(() => {
@@ -112,31 +136,53 @@ export function PromptComposer({
       )}
     >
       <div className={cn("flex items-end gap-1.5", tall && "flex-col items-stretch gap-2")}>
-        <textarea
-          ref={inputRef}
-          rows={1}
-          value={value}
-          onChange={(e) => onChange(e.target.value.replace(/\n/g, " "))}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.nativeEvent.isComposing) {
-              e.preventDefault();
-              submit();
-            }
-          }}
-          placeholder={placeholder}
-          aria-label="Topic, place or period"
-          spellCheck={false}
-          className={cn(
-            "w-full min-w-0 resize-none bg-transparent text-ink outline-none [overflow-wrap:anywhere] placeholder:text-ink-3",
-            tall ? "px-1.5 py-1 text-[15px] leading-6" : "min-h-7 px-1.5 py-[5px] text-[13px] leading-[18px]",
+        <div className="relative min-w-0 flex-1 self-stretch text-left">
+          {showSuggestion && (
+            <span
+              key={suggestion}
+              aria-hidden="true"
+              data-prompt-suggestion
+              className={cn("pointer-events-none absolute inset-x-0 top-0 px-1.5 text-ink-3", tall ? "py-1 text-[15px] leading-6" : "py-[5px] text-[13px] leading-[18px]")}
+              style={!reducedMotion && suggestions && suggestions.length > 1 ? { animation: 'chronos-prompt-suggestion 4500ms ease-in-out infinite' } : undefined}
+            >{suggestion}</span>
           )}
-        />
+          <textarea
+            ref={inputRef}
+            rows={1}
+            value={value}
+            onChange={(e) => onChange(e.target.value.replace(/\n/g, " "))}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            onKeyDown={(e) => {
+              if (e.nativeEvent.isComposing) return;
+              if (e.key === "Tab" && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey && showSuggestion && suggestion) {
+                e.preventDefault();
+                onChange(suggestion);
+                return;
+              }
+              if (e.key === "Enter" && !e.nativeEvent.isComposing) {
+                e.preventDefault();
+                submit();
+              }
+            }}
+            placeholder={showSuggestion ? undefined : placeholder}
+            aria-label="Topic, place or period"
+            aria-describedby={showSuggestion ? hintId : undefined}
+            spellCheck={false}
+            className={cn(
+              "block w-full min-w-0 resize-none bg-transparent text-ink outline-none [overflow-wrap:anywhere] placeholder:text-ink-3",
+              tall ? "px-1.5 py-1 text-[15px] leading-6" : "min-h-7 px-1.5 py-[5px] text-[13px] leading-[18px]",
+            )}
+          />
+          {showSuggestion && <span id={hintId} className="sr-only">Suggested prompt: {suggestion}. Press Tab to use it, or type your own topic.</span>}
+        </div>
         <div className={cn("flex shrink-0 items-center gap-1.5", tall && "justify-between")}>
           <ModeToggle
             mode={mode}
             disabled={running}
             onChange={onModeChange}
           />
+          {tall && focused && showSuggestion && <span aria-hidden="true" className="ml-auto mr-2 hidden items-center gap-1.5 text-[11px] text-ink-3 sm:inline-flex"><kbd className="rounded border border-line px-1 py-0.5 font-sans">Tab</kbd> to use</span>}
           {sendButton}
         </div>
       </div>

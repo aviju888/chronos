@@ -11,7 +11,7 @@ export function SuggestionChips({
   onPick,
   disabled,
   className,
-  label = "Saved runs",
+  label = "Try",
   wrap = false,
 }: {
   examples: string[];

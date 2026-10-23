@@ -2,11 +2,13 @@
 
 The refreshed Chronos interface is the default at `/`. Classic remains a separate document at `/classic/` so the original archive, chat, map, generation and export workflow stays available. There is no saved mode preference or automatic preference redirect.
 
+The modern interface is not yet feature-complete relative to Classic. The user requested that useful Classic capabilities carry forward; see the [feature parity audit](chronos-feature-parity.md) for the pending persistence, export, chat, date and discovery work before release.
+
 ## Provenance and boundaries
 
 The migration started from `aviju888/chronos` main commit `3579f66e18d1ab231bad77693c55c90ce80c6698`, verified October 22, 2026, in an isolated clone. The original source checkout was kept read-only. Classic's HTML is preserved from that base, with the original root React entry, global styling, fonts and components. Minimal additions provide mode links and Classic export URLs; the existing hash-clear path now retains the query string. Classic theme and onboarding storage access tolerate denied browser storage while retaining session behavior.
 
-Modern adapts the user-owned Chronos component/domain source and three recorded fixtures from the avijuan-lab reference snapshot. Only the required craft helpers, tokens, effects and fonts were extracted. There is no runtime import, navigation, branding or asset dependency on the source project. That source snapshot had no Git metadata; do not assign it a fabricated commit. Exact inputs and SHA-256 hashes are in `licenses/modern-source-manifest.json`; the larger research inventory remains with the implementation evidence. See `licenses/README.md`, the included Beautiful UI MIT license and both bundled font OFL notices. Package dependencies and world-atlas retain upstream licenses.
+Modern adapts the user-owned Chronos component/domain source and three recorded fixtures from the avijuan-lab reference snapshot. Only the required craft helpers, tokens, effects and fonts were extracted. There is no runtime import, navigation, branding or asset dependency on the source project. That source snapshot had no Git metadata; do not assign it a fabricated commit. Exact inputs and SHA-256 hashes are in `licenses/modern-source-manifest.json`; the larger research inventory remains with the implementation evidence. See `licenses/README.md`, the included Beautiful UI MIT license and the bundled font OFL notices. Package dependencies and world-atlas retain upstream licenses.
 
 Modern server provider defaults preserve Chronos's current GPT OSS configuration: `openai/gpt-oss-20b` for fast operations and `openai/gpt-oss-120b` for deep operations, low reasoning effort, reasoning output disabled, and a 256-token reasoning allowance. They intentionally do not restore older model settings from the reference source. Classic's `/api/generate` implementation is unchanged from the migration base.
 

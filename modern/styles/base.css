@@ -1,6 +1,7 @@
 @font-face { font-family: Inter; src: url('/fonts/modern/InterVariable.woff2') format('woff2'); font-style: normal; font-weight: 100 900; font-display: swap; }
 @font-face { font-family: Inter; src: url('/fonts/modern/InterVariable-Italic.woff2') format('woff2'); font-style: italic; font-weight: 100 900; font-display: swap; }
 @font-face { font-family: 'JetBrains Mono'; src: url('/fonts/modern/JetBrainsMono-Regular.woff2') format('woff2'); font-style: normal; font-weight: 400; font-display: swap; }
+@font-face { font-family: Cinzel; src: url('/fonts/modern/Cinzel-Variable.ttf') format('truetype'); font-style: normal; font-weight: 400 900; font-display: swap; }
 :root { --font-inter: Inter; --font-mono-face: 'JetBrains Mono'; }
 /* ── Base ── */
 

@@ -5,6 +5,7 @@ import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowUpRight, CaretDown, Lightning } from "@phosphor-icons/react";
 import type { ChronosEvent, Mode, MergeIncoming } from "@/modern/lib/chronos/types";
 import { formatRange } from "@/modern/lib/chronos/time";
+import { PROMPT_SUGGESTIONS } from "@/modern/lib/chronos/examples";
 import { inBox, type GeoBox } from "@/modern/lib/chronos/mapview";
 import { RollingNumber } from "@/modern/components/craft/RollingNumber";
 import { ScrollFade } from "@/modern/components/craft/ScrollFade";
@@ -68,11 +69,11 @@ function Hero({
       </div>
       <div className="relative z-10 flex w-full max-w-[620px] flex-col items-center gap-5 text-center" style={{ animation: "fade-up 500ms cubic-bezier(0.23,1,0.32,1) both" }}>
         <div className="flex flex-col items-center gap-3">
-          <h1 className="text-[48px] leading-none font-semibold tracking-[-0.04em] text-ink sm:text-[64px]">Chronos</h1>
+          <h1 className="chronos-wordmark">Chronos</h1>
           <p className="text-[14px] leading-relaxed text-ink-2">Explore history through interactive timelines.</p>
         </div>
         <div className="w-full pt-1">
-          <PromptComposer value={draft} onChange={setDraft} onSubmit={onSubmit} mode={mode} onModeChange={setMode} tall autoFocus placeholder="Roman Empire 27 BCE - 476 CE" />
+          <PromptComposer value={draft} onChange={setDraft} onSubmit={onSubmit} mode={mode} onModeChange={setMode} tall autoFocus suggestions={PROMPT_SUGGESTIONS} />
         </div>
         <SuggestionChips examples={examples} onPick={onExample} wrap />
       </div>
@@ -178,9 +179,10 @@ const PipelineSection = memo(function PipelineSection({ state }: { state: Chrono
   );
 });
 
-export function ChronosApp({ examples, live }: { examples: string[]; live?: boolean }) {
+export function ChronosApp({ examples, live, onRunChange }: { examples: string[]; live?: boolean; onRunChange?: (hasRun: boolean) => void }) {
   const { state, run, stop } = useChronos();
   const [draft, setDraft] = useState("");
+  useEffect(() => { onRunChange?.(state.status !== "idle"); }, [state.status, onRunChange]);
 
   // sound (off unless the viewer turns it on): a soft tap as sources merge,
   // rate-limited so a burst of merges reads as texture, and a chord when done
@@ -292,7 +294,7 @@ export function ChronosApp({ examples, live }: { examples: string[]; live?: bool
         <div className="w-full shrink-0 md:max-w-[620px]">
           <PromptComposer value={draft} onChange={setDraft} onSubmit={(q) => start(q)} mode={mode} onModeChange={setMode} running={running} onStop={stop} />
         </div>
-        <SuggestionChips examples={examples} onPick={(q) => start(q, { replay: true, mode: "quick" })} disabled={running} className="md:ml-1" label="Saved" />
+        <SuggestionChips examples={examples} onPick={(q) => start(q, { replay: true, mode: "quick" })} disabled={running} className="md:ml-1" />
       </div>
 
       <div className="mt-6">
