@@ -40,6 +40,7 @@ it('keeps interrupted and failed research available for inspection', () => {
   const {rerender} = render(<PipelineSection state={running} onStop={onStop} />);
   fireEvent.click(screen.getByRole('button', {name:'Stop research'}));
   expect(onStop).toHaveBeenCalledOnce();
+  expect(screen.getByRole('button', {name:'Collapse research details'}).getAttribute('aria-expanded')).toBe('true');
   for (const state of [{...done,stopped:true},{...researched,status:'error' as const}]) {
     rerender(<PipelineSection state={state} onStop={onStop} />);
     expect(screen.getByRole('button', {name:'Collapse research details'})).toBeTruthy();

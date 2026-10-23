@@ -129,28 +129,27 @@ export const PipelineSection = memo(function PipelineSection({ state, onStop }: 
   const toggleLabel = open ? 'Collapse research details' : 'Expand research details';
   return (
     <section aria-label="Investigation progress" data-expanded={open} data-source-ready={hasDetails} data-compact={running && !hasDetails}
-      className="chronos-research mx-auto w-full rounded-[18px] border border-line bg-inset p-3 sm:p-4">
-      <div className={cn("flex min-h-11 items-center gap-2", running ? "justify-center" : "justify-start")}>
-        <PixelLoader label={progressLabel(state)} startedAt={state.startedAt} finishedAt={state.finishedAt} />
+      className="chronos-research mx-auto w-full rounded-[18px] border border-line bg-inset px-3 py-1.5 sm:px-4 sm:py-2">
+      <div className="flex items-start gap-1">
+        <button type="button" aria-label={toggleLabel} aria-expanded={open}
+          onClick={() => setManual({runId: state.runId, status: state.status, open: !open})}
+          className="press flex min-h-11 min-w-0 flex-1 items-center justify-between gap-2 rounded-control text-left hover:bg-hover">
+          <PixelLoader label={progressLabel(state)} startedAt={state.startedAt} finishedAt={state.finishedAt} />
+          <CaretDown size={16} className="mr-2 shrink-0 transition-transform duration-200" style={{transform: open ? 'rotate(180deg)' : 'none'}} />
+        </button>
         {running && <Tooltip content="Stop research"><button type="button" aria-label="Stop research" onClick={onStop} className={iconToolClass}><Square size={14} weight="fill" /></button></Tooltip>}
       </div>
       <div className="grid transition-[grid-template-rows,opacity] duration-250" inert={!open} aria-hidden={!open}
         style={{gridTemplateRows: open ? '1fr' : '0fr', opacity: open ? 1 : 0}}>
         <div className="min-h-0 overflow-hidden">
-          <p className="mb-2 min-h-5 text-center text-[12px] text-ink-3">{state.intent && <>{RANGE_FROM[state.intent.rangeFrom]}{state.intent.article && <> · <a href={state.intent.article.url} target="_blank" rel="noreferrer" className="underline">Wikipedia article</a></>}</>}</p>
-          <div className="chronos-research-grid">
+          <p className="mb-2 min-h-5 text-left text-[12px] text-ink-3">{state.intent && <>{RANGE_FROM[state.intent.rangeFrom]}{state.intent.article && <> · <a href={state.intent.article.url} target="_blank" rel="noreferrer" className="underline">Wikipedia article</a></>}</>}</p>
+          <div className="chronos-research-grid pb-2">
             <div className="min-w-0"><TaskList key={`tasks-${state.runId}`} tasks={state.tasks} live={state.intent?.live ?? null} active={running} /></div>
             <div className="chronos-research-traces min-w-0 overflow-hidden" inert={!hasDetails} aria-hidden={!hasDetails}>
               <div className="min-h-0 overflow-hidden">{hasDetails && <TraceLog key={state.runId} traces={state.traces} />}</div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="flex justify-center">
-        <Tooltip content={toggleLabel}><button type="button" aria-label={toggleLabel} aria-expanded={open}
-          onClick={() => setManual({runId: state.runId, status: state.status, open: !open})} className={iconToolClass}>
-          <CaretDown size={16} className="transition-transform duration-200" style={{transform: open ? 'rotate(180deg)' : 'none'}} />
-        </button></Tooltip>
       </div>
     </section>
   );
