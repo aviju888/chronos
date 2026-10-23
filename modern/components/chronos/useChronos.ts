@@ -190,15 +190,15 @@ export function useChronos() {
     dispatch({ type: "stop", at: Date.now() });
   }, []);
 
-  const run = useCallback(async (query: string, mode: Mode, { replay = false, range }: { replay?: boolean; range?: YearRange } = {}) => {
+  const run = useCallback(async (query: string, mode: Mode, { range }: { range?: YearRange } = {}) => {
     abortRef.current?.abort();
     const controller = new AbortController();
     abortRef.current = controller;
-    dispatch({ type: "start", query, mode, replay });
+    dispatch({ type: "start", query, mode, replay: false });
     try {
       await postSSE(
         "/api/chronos/stream",
-        { query, mode, replay, ...(range ? { range } : {}) },
+        { query, mode, ...(range ? { range } : {}) },
         (event, data) => {
           if (controller.signal.aborted) return;
           dispatch({ type: "frame", event, data, at: Date.now() });

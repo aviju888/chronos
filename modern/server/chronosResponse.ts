@@ -16,11 +16,13 @@ export async function createChronosResponse(req: Request): Promise<Response> {
     return Response.json({ error: 'Send a query, like “Silk Road” or “Roman Empire 27 BCE - 476 CE”.' }, { status: 400 });
   }
   const mode = body.mode === 'deep' ? 'deep' : 'quick';
-  const replay = body.replay === true;
+  if (body.replay === true) {
+    return Response.json({ error: 'Recorded runs are only available in local tests. Start a live investigation instead.' }, { status: 400 });
+  }
   if (body.range !== undefined) {
     const error = rangeError(body.range);
-    if (error || replay) return Response.json({ error: error ?? 'Saved examples use their recorded dates. Run live to choose dates.' }, { status: 400 });
+    if (error) return Response.json({ error }, { status: 400 });
   }
   const range = body.range as YearRange | undefined;
-  return sseResponse(req, (send, signal) => runChronos({ query, mode, replay, ...(range ? { range } : {}) }, send, signal));
+  return sseResponse(req, (send, signal) => runChronos({ query, mode, ...(range ? { range } : {}) }, send, signal, { live: true }));
 }

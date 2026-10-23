@@ -6,6 +6,7 @@ import type { ChronosEvent, MergeIncoming } from "@/modern/lib/chronos/types";
 import { formatYear } from "@/modern/lib/chronos/time";
 import { cn } from "@/modern/lib/cn";
 import { SOURCE_NAME, SourceDots, SourceGlyph } from "./sources";
+import { EventDetail } from "./EventDetail";
 import { CategoryGlyph } from "./CategoryGlyph";
 
 /* ─────────────────────────────────────────────────────────
@@ -50,6 +51,9 @@ export type EventCardProps = {
   /** playback: the event the cursor passed most recently */
   current: boolean;
   selected: boolean;
+  expanded?: boolean;
+  animatePosition?: boolean;
+  onCloseDetail?: () => void;
   /** changes whenever a citation points here, to replay the flash */
   flashKey?: number;
   /** the latest merge into this event, if it just happened */
@@ -63,9 +67,10 @@ export type EventCardProps = {
   onHover?: (id: string | null) => void;
 };
 
-function EventCardImpl({ event, live, lit, current, selected, flashKey, merge, linked = false, revealKey, onSelect, onHover }: EventCardProps) {
+function EventCardImpl({ event, live, lit, current, selected, expanded = false, animatePosition = true, onCloseDetail, flashKey, merge, linked = false, revealKey, onSelect, onHover }: EventCardProps) {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const [ghosts, setGhosts] = useState<Ghost[]>([]);
   const [beat, setBeat] = useState(0);
   // the first merge seen at mount already happened; only new ones animate
@@ -79,7 +84,7 @@ function EventCardImpl({ event, live, lit, current, selected, flashKey, merge, l
   }
 
   useEffect(() => {
-    if (flashKey && ref.current) reveal(ref.current, "center", !reduce, true);
+    if (flashKey && ref.current) reveal(ref.current.querySelector("button") ?? ref.current, "center", !reduce, true);
   }, [flashKey, reduce]);
 
   useEffect(() => {
@@ -87,7 +92,7 @@ function EventCardImpl({ event, live, lit, current, selected, flashKey, merge, l
   }, [current, reduce]);
 
   useEffect(() => {
-    if (revealKey && ref.current) reveal(ref.current, "nearest", !reduce, false);
+    if (revealKey && ref.current) reveal(ref.current.querySelector("button") ?? ref.current, "nearest", !reduce, true);
   }, [revealKey, reduce]);
 
   const inferred = event.confidence === "inferred";
@@ -95,8 +100,8 @@ function EventCardImpl({ event, live, lit, current, selected, flashKey, merge, l
   return (
     <motion.div
       ref={ref}
-      layout="position"
-      transition={{ layout: { duration: 0.32, ease: EASE } }}
+      layout={animatePosition ? "position" : false}
+      transition={{ layout: { duration: reduce ? 0 : 0.22, ease: EASE } }}
       initial={reduce ? false : { opacity: 0, y: 6, scale: 0.97 }}
       animate={{ opacity: lit ? 1 : 0.42, y: 0, scale: 1 }}
       className="relative"
@@ -131,8 +136,11 @@ function EventCardImpl({ event, live, lit, current, selected, flashKey, merge, l
       </AnimatePresence>
 
       <motion.button
+        ref={triggerRef}
         type="button"
-        onClick={() => onSelect(event.id)}
+        onClick={() => expanded ? onCloseDetail?.() : onSelect(event.id)}
+        aria-expanded={expanded}
+        aria-controls={expanded ? `event-detail-${event.id}` : undefined}
         onPointerEnter={onHover ? () => onHover(event.id) : undefined}
         onPointerLeave={onHover ? () => onHover(null) : undefined}
         onFocus={onHover ? () => onHover(event.id) : undefined}
@@ -143,7 +151,7 @@ function EventCardImpl({ event, live, lit, current, selected, flashKey, merge, l
         data-linked={linked || undefined}
         className={cn(
           // hover is instant: no fades on highlights
-          "group relative z-10 flex w-full items-start gap-2.5 rounded-[12px] p-2 text-left",
+          "group relative z-10 flex w-full scroll-mt-28 scroll-mb-4 items-start gap-2.5 rounded-[12px] p-2 text-left",
           inferred ? "border border-dashed border-line-strong bg-surface/60 hover:bg-hover" : "bg-surface shadow-card hover:bg-inset",
           linked && (inferred ? "bg-hover" : "bg-inset"),
         )}
@@ -190,6 +198,10 @@ function EventCardImpl({ event, live, lit, current, selected, flashKey, merge, l
           )}
         </span>
       </motion.button>
+      {expanded && onCloseDetail && <motion.div initial={reduce ? false : {height: 0, opacity: 0}}
+        animate={{height: 'auto', opacity: 1}} transition={{duration: reduce ? 0 : 0.22, ease: EASE}} className="overflow-hidden">
+        <EventDetail event={event} live={live} onClose={onCloseDetail} returnFocusRef={triggerRef} />
+      </motion.div>}
     </motion.div>
   );
 }

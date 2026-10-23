@@ -2,6 +2,7 @@
 
 import "./chronos.css";
 import { memo, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, CaretDown, Lightning } from "@phosphor-icons/react";
 import type { ChronosEvent, Mode, MergeIncoming, YearRange } from "@/modern/lib/chronos/types";
 import { formatRange } from "@/modern/lib/chronos/time";
@@ -21,7 +22,6 @@ import { InvestigationMap } from './InvestigationMap';
 import { TimeScrubber } from "./TimeScrubber";
 import { EventList } from "./EventList";
 import { Narrative } from "./Narrative";
-import { EventDetail } from "./EventDetail";
 import { ArchivesButton, DiscoveryControls, ExportButton, toolClass, type DateDraft } from './InvestigationTools';
 import { rangeError, relatedTopics, createSurprisePicker, surpriseQuery } from '@/modern/lib/chronos/discovery';
 import { saveArchive, snapshot, type Archive } from '@/modern/lib/chronos/archives';
@@ -33,8 +33,7 @@ import { progressLabel } from '@/modern/lib/chronos/progress';
  *   idle      hero composer over a dot-matrix world
  *   running   pipeline panel prominent; map, scrubber and the
  *             event list fill in as frames arrive
- *   done      map + scrubber take the stage, pipeline folds
- *             into a one-line summary, narrative below
+ *   done      the same scaffold settles; sources stay open
  * ───────────────────────────────────────────────────────── */
 
 const RANGE_FROM: Record<string, string> = {
@@ -71,7 +70,7 @@ function Hero({
       >
         <DotMap events={[]} cursorYear={null} loading />
       </div>
-      <div className="relative z-10 flex w-full max-w-[620px] flex-col items-center gap-5 text-center" style={{ animation: "fade-up 500ms cubic-bezier(0.23,1,0.32,1) both" }}>
+      <div className="relative z-10 flex w-full max-w-[620px] flex-col items-center gap-5 text-center">
         <div className="flex flex-col items-center gap-3">
           <h1><ChronosWordmark /></h1>
           <p className="text-[14px] leading-relaxed text-ink-2">Explore history through interactive timelines.</p>
@@ -89,10 +88,10 @@ const RunHeader = memo(function RunHeader({ state, events, onLive }: { state: Ch
   const { intent, status } = state;
   const running = status === "running";
   return (
-    <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3" style={{ animation: "fade-in 300ms ease-out both" }}>
+    <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
       <div className="min-w-0">
         <h1 className="mt-1 break-words text-[24px] leading-tight font-semibold tracking-[-0.02em] text-ink sm:text-[28px]">{intent?.topic ?? state.query}</h1>
-        <div className={cn("mt-1 flex flex-wrap items-center gap-x-2 text-[13px] text-ink-2", status === "error" && !intent && "hidden")}>
+        <div className={cn("mt-1 flex min-h-5 flex-wrap items-center gap-x-2 text-[13px] text-ink-2", status === "error" && !intent && "hidden")}>
           {intent && <span className="num">{formatRange(intent.range.start, intent.range.end)}</span>}
           {intent && <span className="text-ink-3">·</span>}
           <span className="inline-flex items-baseline gap-1">
@@ -102,14 +101,13 @@ const RunHeader = memo(function RunHeader({ state, events, onLive }: { state: Ch
         </div>
       </div>
       <div className="flex flex-col items-start gap-2 sm:items-end">
-        {!running && <PixelLoader label={progressLabel(state)} startedAt={state.startedAt} finishedAt={state.finishedAt} />}
         {state.notices.map((notice) => (
           <span key={notice.kind} role="status" className="inline-flex max-w-full items-center gap-1.5 rounded-card bg-accent-tint py-1 pr-1 pl-2.5 text-[11.5px] text-accent-ink" style={{ animation: "pop-in 220ms cubic-bezier(0.23,1,0.32,1) both" }}>
             <Lightning size={11} weight="fill" />
             <span className="max-w-[52ch] text-pretty">{notice.text}</span>
             {!running && (
               <button type="button" onClick={onLive} className="press min-h-11 shrink-0 rounded-full bg-surface px-2 py-0.5 font-medium text-ink shadow-btn hover:bg-hover sm:min-h-0">
-                Run live
+                Try again
               </button>
             )}
           </span>
@@ -119,28 +117,39 @@ const RunHeader = memo(function RunHeader({ state, events, onLive }: { state: Ch
   );
 });
 
-const PipelineSection = memo(function PipelineSection({ state, onStop }: { state: ChronosState; onStop: () => void }) {
+export const PipelineSection = memo(function PipelineSection({ state, onStop }: { state: ChronosState; onStop: () => void }) {
   const running = state.status === "running";
   const [manual, setManual] = useState<{ runId: number; open: boolean } | null>(null);
-  const open = running || (manual?.runId === state.runId && manual.open);
+  const open = manual?.runId === state.runId ? manual.open : true;
   return (
-    <section aria-label="Investigation progress" className={cn("rounded-[18px]", running && "border border-line bg-inset p-4 sm:p-5")}>
-      <div className="flex items-center justify-between gap-2">
-        {running ? <PixelLoader label={progressLabel(state)} startedAt={state.startedAt} finishedAt={state.finishedAt} /> :
-          <button type="button" aria-expanded={open} onClick={() => setManual({runId: state.runId, open: !open})} className={toolClass}>Sources & process <CaretDown size={13} style={{transform: open ? 'rotate(180deg)' : 'none'}} /></button>}
-        {running && <button type="button" onClick={onStop} className={`${toolClass} -mr-2`}>Stop</button>}
+    <section aria-label="Investigation progress" className="rounded-[18px] border border-line bg-inset p-3 sm:p-4">
+      <div className="flex flex-wrap items-center justify-between gap-x-2">
+        <PixelLoader label={progressLabel(state)} startedAt={state.startedAt} finishedAt={state.finishedAt} />
+        <div className="flex items-center gap-1">
+          <button type="button" aria-expanded={open} onClick={() => setManual({runId: state.runId, open: !open})} className={toolClass}>
+            Sources & process <CaretDown size={13} className="transition-transform duration-200" style={{transform: open ? 'rotate(180deg)' : 'none'}} />
+          </button>
+          <button type="button" onClick={onStop} disabled={!running} aria-hidden={!running} tabIndex={running ? 0 : -1}
+            className={`${toolClass} -mr-2 transition-opacity duration-150 ${running ? 'opacity-100' : 'invisible opacity-0'}`}>Stop</button>
+        </div>
       </div>
-      {open && <div className="mt-3 flex flex-col gap-2">
-        {state.intent && <p className="mb-1 text-[12px] text-ink-3">{RANGE_FROM[state.intent.rangeFrom]}{state.intent.article && <> · <a href={state.intent.article.url} target="_blank" rel="noreferrer" className="underline">Wikipedia article</a></>}</p>}
-        <TaskList tasks={state.tasks} live={state.intent?.live ?? null} active={running} />
-        <TraceLog key={state.runId} traces={state.traces} running={running} />
-      </div>}
+      <div className="grid transition-[grid-template-rows,opacity] duration-200" inert={!open}
+        style={{gridTemplateRows: open ? '1fr' : '0fr', opacity: open ? 1 : 0}}>
+        <div className="overflow-hidden">
+          <p className="mb-2 min-h-5 text-[12px] text-ink-3">{state.intent && <>{RANGE_FROM[state.intent.rangeFrom]}{state.intent.article && <> · <a href={state.intent.article.url} target="_blank" rel="noreferrer" className="underline">Wikipedia article</a></>}</>}</p>
+          <div className="grid gap-3 md:grid-cols-2 md:gap-6">
+            <TaskList key={`tasks-${state.runId}`} tasks={state.tasks} live={state.intent?.live ?? null} active={running} />
+            <TraceLog key={state.runId} traces={state.traces} running={running} />
+          </div>
+        </div>
+      </div>
     </section>
   );
 });
 
 export function ChronosApp({ live, onRunChange }: { live?: boolean; onRunChange?: (hasRun: boolean) => void }) {
   const { state, run, stop, restore, reset } = useChronos();
+  const reduceMotion = useReducedMotion();
   const [dates, setDates] = useState<DateDraft>({start: '', end: ''});
   const [dateError, setDateError] = useState<string | null>(null);
   const [runRange, setRunRange] = useState<YearRange | undefined>();
@@ -211,15 +220,14 @@ export function ChronosApp({ live, onRunChange }: { live?: boolean; onRunChange?
   }, [state.merges]);
 
   const start = useCallback(
-    (q: string, opts: { replay?: boolean; mode?: Mode; range?: YearRange; useDates?: boolean } = {}) => {
+    (q: string, opts: { mode?: Mode; range?: YearRange; useDates?: boolean } = {}) => {
       let selected = opts.range;
-      if (!opts.replay && opts.useDates !== false && (dates.start || dates.end)) {
+      if (opts.useDates !== false && (dates.start || dates.end)) {
         selected = {start: Number(dates.start), end: Number(dates.end)};
         const error = rangeError(selected);
         if (error) { setDateError(error); return; }
       }
       setDateError(null);
-      if (opts.replay) setDates({start: '', end: ''});
       setRunRange(selected);
       setSaveMessage(null);
       setSaveFailed(false);
@@ -232,8 +240,8 @@ export function ChronosApp({ live, onRunChange }: { live?: boolean; onRunChange?
       setHover(null);
       setArea(null);
       setReveal(null);
-      run(q, opts.mode ?? mode, { replay: opts.replay, range: selected });
-      if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+      run(q, opts.mode ?? mode, { range: selected });
+      if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "instant" });
     },
     [run, mode, dates, stopPlayback],
   );
@@ -246,6 +254,8 @@ export function ChronosApp({ live, onRunChange }: { live?: boolean; onRunChange?
       setFocusId(target);
       setFlash({ id: target, key: Date.now() });
       setDetailId(target);
+      setArea(null); setView("events");
+      setReveal({id: target, key: Date.now()});
     },
     [state.events, state.alias, stopPlayback],
   );
@@ -255,11 +265,13 @@ export function ChronosApp({ live, onRunChange }: { live?: boolean; onRunChange?
       stopPlayback();
       setFocusId(id);
       setDetailId(id);
+      setArea(null); setView("events");
+      setReveal({id, key: Date.now()});
     },
     [stopPlayback],
   );
 
-  const runLive = useCallback(() => start(state.query, { replay: false, mode: state.mode, range: runRange, useDates: false }), [start, state.query, state.mode, runRange]);
+  const runLive = useCallback(() => start(state.query, { mode: state.mode, range: runRange, useDates: false }), [start, state.query, state.mode, runRange]);
   const closeDetail = useCallback(() => setDetailId(null), []);
 
   const onListHover = useCallback((id: string | null) => setHover(id ? { ids: [id], from: "list" } : null), []);
@@ -287,7 +299,6 @@ export function ChronosApp({ live, onRunChange }: { live?: boolean; onRunChange?
     stopPlayback(); reset();
     setDraft(q); setDates(range ? {start: String(range.start), end: String(range.end)} : {start: '', end: ''}); setDateError(null);
     window.scrollTo({top: 0});
-    requestAnimationFrame(() => document.querySelector<HTMLTextAreaElement>('textarea[aria-label="Topic, place or period"]')?.focus({preventScroll: true}));
   };
   const discovery = <DiscoveryControls dates={dates} onDates={value => {setDates(value); setDateError(null);}}
     error={dateError} onSurprise={() => {
@@ -297,26 +308,26 @@ export function ChronosApp({ live, onRunChange }: { live?: boolean; onRunChange?
     <ArchivesButton onRestore={restoreArchive} />
   </DiscoveryControls>;
 
-  if (state.status === "idle") {
-    return <Hero draft={draft} setDraft={setDraft} mode={mode} setMode={setMode}
-      onSubmit={(q) => start(q)}>
-      {discovery}
-    </Hero>;
-  }
-
   const cursorForViews = playback.cursor === null ? null : Math.floor(playback.cursor);
   const related = relatedTopics(state.intent?.topic ?? state.query, events);
 
   return (
+    <AnimatePresence initial={false} mode="wait">
+      <motion.div key={state.status === 'idle' ? 'search' : 'investigation'}
+        initial={{opacity: 0, transform: reduceMotion ? 'none' : 'translateY(6px)'}}
+        animate={{opacity: 1, transform: 'none'}}
+        exit={{opacity: 0, transition: {duration: reduceMotion ? 0 : 0.1}}}
+        transition={{duration: reduceMotion ? 0 : 0.22, ease: [0.23, 1, 0.32, 1]}}>
+      {state.status === 'idle' ? <Hero draft={draft} setDraft={setDraft} mode={mode} setMode={setMode} onSubmit={q => start(q)}>{discovery}</Hero> :
     <div className="mx-auto w-full max-w-[1440px] px-4 pt-4 pb-12 sm:px-6">
-      {!running && <div className="mb-4 flex flex-wrap items-center gap-1">
+      <div className="mb-4 flex min-h-11 flex-wrap items-center gap-1">
         <button type="button" className={toolClass} onClick={() => prepareTopic('')}>New search</button>
         <ArchivesButton onRestore={restoreArchive} />
-        {events.length > 0 && <ExportButton archive={archive} />}
+        <span className={running || !events.length ? "invisible" : "chronos-enter"} inert={running || !events.length}><ExportButton archive={archive} /></span>
         {saveMessage && <span role="status" className={cn('px-2 text-[12px] sm:ml-auto', saveFailed ? 'text-red' : 'text-ink-3')}>{saveMessage}
           {saveFailed && <button type="button" className={toolClass} onClick={saveCurrent}>Try saving again</button>}
         </span>}
-      </div>}
+      </div>
       <RunHeader state={state} events={events} onLive={runLive} />
 
       {state.status === 'error' && <div role="alert" className="mt-4 rounded-card bg-red-tint px-4 py-3 text-[13px] text-red">
@@ -324,11 +335,11 @@ export function ChronosApp({ live, onRunChange }: { live?: boolean; onRunChange?
         <button type="button" className={toolClass} onClick={runLive}>Try again</button>
       </div>}
 
-      <div className={cn('mt-4', running && !events.length && 'mx-auto max-w-[680px]')}>
+      <div className="mt-4">
         <PipelineSection state={state} onStop={stop} />
       </div>
 
-      {events.length > 0 ? <>
+      {events.length > 0 ? <div className="chronos-enter">
         <nav ref={sectionNav} aria-label="Timeline sections" className="scroll-mt-12 sticky top-12 z-20 -mx-4 mt-4 flex gap-1 border-b border-line bg-page/95 px-4 backdrop-blur-sm sm:-mx-6 sm:px-6 lg:hidden">
           {['map', 'events', 'story'].map(id => <button key={id} type="button" aria-controls={`chronos-${id}`} aria-pressed={view === id}
             onClick={() => {switchView(id); if(id !== 'map') stopPlayback();}}
@@ -356,15 +367,16 @@ export function ChronosApp({ live, onRunChange }: { live?: boolean; onRunChange?
           </div>
           <ScrollFade id="chronos-events" axis="y" className="chronos-events-panel min-w-0 lg:sticky lg:top-[60px] lg:max-h-[calc(100dvh-72px)] lg:self-start lg:-mx-2 lg:px-2 lg:pb-2" fade={32}>
             <EventList events={filtered} live={isLive} cursor={cursorForViews} selectedId={focusId} flash={flash} merges={merges}
-              running={running} onSelect={onSelect} linkedIds={hover?.from === 'map' ? hover.ids : null} onHover={onListHover} reveal={reveal} areaFilter={areaFilter} />
+              running={running} onSelect={onSelect} detailId={detailId} onCloseDetail={closeDetail} linkedIds={hover?.from === 'map' ? hover.ids : null} onHover={onListHover} reveal={reveal} areaFilter={areaFilter} />
           </ScrollFade>
         </div>
         {!running && related.length > 0 && <section className="mt-8 border-t border-line pt-4">
           <h2 className="mb-2 text-[13px] font-semibold text-ink-2">Keep exploring</h2>
-          <div className="flex flex-wrap gap-2">{related.map(q => <button type="button" key={q} onClick={() => prepareTopic(q)} className={`${toolClass} max-w-full border border-line bg-surface text-left`}>{q}<ArrowUpRight className="shrink-0" size={13} /></button>)}</div>
+          <div className="flex flex-wrap gap-2">{related.map(q => <button type="button" key={q.id} onClick={() => prepareTopic(surpriseQuery(q), q.range)} className={`${toolClass} max-w-full border border-line bg-surface text-left`}>{q.topic}<ArrowUpRight className="shrink-0" size={13} /></button>)}</div>
         </section>}
-      </> : !running && state.status !== 'error' && <p className="py-10 text-center text-[14px] text-ink-2">{state.stopped ? 'Stopped before any events arrived.' : 'No events were found. Try another topic or a wider date range.'}</p>}
-      <EventDetail event={detailId ? state.events[detailId] ?? null : null} live={isLive} onClose={closeDetail} />
-    </div>
+      </div> : !running && state.status !== 'error' && <p className="py-10 text-center text-[14px] text-ink-2">{state.stopped ? 'Stopped before any events arrived.' : 'No events were found. Try another topic or a wider date range.'}</p>}
+    </div>}
+      </motion.div>
+    </AnimatePresence>
   );
 }

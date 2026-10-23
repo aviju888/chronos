@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { EventDetail } from '../EventDetail';
@@ -21,38 +21,37 @@ afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 const event = (FIXTURES[0].frames.find(f => f.event === 'event')!.data as {event: ChronosEvent}).event;
 function Harness() {
   const [open, setOpen] = useState(false);
-  return <><button onClick={() => setOpen(true)}>Open event</button><EventDetail event={open ? event : null} live={false} onClose={() => setOpen(false)} /></>;
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  return <><button ref={triggerRef} onClick={() => setOpen(true)}>Open event</button><EventDetail event={open ? event : null} live={false} onClose={() => setOpen(false)} returnFocusRef={triggerRef} /></>;
 }
-it.each(['Escape', 'Close'])('restores the connected event trigger after %s', dismissal => {
+it.each(['Escape', 'Close'])('returns focus to the connected trigger after %s', dismissal => {
   render(<Harness />);
   const trigger = screen.getByRole('button', {name: 'Open event'});
   trigger.focus(); fireEvent.click(trigger);
-  const close = screen.getByRole('button', {name: 'Close'});
+  const close = screen.getByRole('button', {name: 'Close event details'});
   expect(document.activeElement).toBe(close);
-  if (dismissal === 'Escape') fireEvent.keyDown(window, {key: 'Escape'});
+  if (dismissal === 'Escape') fireEvent.keyDown(close, {key: 'Escape'});
   else fireEvent.click(close);
   expect(document.activeElement).toBe(trigger);
 });
 
-it('contains mobile dialog focus and restores page scrolling after closing', () => {
+it('keeps mobile evidence in the document without covering or locking the page', () => {
   vi.stubGlobal('matchMedia', () => ({matches: true, addEventListener: vi.fn(), removeEventListener: vi.fn()}));
   document.body.style.overflow = 'auto';
-  document.documentElement.style.overflow = '';
   render(<Harness />);
-  const trigger = screen.getByRole('button', {name: 'Open event'});
-  trigger.focus(); fireEvent.click(trigger);
-  expect(screen.getByRole('dialog').getAttribute('aria-modal')).toBe('true');
-  expect(document.body.style.overflow).toBe('hidden');
-  expect(document.documentElement.style.overflow).toBe('hidden');
-  const close = screen.getByRole('button', {name: 'Close'});
-  const links = screen.getAllByRole('link');
-  fireEvent.keyDown(window, {key: 'Tab', shiftKey: true});
-  expect(document.activeElement).toBe(links.at(-1));
-  fireEvent.keyDown(window, {key: 'Tab'});
-  expect(document.activeElement).toBe(close);
-  fireEvent.click(close);
+  fireEvent.click(screen.getByRole('button', {name: 'Open event'}));
+  expect(screen.queryByRole('dialog')).toBeNull();
+  const region = screen.getByRole('region', {name: `Sources for ${event.title}`});
+  expect(region.className).not.toMatch(/fixed|absolute/);
   expect(document.body.style.overflow).toBe('auto');
-  expect(document.documentElement.style.overflow).toBe('');
-  expect(document.activeElement).toBe(trigger);
+  expect(screen.getAllByRole('link').length).toBeGreaterThan(0);
   document.body.style.overflow = '';
+});
+
+it('returns to the event trigger after a Safari-style tap that did not focus it', () => {
+  render(<Harness />);
+  const trigger = screen.getByRole('button', {name:'Open event'});
+  fireEvent.click(trigger);
+  fireEvent.click(screen.getByRole('button', {name:'Close event details'}));
+  expect(document.activeElement).toBe(trigger);
 });

@@ -67,7 +67,6 @@ function NarrativeImpl({
   events,
   alias,
   intent,
-  source = null,
   onCite,
   emphasis = null,
 }: {
@@ -104,9 +103,6 @@ function NarrativeImpl({
     <section aria-label="Narrative" className="w-full">
       <div className="mb-2 flex items-center gap-2">
         <h2 className="text-[13px] font-semibold tracking-[-0.01em] text-ink">Narrative</h2>
-        <span className="text-[11.5px] text-ink-3">
-          {(source ?? (intent?.live ? "model" : "composed")) === "model" ? "Written by the model, cited against the events" : "Composed from the Wikipedia lead and the dated sentences behind the events"}
-        </span>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-[minmax(0,68ch)_minmax(200px,1fr)]">

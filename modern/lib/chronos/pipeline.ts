@@ -16,7 +16,6 @@
  * ───────────────────────────────────────────────────────── */
 
 import type { SSESend } from "../sse.js";
-import { hasLLM } from "../llm.js";
 import { scriptedStream, sleep } from "../scripted.js";
 import type {
   ChronosEvent,
@@ -64,15 +63,15 @@ import { llmEras, llmNarrative, llmRange, llmSeedEvents } from "./llm.js";
 import { HttpError } from "./http.js";
 import { findFixture, replayFixture } from "./fixtures.js";
 
-export type RunInput = { query: string; mode: Mode; replay?: boolean; range?: YearRange };
+export type RunInput = { query: string; mode: Mode; range?: YearRange };
 export type RunOptions = {
-  /** force live (Groq) or demo; defaults to whether GROQ_API_KEY is set */
+  /** Live by default; false is reserved for isolated local tests. */
   live?: boolean;
   now?: number;
   /** pace frames for the assembling effect (off for tests) */
   pace?: boolean;
-  /** replay a saved run when the network fails */
-  fixtureFallback?: boolean;
+  /** Explicit offline recording for local tests; never supplied by the HTTP handler. */
+  replay?: boolean;
 };
 
 const LIMITS: Record<Mode, { linked: number; links: number; details: number; claims: number; narrative: number }> = {
@@ -290,15 +289,15 @@ function resolveRange(
 export async function runChronos(input: RunInput, send: SSESend, signal: AbortSignal, opts: RunOptions = {}): Promise<void> {
   if (signal.aborted) return;
   const now = opts.now ?? new Date().getFullYear();
-  const live = opts.live ?? hasLLM();
+  const live = opts.live ?? true;
   const pace = opts.pace ?? true;
   const mode: Mode = input.mode === "deep" ? "deep" : "quick";
   const L = LIMITS[mode];
   const started = Date.now();
 
-  if (input.replay) {
+  if (opts.replay) {
     const fx = findFixture(input.query);
-    if (!fx) throw new Error(`No usable saved run is available for “${input.query}”. Choose a saved example or turn off replay to run live.`);
+    if (!fx) throw new Error(`No usable saved run is available for “${input.query}”.`);
     return replayFixture(fx, send, signal, { pace });
   }
 
@@ -316,15 +315,6 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
     out.trace({ source, kind: "note", text: `${label}: ${errorText(err)}.` });
   };
 
-  const fallback = async (reason: string): Promise<boolean> => {
-    if (opts.fixtureFallback === false || input.range) return false;
-    const fx = findFixture(input.query);
-    if (!fx) return false;
-    await out.flush();
-    send("notice", { kind: "fallback", text: `${reason} Showing a saved run instead.` });
-    await replayFixture(fx, send, signal, { notice: false, pace });
-    return true;
-  };
 
   out.trace({ source: "intent", kind: "note", text: `Reading “${parsed.raw}”: topic “${parsed.topic}”${parsed.range ? `, ${formatRange(parsed.range.start, parsed.range.end)}` : ""}` });
 
@@ -335,11 +325,9 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
     resolved = await resolveTitle(parsed.topic, signal);
   } catch (err) {
     if (signal.aborted) return;
-    if (await fallback(`Wikipedia is unreachable (${errorText(err)}).`)) return;
-    throw new Error(`Couldn't reach Wikipedia (${errorText(err)}). Try again in a moment, or pick a saved example.`);
+    throw new Error(`Couldn't reach Wikipedia (${errorText(err)}). Try again in a moment.`);
   }
   if (!resolved) {
-    if (await fallback(`No Wikipedia article matches “${parsed.topic}”.`)) return;
     throw new Error(`No Wikipedia article matches “${parsed.topic}”. Check the spelling or try a broader topic.`);
   }
 
@@ -741,7 +729,6 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
   const events = engine.list();
   if (events.length === 0) {
     await out.flush();
-    if (await fallback(`No dated events came back for “${resolved.title}”.`)) return;
     throw new Error(`No dated events found for “${resolved.title}” between ${formatRange(range.start, range.end)}. Try a wider range.`);
   }
 

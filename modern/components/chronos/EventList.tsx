@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { LayoutGroup } from "motion/react";
 import { Selection } from "@phosphor-icons/react";
 import type { ChronosEvent, MergeIncoming } from "@/modern/lib/chronos/types";
@@ -83,6 +83,8 @@ export function EventList({
   live,
   cursor,
   selectedId,
+  detailId,
+  onCloseDetail,
   flash,
   merges,
   running,
@@ -97,6 +99,8 @@ export function EventList({
   live: boolean | null;
   cursor: number | null;
   selectedId: string | null;
+  detailId: string | null;
+  onCloseDetail: () => void;
   flash: { id: string; key: number } | null;
   merges: Record<string, { key: string; incoming: MergeIncoming[] }>;
   running: boolean;
@@ -117,6 +121,9 @@ export function EventList({
       events.filter((e) => (filter === "agreed" ? e.sources.length >= 2 : filter === "single" ? e.sources.length === 1 : true)),
     [events, filter],
   );
+  useEffect(() => {
+    if (detailId) setFilter("all");
+  }, [detailId]);
   const litYear = cursor === null ? null : Math.floor(cursor);
   const currentId = useMemo(() => {
     if (litYear === null) return null;
@@ -168,6 +175,9 @@ export function EventList({
                 lit={litYear === null || e.year <= litYear}
                 current={e.id === currentId}
                 selected={e.id === selectedId}
+                expanded={e.id === detailId}
+                animatePosition={!detailId}
+                onCloseDetail={onCloseDetail}
                 flashKey={flash?.id === e.id ? flash.key : undefined}
                 merge={merges[e.id]}
                 linked={linked.has(e.id)}
