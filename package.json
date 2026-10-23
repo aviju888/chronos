@@ -6,10 +6,11 @@
   "scripts": {
     "dev": "vite",
     "dev:full": "vercel dev --listen 3000",
-    "build": "vite build",
+    "build": "npm run test:server-runtime && vite build",
     "typecheck": "tsc --noEmit",
+    "test:server-runtime": "node scripts/check-server-runtime.mjs",
     "preview": "vite preview",
-    "vercel-build": "vite build",
+    "vercel-build": "npm run build",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"

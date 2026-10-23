@@ -45,3 +45,9 @@ The resumable `scripts/evaluate-surprise.ts` audit uses no model credentials, ru
 - Public deployment verification is recorded after release. Browser emulation does not establish physical-device acceptance.
 
 Rollback baseline: main `e2d2487e912823fb8a4e33a35d5c5593d54b461b`, deployment `dpl_AgXNR5YtQyfP2JdGrNvtetNgvkCq`.
+
+### Release repair
+
+The first PR #13 production deployment passed the frontend build but failed the public API smoke check. The date validator imported discovery code that now had catalog JSON and an extensionless runtime import. Native Node ESM could not load that graph, returning 500 before request validation. Production was rolled back to the baseline; invalid-date requests returned 400 again.
+
+The repair separates the pure date validator from discovery, uses explicit ESM imports, and adds `npm run test:server-runtime` to every production build. This compiles without bundling, imports the actual API entry in native Node, and verifies method/input validation and a complete recorded SSE replay without external requests. It specifically covers the failure that frontend bundling and Vitest previously hid.
