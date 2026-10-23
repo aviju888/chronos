@@ -1,7 +1,7 @@
 import { sseResponse } from '../lib/sse.js';
 import { runChronos } from '../lib/chronos/pipeline.js';
 import { sanitizeString } from '../lib/chronos/query.js';
-import { rangeError } from '../lib/chronos/discovery.js';
+import { rangeError } from '../lib/chronos/dateRange.js';
 import type { YearRange } from '../lib/chronos/types.js';
 
 /** Standard Request/Response boundary, shared by Vercel and focused tests. */

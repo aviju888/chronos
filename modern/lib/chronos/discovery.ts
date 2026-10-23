@@ -1,16 +1,8 @@
-import type { ChronosEvent, YearRange } from './types';
-import catalog from './surprise-topics.json';
-import readyIds from './surprise-ready.json';
-import { formatRange } from './time';
-
-export function rangeError(value: unknown, now = new Date().getFullYear()): string | null {
-  if (!value || typeof value !== 'object') return 'Enter both a start and end year.';
-  const { start, end } = value as YearRange;
-  if (![start, end].every(y => Number.isInteger(y) && y !== 0 && y >= -10000 && y <= now)) {
-    return `Use whole years from 10000 BCE to ${now} CE. There is no year 0.`;
-  }
-  return start > end ? 'The start year must come before the end year.' : null;
-}
+import type { ChronosEvent, YearRange } from './types.js';
+import catalog from './surprise-topics.json' with { type: 'json' };
+import readyIds from './surprise-ready.json' with { type: 'json' };
+import { formatRange } from './time.js';
+export { rangeError } from './dateRange.js';
 
 export type SurpriseTopic = { id: string; topic: string; category: string; range: YearRange };
 export const SURPRISE_TOPICS: SurpriseTopic[] = catalog;
