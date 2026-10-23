@@ -12,7 +12,9 @@ it('renders and toggles without storage while retaining a full-document Classic 
   vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => { throw new DOMException('Denied'); });
   vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new DOMException('Denied'); });
   render(<App />);
-  expect(screen.getByRole('link', { name: 'Classic' }).getAttribute('href')).toBe('/classic/');
+  const classic = screen.getByRole('link', { name: 'Chronos Classic' });
+  expect(classic.getAttribute('href')).toBe('/classic/');
+  expect(classic.closest('footer')).not.toBeNull();
   const sound = screen.getByRole('button', { name: 'Turn sound on' });
   expect(sound.getAttribute('aria-pressed')).toBe('false');
   fireEvent.click(screen.getByRole('button', { name: 'Use dark theme' }));

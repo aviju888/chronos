@@ -76,3 +76,14 @@ it('cleans up its timer when unmounted', () => {
   unmount();
   expect(vi.getTimerCount()).toBe(0);
 });
+
+it('leaves the mobile keyboard closed on arrival and blurs after explicit submission', () => {
+  vi.stubGlobal('matchMedia', (query: string) => ({matches: query === '(pointer: coarse)', addEventListener: vi.fn(), removeEventListener: vi.fn()}));
+  const {rerender} = render(<PromptComposer value="" onChange={() => {}} onSubmit={submit} mode="quick" onModeChange={() => {}} autoFocus />);
+  expect(document.activeElement).not.toBe(input());
+  rerender(<PromptComposer value="Rome" onChange={() => {}} onSubmit={submit} mode="quick" onModeChange={() => {}} autoFocus />);
+  act(() => { input().focus(); });
+  fireEvent.keyDown(input(), {key: 'Enter'});
+  expect(submit).toHaveBeenCalledWith('Rome');
+  expect(document.activeElement).not.toBe(input());
+});

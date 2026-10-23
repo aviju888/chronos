@@ -30,20 +30,22 @@ export default function App() {
     if (next.sfx) previewSfx('toggle');
   };
   return (
-    <div data-project="chronos" className="min-h-dvh bg-page text-ink">
+    <div data-project="chronos" className="flex min-h-dvh flex-col bg-page text-ink">
       <header className="sticky top-0 z-30 flex h-12 items-center justify-end border-b border-line bg-page/95 px-4 backdrop-blur-sm sm:px-6">
-        {hasRun && <a href="/" aria-label="Chronos home" className="mr-auto text-[14px] font-semibold tracking-[-0.025em]">Chronos</a>}
+        {hasRun && <a href="/" aria-label="Chronos home" className="mr-auto flex min-h-11 items-center text-[14px] font-semibold tracking-[-0.025em]">Chronos</a>}
         <nav aria-label="Chronos controls" className="flex items-center gap-2">
-          <button type="button" onClick={toggleSound} aria-label={preferences.sfx ? 'Turn sound off' : 'Turn sound on'} aria-pressed={preferences.sfx} className="press flex size-8 items-center justify-center rounded-control text-ink-2 hover:bg-hover">
+          <button type="button" onClick={toggleSound} aria-label={preferences.sfx ? 'Turn sound off' : 'Turn sound on'} aria-pressed={preferences.sfx} className="press flex size-11 items-center justify-center rounded-control text-ink-2 hover:bg-hover sm:size-8">
             {preferences.sfx ? <SpeakerHigh size={17} /> : <SpeakerSlash size={17} />}
           </button>
-          <button type="button" onClick={toggleTheme} aria-label={dark ? 'Use light theme' : 'Use dark theme'} className="press flex size-8 items-center justify-center rounded-control text-ink-2 hover:bg-hover">
+          <button type="button" onClick={toggleTheme} aria-label={dark ? 'Use light theme' : 'Use dark theme'} className="press flex size-11 items-center justify-center rounded-control text-ink-2 hover:bg-hover sm:size-8">
             {dark ? <Sun size={17} /> : <Moon size={17} />}
           </button>
-          <a href="/classic/" className="ml-1 rounded-control px-2 py-1.5 text-[12px] font-medium text-ink-2 hover:bg-hover hover:text-ink">Classic</a>
         </nav>
       </header>
-      <main><ChronosApp examples={EXAMPLE_QUERIES} onRunChange={setHasRun} /></main>
+      <main className="flex-1"><ChronosApp examples={EXAMPLE_QUERIES} onRunChange={setHasRun} /></main>
+      <footer className="flex min-h-16 items-center justify-center px-4 pb-[env(safe-area-inset-bottom)]">
+        <a href="/classic/" className="inline-flex min-h-11 items-center rounded-control px-3 text-[12px] font-medium text-ink-3 hover:bg-hover hover:text-ink">Chronos Classic</a>
+      </footer>
     </div>
   );
 }

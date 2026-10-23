@@ -39,7 +39,7 @@ function IconButton({
         disabled={disabled}
         onClick={onClick}
         className={cn(
-          "primitive-icon-button press disabled:opacity-35",
+          "primitive-icon-button chronos-map-button press disabled:opacity-35",
           pressed ? "bg-accent-tint text-accent-ink" : "text-ink-2 enabled:hover:bg-hover enabled:hover:text-ink",
         )}
       >
@@ -49,7 +49,7 @@ function IconButton({
   );
 }
 
-const GROUP = "flex flex-col rounded-card bg-surface p-0.5 shadow-raised";
+const GROUP = "flex flex-row rounded-card bg-surface p-0.5 shadow-raised sm:flex-col";
 
 export function MapControls({
   onZoomIn,
@@ -73,7 +73,7 @@ export function MapControls({
   onToggleTrail: () => void;
 }) {
   return (
-    <div data-map-ui className="absolute right-2 bottom-2 z-20 flex flex-col gap-1.5">
+    <div data-map-ui className="absolute right-2 bottom-2 z-20 flex flex-row gap-1.5 sm:flex-col">
       <div className={GROUP}>
         <IconButton label="Zoom in" shortcut="+" onClick={onZoomIn} disabled={!canZoomIn}>
           <Plus size={14} weight="bold" />

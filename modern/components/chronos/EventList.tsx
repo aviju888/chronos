@@ -53,7 +53,7 @@ export function EventListHeader({
             aria-checked={filter === f.id}
             onClick={() => onFilter(f.id)}
             className={cn(
-              "h-6 rounded-[6px] px-2 text-[11.5px] font-medium",
+              "h-11 rounded-[6px] px-2 text-[11.5px] font-medium sm:h-6",
               filter === f.id ? "bg-surface text-ink shadow-btn" : "text-ink-2 hover:text-ink",
             )}
           >

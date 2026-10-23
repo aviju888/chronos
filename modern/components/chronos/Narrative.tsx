@@ -193,7 +193,7 @@ function NarrativeImpl({
                 () => undefined,
               );
             }}
-            className="flex size-6 items-center justify-center rounded-[6px] text-ink-3 hover:bg-hover-2 hover:text-ink-2"
+            className="flex size-11 items-center justify-center rounded-[6px] text-ink-3 hover:bg-hover-2 hover:text-ink-2 sm:size-6"
           >
             {copied ? <Check size={14} weight="bold" /> : <Copy size={14} weight="bold" />}
           </button>
@@ -203,7 +203,7 @@ function NarrativeImpl({
             type="button"
             aria-expanded={sourcesOpen}
             onClick={() => setSourcesOpen((o) => !o)}
-            className="ml-1.5 flex items-center gap-1.5 rounded-[6px] px-1 py-0.5 text-left hover:bg-hover lg:pointer-events-none"
+            className="ml-1.5 flex min-h-11 items-center gap-1.5 rounded-[6px] px-1 py-0.5 text-left hover:bg-hover sm:min-h-0 lg:pointer-events-none"
           >
             <span className="flex -space-x-1">
               {cited.slice(0, 4).map((e) =>
@@ -233,7 +233,7 @@ function NarrativeImpl({
                 href={intent.article.url}
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center gap-2 rounded-[6px] px-1.5 py-1 text-[12px] text-ink-2 hover:bg-hover hover:text-ink"
+                className="flex min-h-11 items-center gap-2 rounded-[6px] px-1.5 py-1 text-[12px] text-ink-2 hover:bg-hover hover:text-ink sm:min-h-0"
               >
                 <span className="animated-underline">{intent.article.title}</span>
                 <span className="ml-auto font-mono text-[10.5px] text-ink-3">lead · wikipedia</span>
@@ -245,7 +245,7 @@ function NarrativeImpl({
                 key={e.id}
                 type="button"
                 onClick={() => onCite(e.id)}
-                className="flex items-center gap-2 rounded-[6px] px-1.5 py-1 text-left text-[12px] text-ink-2 hover:bg-hover hover:text-ink"
+                className="flex min-h-11 items-center gap-2 rounded-[6px] px-1.5 py-1 text-left text-[12px] text-ink-2 hover:bg-hover hover:text-ink sm:min-h-0"
               >
                 <span className={cn("size-[6px] shrink-0 rounded-full", CONFIDENCE_TONE[e.confidence])} />
                 <span className="truncate">{e.title}</span>

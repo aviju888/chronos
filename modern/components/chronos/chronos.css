@@ -1,5 +1,9 @@
 /* Chronos-only motion. Prefixed so nothing collides with the shared kit. */
 
+@media (max-width: 639px) {
+  .chronos-map-button { width: 44px; height: 44px; }
+}
+
 .chronos-wordmark {
   font-family: Cinzel, 'Times New Roman', serif;
   font-size: clamp(2rem, 7vw, 3.75rem);

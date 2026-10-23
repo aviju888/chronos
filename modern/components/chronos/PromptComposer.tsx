@@ -30,7 +30,7 @@ export function ModeToggle({ mode, onChange, disabled }: { mode: Mode; onChange:
             disabled={disabled}
             onClick={() => onChange(m.id)}
             className={cn(
-              "h-6 rounded-[6px] px-2 text-[12px] font-medium disabled:opacity-50",
+              "h-11 min-w-11 rounded-[6px] px-3 text-[13px] font-medium disabled:opacity-50 sm:h-6 sm:min-w-0 sm:px-2 sm:text-[12px]",
               mode === m.id ? "bg-surface text-ink shadow-btn" : "text-ink-2 hover:text-ink",
             )}
           >
@@ -104,11 +104,12 @@ export function PromptComposer({
   }, [value, tall]);
 
   useEffect(() => {
-    if (autoFocus) inputRef.current?.focus({ preventScroll: true });
+    if (autoFocus && !matchMedia('(pointer: coarse)').matches) inputRef.current?.focus({ preventScroll: true });
   }, [autoFocus]);
 
   const submit = () => {
     if (!canSend || running) return;
+    if (matchMedia('(pointer: coarse)').matches) inputRef.current?.blur();
     onSubmit(value.trim());
   };
 
@@ -118,7 +119,7 @@ export function PromptComposer({
       aria-label={running ? "Stop" : "Build timeline"}
       disabled={!running && !canSend}
       onClick={running ? onStop : submit}
-      className="flex size-7 shrink-0 items-center justify-center rounded-[8px] transition-transform duration-150 enabled:active:scale-[0.94]"
+      className="flex size-11 shrink-0 items-center justify-center rounded-[8px] transition-transform duration-150 enabled:active:scale-[0.94] sm:size-7"
       style={{
         background: running || canSend ? "var(--ink)" : "var(--line-strong)",
         color: running || canSend ? "var(--surface)" : "var(--ink-2)",
@@ -135,14 +136,14 @@ export function PromptComposer({
         tall ? "gap-2 rounded-[22px] p-3" : "gap-1.5 rounded-[14px] p-1.5",
       )}
     >
-      <div className={cn("flex items-end gap-1.5", tall && "flex-col items-stretch gap-2")}>
+      <div className={cn("flex flex-col items-stretch gap-2 sm:flex-row sm:items-end sm:gap-1.5", tall && "sm:flex-col sm:items-stretch sm:gap-2")}>
         <div className="relative min-w-0 flex-1 self-stretch text-left">
           {showSuggestion && (
             <span
               key={suggestion}
               aria-hidden="true"
               data-prompt-suggestion
-              className={cn("pointer-events-none absolute inset-x-0 top-0 px-1.5 text-ink-3", tall ? "py-1 text-[15px] leading-6" : "py-[5px] text-[13px] leading-[18px]")}
+              className={cn("pointer-events-none absolute inset-x-0 top-0 px-1.5 text-left text-[16px] text-ink-3", tall ? "py-1 leading-6 sm:text-[15px]" : "py-[5px] leading-[22px] sm:text-[13px] sm:leading-[18px]")}
               style={!reducedMotion && suggestions && suggestions.length > 1 ? { animation: 'chronos-prompt-suggestion 4500ms ease-in-out infinite' } : undefined}
             >{suggestion}</span>
           )}
@@ -168,15 +169,16 @@ export function PromptComposer({
             placeholder={showSuggestion ? undefined : placeholder}
             aria-label="Topic, place or period"
             aria-describedby={showSuggestion ? hintId : undefined}
+            enterKeyHint="go"
             spellCheck={false}
             className={cn(
               "block w-full min-w-0 resize-none bg-transparent text-ink outline-none [overflow-wrap:anywhere] placeholder:text-ink-3",
-              tall ? "px-1.5 py-1 text-[15px] leading-6" : "min-h-7 px-1.5 py-[5px] text-[13px] leading-[18px]",
+              tall ? "px-1.5 py-1 text-[16px] leading-6 sm:text-[15px]" : "min-h-7 px-1.5 py-[5px] text-[16px] leading-[22px] sm:text-[13px] sm:leading-[18px]",
             )}
           />
           {showSuggestion && <span id={hintId} className="sr-only">Suggested prompt: {suggestion}. Press Tab to use it, or type your own topic.</span>}
         </div>
-        <div className={cn("flex shrink-0 items-center gap-1.5", tall && "justify-between")}>
+        <div className={cn("flex shrink-0 items-center justify-between gap-1.5 sm:justify-start", tall && "sm:justify-between")}>
           <ModeToggle
             mode={mode}
             disabled={running}

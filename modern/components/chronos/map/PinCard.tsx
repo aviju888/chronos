@@ -71,7 +71,7 @@ function Anchored({
         type="button"
         onClick={onClose}
         aria-label="Close"
-        className="hit-area press absolute top-1.5 right-1.5 flex size-6 items-center justify-center rounded-[7px] text-ink-3 hover:bg-hover hover:text-ink"
+        className="press absolute top-0 right-0 flex size-11 items-center justify-center rounded-[7px] text-ink-3 hover:bg-hover hover:text-ink sm:top-1.5 sm:right-1.5 sm:size-6"
       >
         <X size={12} weight="bold" />
       </button>
@@ -103,7 +103,7 @@ export function EventPinCard({
   const place = event.location;
   return (
     <Anchored x={x} y={y} mapWidth={mapWidth} width={width} pinRadius={pinRadius} label={event.title} onClose={onClose}>
-      <div className="flex items-center gap-1.5 pr-7">
+      <div className="flex items-center gap-1.5 pr-11 sm:pr-7">
         <span className="num text-[12px] font-semibold text-ink-2">
           {event.approxYear ? "c. " : ""}
           {formatYear(event.year)}
@@ -122,7 +122,7 @@ export function EventPinCard({
             <span className="truncate">{place.approx ? `near ${place.name}` : place.name}</span>
           </span>
         ) : null}
-        <Button size="xs" variant="secondary" className="ml-auto" onClick={() => onOpen(event.id)}>
+        <Button size="xs" variant="secondary" className="ml-auto min-h-11 sm:min-h-0" onClick={() => onOpen(event.id)}>
           Open
           <ArrowUpRight size={11} weight="bold" />
         </Button>
@@ -153,7 +153,7 @@ export function ClusterCard({
   const place = events.find((e) => e.location?.name)?.location?.name;
   return (
     <Anchored x={x} y={y} mapWidth={mapWidth} width={width} pinRadius={pinRadius} label={`${events.length} events`} onClose={onClose}>
-      <p className="pr-7 text-[12px] font-medium text-ink">
+      <p className="pr-11 text-[12px] font-medium text-ink sm:pr-7">
         <span className="num">{events.length}</span> events {place ? `near ${place}` : "in one place"}
       </p>
       <div className="mt-1.5 -mx-1 flex flex-col">
@@ -162,7 +162,7 @@ export function ClusterCard({
             key={e.id}
             type="button"
             onClick={() => onPick(e.id)}
-            className="flex items-baseline gap-2 rounded-[6px] px-1 py-1 text-left hover:bg-hover"
+            className="flex min-h-11 items-center gap-2 rounded-[6px] px-1 py-1 text-left hover:bg-hover sm:min-h-0 sm:items-baseline"
           >
             <span className="num w-14 shrink-0 text-[11.5px] font-medium text-ink-3">{formatYear(e.year)}</span>
             <span className="min-w-0 truncate text-[12.5px] text-ink">{e.title}</span>

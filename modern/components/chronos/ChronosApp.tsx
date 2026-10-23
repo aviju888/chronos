@@ -59,7 +59,7 @@ function Hero({
   onExample: (q: string) => void;
 }) {
   return (
-    <div className="relative mx-auto flex min-h-[calc(100dvh-48px)] w-full max-w-[1240px] flex-col items-center justify-center overflow-hidden px-4 pt-8 pb-20 sm:px-6">
+    <div className="relative mx-auto flex min-h-[calc(100dvh-112px)] w-full max-w-[1240px] flex-col items-center justify-center overflow-hidden px-4 pt-8 pb-12 sm:px-6 sm:pb-20">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-1/2 mx-auto w-[min(1180px,140vw)] -translate-y-1/2 opacity-80"
@@ -130,7 +130,7 @@ const RunHeader = memo(function RunHeader({ state, events, onLive }: { state: Ch
             <Lightning size={11} weight="fill" />
             <span className="max-w-[52ch] text-pretty">{notice.text}</span>
             {!running && (
-              <button type="button" onClick={onLive} className="press rounded-full bg-surface px-2 py-0.5 font-medium text-ink shadow-btn hover:bg-hover">
+              <button type="button" onClick={onLive} className="press min-h-11 shrink-0 rounded-full bg-surface px-2 py-0.5 font-medium text-ink shadow-btn hover:bg-hover sm:min-h-0">
                 Run live
               </button>
             )}
@@ -158,7 +158,7 @@ const PipelineSection = memo(function PipelineSection({ state }: { state: Chrono
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
         disabled={running}
-        className="-mx-1 flex items-center gap-2 rounded-control px-1 py-0.5 text-left enabled:hover:bg-hover"
+        className="-mx-1 flex min-h-11 items-center gap-2 rounded-control px-1 py-0.5 text-left enabled:hover:bg-hover sm:min-h-0"
       >
         <h2 className="text-[13px] font-semibold tracking-[-0.01em] text-ink">Pipeline</h2>
         <span className="truncate text-[12px] text-ink-3">
@@ -301,6 +301,14 @@ export function ChronosApp({ examples, live, onRunChange }: { examples: string[]
         <RunHeader state={state} events={events} onLive={runLive} />
       </div>
 
+      {events.length > 0 && (
+        <nav aria-label="Timeline sections" className="sticky top-12 z-20 -mx-4 mt-4 flex gap-1 border-b border-line bg-page/95 px-4 backdrop-blur-sm sm:-mx-6 sm:px-6 lg:hidden">
+          {[['chronos-map', 'Map'], ['chronos-events', 'Events'], ['chronos-story', 'Story']].map(([id, label]) => (
+            <a key={id} href={`#${id}`} className="flex min-h-11 flex-1 items-center justify-center rounded-control px-3 text-[13px] font-medium text-ink-2 hover:bg-hover hover:text-ink">{label}</a>
+          ))}
+        </nav>
+      )}
+
       {state.status === "error" && (
         <div role="alert" className="mt-5 flex flex-col gap-3 rounded-card bg-red-tint px-4 py-3 text-[13px] text-red sm:flex-row sm:items-center" style={{ animation: "fade-up 300ms cubic-bezier(0.23,1,0.32,1) both" }}>
           <span className="flex-1 text-pretty">{state.error}</span>
@@ -313,7 +321,7 @@ export function ChronosApp({ examples, live, onRunChange }: { examples: string[]
       <div className="mt-5 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_400px] xl:grid-cols-[minmax(0,1fr)_420px]">
         {/* stage (second on phones while the pipeline runs above it) */}
         <div className="flex min-w-0 flex-col gap-4 max-lg:order-2">
-          <div className="rounded-[14px] bg-surface p-3 shadow-card">
+          <div id="chronos-map" className="scroll-mt-28 rounded-[14px] bg-surface p-3 shadow-card">
             <DotMap
               events={events}
               cursorYear={cursorForViews}
@@ -346,7 +354,7 @@ export function ChronosApp({ examples, live, onRunChange }: { examples: string[]
             )}
           </div>
 
-          <div className="px-0.5 pt-2">
+          <div id="chronos-story" className="scroll-mt-28 px-0.5 pt-2">
             <Narrative
               text={state.narrative}
               streaming={running && state.narrative.length > 0}
@@ -365,7 +373,7 @@ export function ChronosApp({ examples, live, onRunChange }: { examples: string[]
           <div className="max-lg:order-1">
             <PipelineSection state={state} />
           </div>
-          <ScrollFade axis="y" className="min-h-0 flex-1 max-lg:order-3 lg:-mx-2 lg:px-2 lg:pb-2" fade={32}>
+          <ScrollFade id="chronos-events" axis="y" className="min-h-0 flex-1 scroll-mt-28 max-lg:order-3 lg:-mx-2 lg:px-2 lg:pb-2" fade={32}>
             <EventList
               events={filtered}
               live={isLive}

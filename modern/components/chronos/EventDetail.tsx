@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useRef } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, MapPin, X } from "@phosphor-icons/react";
 import { SOURCE_ORDER, type ChronosEvent, type Fact, type SourceId } from "@/modern/lib/chronos/types";
@@ -78,18 +78,49 @@ function FactList({ facts }: { facts: Fact[] }) {
 function EventDetailImpl({ event, live, onClose }: { event: ChronosEvent | null; live: boolean | null; onClose: () => void }) {
   const reduce = useReducedMotion();
   const closeRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
+  const [modal, setModal] = useState(false);
+
+  useEffect(() => {
+    const media = matchMedia('(max-width: 767px)');
+    const update = () => setModal(media.matches);
+    update(); media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+
+  useEffect(() => {
+    if (!event || !modal) return;
+    const bodyOverflow = document.body.style.overflow;
+    const rootOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = bodyOverflow;
+      document.documentElement.style.overflow = rootOverflow;
+    };
+  }, [event, modal]);
 
   useEffect(() => {
     if (!event) return;
     const returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key !== "Tab" || !modal || !panelRef.current) return;
+      const targets = Array.from(panelRef.current.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex="0"]'));
+      const first = targets[0]; const last = targets.at(-1);
+      if (first && last && e.shiftKey && (document.activeElement === first || !panelRef.current.contains(document.activeElement))) {
+        e.preventDefault(); last.focus();
+      } else if (first && last && !e.shiftKey && (document.activeElement === last || !panelRef.current.contains(document.activeElement))) {
+        e.preventDefault(); first.focus();
+      }
+    };
     window.addEventListener("keydown", onKey);
     closeRef.current?.focus({ preventScroll: true });
     return () => {
       window.removeEventListener("keydown", onKey);
       if (returnFocus?.isConnected) returnFocus.focus({ preventScroll: true });
     };
-  }, [event, onClose]);
+  }, [event, onClose, modal]);
 
   return (
     <AnimatePresence>
@@ -104,9 +135,11 @@ function EventDetailImpl({ event, live, onClose }: { event: ChronosEvent | null;
             onClick={onClose}
           />
           <motion.aside
+            ref={panelRef}
             key="panel"
             role="dialog"
             aria-label={event.title}
+            aria-modal={modal || undefined}
             className="fixed inset-x-0 bottom-0 z-50 flex max-h-[84dvh] flex-col rounded-t-[16px] bg-canvas shadow-overlay md:inset-x-auto md:top-[60px] md:right-3 md:bottom-3 md:max-h-none md:w-[400px] md:rounded-window"
             initial={reduce ? { opacity: 0 } : { opacity: 0, x: 0, y: 28 }}
             animate={{ opacity: 1, x: 0, y: 0, transition: { duration: 0.3, ease: EASE } }}
@@ -129,13 +162,13 @@ function EventDetailImpl({ event, live, onClose }: { event: ChronosEvent | null;
                 type="button"
                 onClick={onClose}
                 aria-label="Close"
-                className="press -mr-1 flex size-8 shrink-0 items-center justify-center rounded-control text-ink-2 hover:bg-hover hover:text-ink"
+                className="press -mr-1 flex size-11 shrink-0 items-center justify-center rounded-control text-ink-2 hover:bg-hover hover:text-ink sm:size-8"
               >
                 <X size={16} weight="bold" />
               </button>
             </div>
 
-            <ScrollFade axis="y" className="min-h-0 flex-1 px-4 pb-4">
+            <ScrollFade axis="y" className="min-h-0 flex-1 overscroll-contain px-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
               <div key={event.id} className="flex flex-col gap-3">
                 {event.thumbnail && (
                   // eslint-disable-next-line @next/next/no-img-element

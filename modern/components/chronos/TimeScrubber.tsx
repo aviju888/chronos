@@ -107,8 +107,8 @@ export function TimeScrubber({
           onClick={onTogglePlay}
           disabled={events.length === 0}
           aria-label={playing ? "Pause playback" : "Play timeline"}
-          className="press mt-[2px] flex size-8 shrink-0 items-center justify-center rounded-full bg-ink text-canvas shadow-hairline hover:opacity-90 disabled:opacity-40"
-          style={{ marginTop: ribbonTop + RIBBON_H / 2 - 16 }}
+          className="press flex size-11 -translate-y-1/2 shrink-0 items-center justify-center rounded-full bg-ink text-canvas shadow-hairline hover:opacity-90 disabled:opacity-40 sm:size-8"
+          style={{ marginTop: ribbonTop + RIBBON_H / 2 }}
         >
           {playing ? <Pause size={14} weight="fill" /> : <Play size={14} weight="fill" className="translate-x-[1px]" />}
         </button>

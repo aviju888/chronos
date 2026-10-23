@@ -24,7 +24,7 @@ Browser
    └─ /classic/?query#/timeline/id/view[/event/id]
 ```
 
-Both mode links use native full-document navigation. Vite canonicalizes bare `/classic` to `/classic/` while preserving raw query parameters; Vercel has explicit Classic rewrites before the root fallback. API rewrites precede both page rewrites. The multi-page build supplies independent HTML inputs, preventing modern global CSS, theme tokens or fonts from being imported by Classic. Existing Classic external assets remain as before.
+The modern Classic entry is a footer link; Classic offers “Try the new Chronos.” Both mode links use native full-document navigation. Vite canonicalizes bare `/classic` to `/classic/` while preserving raw query parameters; Vercel has explicit Classic rewrites before the root fallback. API rewrites precede both page rewrites. The multi-page build supplies independent HTML inputs, preventing modern global CSS, theme tokens or fonts from being imported by Classic. Existing Classic external assets remain as before.
 
 Old root timeline links redirect before modern mounts and retain their search/hash. New Classic share links explicitly use `/classic/#/timeline/{id}/map`. They reference archives in the same browser's local storage; exporting a link does not upload an archive or make it available on another device. Text and JSON exports remain the way to download timeline data. Existing Classic views are `map`, `timeline`, `list`, and `narrative`.
 
@@ -53,6 +53,8 @@ The CLI's development rewrite handling can send source-module requests to HTML, 
 `npm test`, `npm run typecheck`, and `npm run build` are the completion checks. `npm run preview` serves only static build output. `CHRONOS_DEV_API_ORIGIN` is optional and only controls the Vite development API proxy. `GROQ_API_KEY` is server-only, never exposed through Vite defines, browser env or frontend imports. Configure it only in an explicitly approved server environment. The shell key was explicitly empty for local acceptance, but the Vercel CLI can inject configured project development values. The explicit `replay:true` route uses usable repository fixtures and bypasses external source and model work. Missing, empty or diagnostic-only recordings return an error followed by terminal done; they never fall through to live collection. An empty shell variable alone does not prove a no-key function environment. A single unexpected Classic follow-up HTTP 200 during acceptance is recorded in the receipt; its provider execution is unresolved, and no provider success is claimed.
 
 ## Acceptance and release boundary
+
+The [mobile follow-up](chronos-mobile-acceptance.md) records the phone layout, touch, navigation, detail-sheet and Classic round-trip checks.
 
 The Task 4 receipt records local verification of desktop/mobile documents, route refresh, old hash links, archive/chat byte preservation, share/download, theme isolation, denied storage, map/list/details/playback, keyboard controls, stop/replacement, actual local function replay and simulated failure presentation. Unit tests cover provider response/error contracts and abort handling with in-memory mocks. Recorded fixture replay proves integration and UI behavior; it does not prove current Wikipedia, Wikidata or Groq availability, accuracy or live model quality.
 

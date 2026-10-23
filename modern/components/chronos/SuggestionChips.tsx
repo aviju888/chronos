@@ -31,7 +31,7 @@ export function SuggestionChips({
             type="button"
             disabled={disabled}
             onClick={() => onPick(q)}
-            className="press inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full bg-surface pr-2.5 pl-2 text-[12.5px] font-medium whitespace-nowrap text-ink-2 shadow-btn hover:bg-hover hover:text-ink disabled:opacity-50"
+            className="press inline-flex h-11 shrink-0 items-center gap-1.5 rounded-full bg-surface pr-2.5 pl-2 text-[12.5px] font-medium whitespace-nowrap text-ink-2 shadow-btn hover:bg-hover hover:text-ink disabled:opacity-50 sm:h-7"
             style={{ animation: `fade-up 360ms cubic-bezier(0.23,1,0.32,1) ${120 + i * 50}ms both` }}
           >
             <Lightning size={12} weight="fill" className="text-accent" />
