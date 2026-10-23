@@ -67,10 +67,10 @@ function Hero({
         <DotMap events={[]} cursorYear={null} loading />
       </div>
       <div className="relative z-10 flex w-full max-w-[620px] flex-col items-center gap-5 text-center" style={{ animation: "fade-up 500ms cubic-bezier(0.23,1,0.32,1) both" }}>
-        <h1 className="text-[30px] leading-[1.1] font-semibold tracking-[-0.03em] text-balance text-ink sm:text-[40px]">Explore an era through a timeline built from your question.</h1>
-        <p className="max-w-[48ch] text-[14px] leading-relaxed text-pretty text-ink-2">
-          Three sources run in parallel and merge into one timeline. Every event shows which sources agree, so you can see what is well sourced and what is inferred.
-        </p>
+        <div className="flex flex-col items-center gap-3">
+          <h1 className="text-[48px] leading-none font-semibold tracking-[-0.04em] text-ink sm:text-[64px]">Chronos</h1>
+          <p className="text-[14px] leading-relaxed text-ink-2">Explore history through interactive timelines.</p>
+        </div>
         <div className="w-full pt-1">
           <PromptComposer value={draft} onChange={setDraft} onSubmit={onSubmit} mode={mode} onModeChange={setMode} tall autoFocus placeholder="Roman Empire 27 BCE - 476 CE" />
         </div>
