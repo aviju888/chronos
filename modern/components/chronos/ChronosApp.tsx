@@ -2,8 +2,10 @@
 
 import "./chronos.css";
 import { memo, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
+import { Tooltip } from "./Tooltip";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { ArrowUpRight, CaretDown, Lightning } from "@phosphor-icons/react";
+import { ArrowUpRight, CaretDown, Lightning, Plus, Square } from "@phosphor-icons/react";
 import type { ChronosEvent, Mode, MergeIncoming, YearRange } from "@/modern/lib/chronos/types";
 import { formatRange } from "@/modern/lib/chronos/time";
 import { PROMPT_SUGGESTIONS } from "@/modern/lib/chronos/examples";
@@ -22,7 +24,7 @@ import { InvestigationMap } from './InvestigationMap';
 import { TimeScrubber } from "./TimeScrubber";
 import { EventList } from "./EventList";
 import { Narrative } from "./Narrative";
-import { ArchivesButton, DiscoveryControls, ExportButton, toolClass, type DateDraft } from './InvestigationTools';
+import { ArchivesButton, DiscoveryControls, ExportButton, iconToolClass, toolClass, type DateDraft } from './InvestigationTools';
 import { rangeError, relatedTopics, createSurprisePicker, surpriseQuery } from '@/modern/lib/chronos/discovery';
 import { saveArchive, snapshot, type Archive } from '@/modern/lib/chronos/archives';
 import { progressLabel } from '@/modern/lib/chronos/progress';
@@ -33,7 +35,7 @@ import { progressLabel } from '@/modern/lib/chronos/progress';
  *   idle      hero composer over a dot-matrix world
  *   running   pipeline panel prominent; map, scrubber and the
  *             event list fill in as frames arrive
- *   done      the same scaffold settles; sources stay open
+ *   done      the same scaffold settles; research details collapse
  * ───────────────────────────────────────────────────────── */
 
 const RANGE_FROM: Record<string, string> = {
@@ -119,35 +121,42 @@ const RunHeader = memo(function RunHeader({ state, events, onLive }: { state: Ch
 
 export const PipelineSection = memo(function PipelineSection({ state, onStop }: { state: ChronosState; onStop: () => void }) {
   const running = state.status === "running";
-  const [manual, setManual] = useState<{ runId: number; open: boolean } | null>(null);
-  const open = manual?.runId === state.runId ? manual.open : true;
+  const [manual, setManual] = useState<{ runId: number; status: string; open: boolean } | null>(null);
+  const completed = state.status === 'done' && !state.stopped;
+  const open = manual?.runId === state.runId && manual.status === state.status ? manual.open : !completed;
+  // The initial query-parsing trace is not source research yet.
+  const hasDetails = state.traces.some(trace => trace.source !== 'intent');
+  const toggleLabel = open ? 'Collapse research details' : 'Expand research details';
   return (
-    <section aria-label="Investigation progress" className="rounded-[18px] border border-line bg-inset p-3 sm:p-4">
-      <div className="flex flex-wrap items-center justify-between gap-x-2">
+    <section aria-label="Investigation progress" data-expanded={open} data-source-ready={hasDetails}
+      className="chronos-research mx-auto w-full rounded-[18px] border border-line bg-inset p-3 sm:p-4">
+      <div className="flex min-h-11 items-center justify-center gap-2">
         <PixelLoader label={progressLabel(state)} startedAt={state.startedAt} finishedAt={state.finishedAt} />
-        <div className="flex items-center gap-1">
-          <button type="button" aria-expanded={open} onClick={() => setManual({runId: state.runId, open: !open})} className={toolClass}>
-            Sources & process <CaretDown size={13} className="transition-transform duration-200" style={{transform: open ? 'rotate(180deg)' : 'none'}} />
-          </button>
-          <button type="button" onClick={onStop} disabled={!running} aria-hidden={!running} tabIndex={running ? 0 : -1}
-            className={`${toolClass} -mr-2 transition-opacity duration-150 ${running ? 'opacity-100' : 'invisible opacity-0'}`}>Stop</button>
-        </div>
+        {running && <Tooltip content="Stop research"><button type="button" aria-label="Stop research" onClick={onStop} className={iconToolClass}><Square size={14} weight="fill" /></button></Tooltip>}
       </div>
-      <div className="grid transition-[grid-template-rows,opacity] duration-200" inert={!open}
+      <div className="grid transition-[grid-template-rows,opacity] duration-250" inert={!open} aria-hidden={!open}
         style={{gridTemplateRows: open ? '1fr' : '0fr', opacity: open ? 1 : 0}}>
-        <div className="overflow-hidden">
-          <p className="mb-2 min-h-5 text-[12px] text-ink-3">{state.intent && <>{RANGE_FROM[state.intent.rangeFrom]}{state.intent.article && <> · <a href={state.intent.article.url} target="_blank" rel="noreferrer" className="underline">Wikipedia article</a></>}</>}</p>
-          <div className="grid gap-3 md:grid-cols-2 md:gap-6">
-            <TaskList key={`tasks-${state.runId}`} tasks={state.tasks} live={state.intent?.live ?? null} active={running} />
-            <TraceLog key={state.runId} traces={state.traces} running={running} />
+        <div className="min-h-0 overflow-hidden">
+          <p className="mb-2 min-h-5 text-center text-[12px] text-ink-3">{state.intent && <>{RANGE_FROM[state.intent.rangeFrom]}{state.intent.article && <> · <a href={state.intent.article.url} target="_blank" rel="noreferrer" className="underline">Wikipedia article</a></>}</>}</p>
+          <div className="chronos-research-grid">
+            <div className="min-w-0"><TaskList key={`tasks-${state.runId}`} tasks={state.tasks} live={state.intent?.live ?? null} active={running} /></div>
+            <div className="chronos-research-traces min-w-0 overflow-hidden" inert={!hasDetails} aria-hidden={!hasDetails}>
+              <div className="min-h-0 overflow-hidden">{hasDetails && <TraceLog key={state.runId} traces={state.traces} />}</div>
+            </div>
           </div>
         </div>
+      </div>
+      <div className="flex justify-center">
+        <Tooltip content={toggleLabel}><button type="button" aria-label={toggleLabel} aria-expanded={open}
+          onClick={() => setManual({runId: state.runId, status: state.status, open: !open})} className={iconToolClass}>
+          <CaretDown size={16} className="transition-transform duration-200" style={{transform: open ? 'rotate(180deg)' : 'none'}} />
+        </button></Tooltip>
       </div>
     </section>
   );
 });
 
-export function ChronosApp({ live, onRunChange }: { live?: boolean; onRunChange?: (hasRun: boolean) => void }) {
+export function ChronosApp({ live, onRunChange, headerActionsTarget }: { live?: boolean; onRunChange?: (hasRun: boolean) => void; headerActionsTarget?: HTMLElement | null }) {
   const { state, run, stop, restore, reset } = useChronos();
   const reduceMotion = useReducedMotion();
   const [dates, setDates] = useState<DateDraft>({start: '', end: ''});
@@ -166,7 +175,7 @@ export function ChronosApp({ live, onRunChange }: { live?: boolean; onRunChange?
   const saveCurrent = useCallback(() => {
     const result = saveArchive(snapshot(state));
     setSaveFailed(Boolean(result.error));
-    setSaveMessage(result.error ?? 'Saved');
+    setSaveMessage(result.error ?? null);
   }, [state]);
   useEffect(() => {
     if ((state.status === 'done' || state.status === 'error') && state.order.length && savedRun.current !== state.runId) {
@@ -288,7 +297,7 @@ export function ChronosApp({ live, onRunChange }: { live?: boolean; onRunChange?
     stopPlayback();
     setDetailId(null); setFocusId(null); setArea(null); setHover(null); setReveal(null); setFlash(null);
     setDraft(a.state.query); setMode(a.state.mode); setView('map');
-    setSaveMessage('Saved'); setSaveFailed(false); setDateError(null);
+    setSaveMessage(null); setSaveFailed(false); setDateError(null);
     const selected = a.state.intent?.rangeFrom === 'selected' ? a.state.intent.range : undefined;
     setRunRange(selected);
     setDates(selected ? {start: String(selected.start), end: String(selected.end)} : {start: '', end: ''});
@@ -305,13 +314,18 @@ export function ChronosApp({ live, onRunChange }: { live?: boolean; onRunChange?
       const next = pickSurprise();
       if (next) prepareTopic(surpriseQuery(next), next.range);
     }}>
-    <ArchivesButton onRestore={restoreArchive} />
   </DiscoveryControls>;
 
   const cursorForViews = playback.cursor === null ? null : Math.floor(playback.cursor);
   const related = relatedTopics(state.intent?.topic ?? state.query, events);
 
   return (
+    <>
+    {headerActionsTarget && createPortal(<>
+      {state.status !== 'idle' && <Tooltip content="New search" side="bottom"><button type="button" aria-label="New search" onClick={() => prepareTopic('')} className={iconToolClass}><Plus size={18} /></button></Tooltip>}
+      <ArchivesButton iconOnly onRestore={restoreArchive} />
+      {state.status !== 'idle' && <ExportButton iconOnly archive={archive} disabled={running || !events.length} />}
+    </>, headerActionsTarget)}
     <AnimatePresence initial={false} mode="wait">
       <motion.div key={state.status === 'idle' ? 'search' : 'investigation'}
         initial={{opacity: 0, transform: reduceMotion ? 'none' : 'translateY(6px)'}}
@@ -320,15 +334,10 @@ export function ChronosApp({ live, onRunChange }: { live?: boolean; onRunChange?
         transition={{duration: reduceMotion ? 0 : 0.22, ease: [0.23, 1, 0.32, 1]}}>
       {state.status === 'idle' ? <Hero draft={draft} setDraft={setDraft} mode={mode} setMode={setMode} onSubmit={q => start(q)}>{discovery}</Hero> :
     <div className="mx-auto w-full max-w-[1440px] px-4 pt-4 pb-12 sm:px-6">
-      <div className="mb-4 flex min-h-11 flex-wrap items-center gap-1">
-        <button type="button" className={toolClass} onClick={() => prepareTopic('')}>New search</button>
-        <ArchivesButton onRestore={restoreArchive} />
-        <span className={running || !events.length ? "invisible" : "chronos-enter"} inert={running || !events.length}><ExportButton archive={archive} /></span>
-        {saveMessage && <span role="status" className={cn('px-2 text-[12px] sm:ml-auto', saveFailed ? 'text-red' : 'text-ink-3')}>{saveMessage}
-          {saveFailed && <button type="button" className={toolClass} onClick={saveCurrent}>Try saving again</button>}
-        </span>}
-      </div>
       <RunHeader state={state} events={events} onLive={runLive} />
+      {saveFailed && saveMessage && <div role="alert" className="mt-3 flex flex-wrap items-center gap-2 text-[12px] text-red">
+        <span>{saveMessage}</span><button type="button" className={toolClass} onClick={saveCurrent}>Try saving again</button>
+      </div>}
 
       {state.status === 'error' && <div role="alert" className="mt-4 rounded-card bg-red-tint px-4 py-3 text-[13px] text-red">
         <p>{state.error}</p>
@@ -378,5 +387,6 @@ export function ChronosApp({ live, onRunChange }: { live?: boolean; onRunChange?
     </div>}
       </motion.div>
     </AnimatePresence>
+    </>
   );
 }

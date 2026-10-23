@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Archive as ArchiveIcon, CalendarBlank, DownloadSimple, Shuffle, X } from '@phosphor-icons/react';
 import { downloadArchive, readArchives, readClassicArchives, removeArchive, type Archive } from '@/modern/lib/chronos/archives';
+import { Tooltip } from './Tooltip';
 import { formatRange } from '@/modern/lib/chronos/time';
 
+export const iconToolClass = 'press flex size-11 shrink-0 items-center justify-center rounded-control text-ink-2 hover:bg-hover disabled:opacity-40 sm:size-8';
 export const toolClass = 'press inline-flex min-h-11 items-center justify-center gap-1.5 rounded-control px-2 text-[13px] font-medium text-ink-2 hover:bg-hover disabled:opacity-40';
 export type DateDraft = { start: string; end: string };
 
@@ -52,10 +54,10 @@ function Modal({ title, onClose, children }: { title: string; onClose: () => voi
   </dialog>;
 }
 
-export function ArchivesButton({ onRestore, disabled = false }: { onRestore: (a: Archive) => void; disabled?: boolean }) {
+export function ArchivesButton({ onRestore, disabled = false, iconOnly = false }: { onRestore: (a: Archive) => void; disabled?: boolean; iconOnly?: boolean }) {
   const [open, setOpen] = useState(false);
   return <>
-    <button type="button" className={toolClass} disabled={disabled} onClick={() => setOpen(true)}><ArchiveIcon size={16} />Archives</button>
+    <Tooltip content="Archives" side="bottom" disabled={!iconOnly}><button type="button" aria-label="Archives" className={iconOnly ? iconToolClass : toolClass} disabled={disabled} onClick={() => setOpen(true)}><ArchiveIcon size={17} />{!iconOnly && "Archives"}</button></Tooltip>
     {open && <ArchiveList onClose={() => setOpen(false)} onRestore={a => { setOpen(false); onRestore(a); }} />}
   </>;
 }
@@ -87,14 +89,14 @@ function ArchiveList({ onClose, onRestore }: { onClose: () => void; onRestore: (
   </Modal>;
 }
 
-export function ExportButton({ archive }: { archive: Archive }) {
+export function ExportButton({ archive, iconOnly = false, disabled = false }: { archive: Archive; iconOnly?: boolean; disabled?: boolean }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState(false);
   const download = (format: 'json' | 'txt') => {
     try { downloadArchive(archive, format); setOpen(false); } catch { setError(true); }
   };
   return <>
-    <button type="button" className={toolClass} onClick={() => {setOpen(true); setError(false);}}><DownloadSimple size={16} />Export</button>
+    <Tooltip content="Export" side="bottom" disabled={!iconOnly}><button type="button" aria-label="Export" disabled={disabled} className={iconOnly ? iconToolClass : toolClass} onClick={() => {setOpen(true); setError(false);}}><DownloadSimple size={17} />{!iconOnly && "Export"}</button></Tooltip>
     {open && <Modal title="Export timeline" onClose={() => setOpen(false)}>
       <p className="font-medium">{archive.state.intent?.topic ?? archive.state.query}</p>
       {archive.state.intent && <p className="mt-1 text-[13px] text-ink-3">{formatRange(archive.state.intent.range.start, archive.state.intent.range.end)}</p>}

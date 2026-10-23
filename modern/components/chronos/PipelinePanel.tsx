@@ -214,38 +214,21 @@ function highlight(line: string) {
   });
 }
 
-export function TraceLog({ traces, running }: { traces: TraceLine[]; running: boolean }) {
-  const [manual, setManual] = useState<boolean | null>(null);
-  const expanded = manual ?? true;
+export function TraceLog({ traces }: { traces: TraceLine[] }) {
   const contentRef = useRef<HTMLDivElement>(null);
   const stick = useRef(true);
 
   // follow the newest line unless the reader scrolled up (the ScrollFade div is the scroller)
   useLayoutEffect(() => {
     const scroller = contentRef.current?.parentElement;
-    if (scroller && stick.current && expanded) scroller.scrollTop = scroller.scrollHeight;
-  }, [traces.length, expanded]);
+    if (scroller && stick.current) scroller.scrollTop = scroller.scrollHeight;
+  }, [traces.length]);
 
 
   return (
     <div className="flex w-full flex-col">
-      <button
-        type="button"
-        aria-expanded={expanded}
-        onClick={() => setManual(!expanded)}
-        className="-mx-1.5 flex min-h-11 w-fit items-center gap-2 rounded-control px-1.5 py-1 hover:bg-hover-2"
-      >
-        <svg width="15" height="15" viewBox="0 0 24 24" fill={running ? "var(--ink-2)" : "var(--ink-3)"} aria-hidden>
-          <path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z" />
-        </svg>
-        <span className="text-[13px] font-medium text-ink-2">Source details</span>
-        <CaretDown size={13} weight="bold" className="text-ink-3 transition-transform duration-300" style={{ transform: expanded ? "rotate(180deg)" : "none" }} />
-      </button>
-
-      <div
-        className="grid transition-[grid-template-rows,opacity] duration-200" inert={!expanded}
-        style={{ gridTemplateRows: expanded ? "1fr" : "0fr", opacity: expanded ? 1 : 0, transitionTimingFunction: "cubic-bezier(0.23,1,0.32,1)" }}
-      >
+      <h3 className="mb-2 flex min-h-6 items-center text-[13px] font-medium text-ink-2">Source details</h3>
+      <div>
         <div className="overflow-hidden">
           <div className="relative mt-1 ml-[6px] pl-4">
             <span aria-hidden className="absolute top-0 bottom-2 left-[3px] w-px bg-line" />
