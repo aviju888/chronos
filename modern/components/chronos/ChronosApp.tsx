@@ -14,15 +14,16 @@ import { playSfx } from "@/modern/lib/sfx";
 import { useChronos, type ChronosState } from "./useChronos";
 import { usePlayback } from "./usePlayback";
 import { PromptComposer } from "./PromptComposer";
-import { SuggestionChips } from "./SuggestionChips";
+import { ChronosWordmark } from "@/components/brand/ChronosWordmark";
 import { PixelLoader, TaskList, TraceLog } from "./PipelinePanel";
 import { DotMap } from "./DotMap";
+import { InvestigationMap } from './InvestigationMap';
 import { TimeScrubber } from "./TimeScrubber";
 import { EventList } from "./EventList";
 import { Narrative } from "./Narrative";
 import { EventDetail } from "./EventDetail";
 import { ArchivesButton, DiscoveryControls, ExportButton, toolClass, type DateDraft } from './InvestigationTools';
-import { rangeError, relatedTopics, SURPRISE_TOPICS } from '@/modern/lib/chronos/discovery';
+import { rangeError, relatedTopics, createSurprisePicker, surpriseQuery } from '@/modern/lib/chronos/discovery';
 import { saveArchive, snapshot, type Archive } from '@/modern/lib/chronos/archives';
 import { progressLabel } from '@/modern/lib/chronos/progress';
 
@@ -52,8 +53,6 @@ function Hero({
   mode,
   setMode,
   onSubmit,
-  examples,
-  onExample,
   children,
 }: {
   children?: ReactNode;
@@ -62,8 +61,6 @@ function Hero({
   mode: Mode;
   setMode: (m: Mode) => void;
   onSubmit: (q: string) => void;
-  examples: string[];
-  onExample: (q: string) => void;
 }) {
   return (
     <div className="relative mx-auto flex min-h-[calc(100dvh-112px)] w-full max-w-[1240px] flex-col items-center justify-center overflow-hidden px-4 pt-8 pb-12 sm:px-6 sm:pb-20">
@@ -76,14 +73,13 @@ function Hero({
       </div>
       <div className="relative z-10 flex w-full max-w-[620px] flex-col items-center gap-5 text-center" style={{ animation: "fade-up 500ms cubic-bezier(0.23,1,0.32,1) both" }}>
         <div className="flex flex-col items-center gap-3">
-          <h1 className="chronos-wordmark">Chronos</h1>
+          <h1><ChronosWordmark /></h1>
           <p className="text-[14px] leading-relaxed text-ink-2">Explore history through interactive timelines.</p>
         </div>
         <div className="w-full pt-1">
           <PromptComposer value={draft} onChange={setDraft} onSubmit={onSubmit} mode={mode} onModeChange={setMode} tall autoFocus suggestions={PROMPT_SUGGESTIONS} />
         </div>
         {children}
-        <SuggestionChips examples={examples} onPick={onExample} wrap />
       </div>
     </div>
   );
@@ -143,12 +139,11 @@ const PipelineSection = memo(function PipelineSection({ state, onStop }: { state
   );
 });
 
-export function ChronosApp({ examples, live, onRunChange }: { examples: string[]; live?: boolean; onRunChange?: (hasRun: boolean) => void }) {
-  const { state, run, stop, restore } = useChronos();
+export function ChronosApp({ live, onRunChange }: { live?: boolean; onRunChange?: (hasRun: boolean) => void }) {
+  const { state, run, stop, restore, reset } = useChronos();
   const [dates, setDates] = useState<DateDraft>({start: '', end: ''});
   const [dateError, setDateError] = useState<string | null>(null);
   const [runRange, setRunRange] = useState<YearRange | undefined>();
-  const [editing, setEditing] = useState(false);
   const [view, setView] = useState('map');
   const sectionNav = useRef<HTMLElement>(null);
   const switchView = (next: string) => {
@@ -171,6 +166,7 @@ export function ChronosApp({ examples, live, onRunChange }: { examples: string[]
     }
   }, [state.status, state.runId, state.order.length, saveCurrent]);
   const [draft, setDraft] = useState("");
+  const [pickSurprise] = useState(() => createSurprisePicker());
   useEffect(() => { onRunChange?.(state.status !== "idle"); }, [state.status, onRunChange]);
 
   // sound (off unless the viewer turns it on): a soft tap as sources merge,
@@ -227,7 +223,6 @@ export function ChronosApp({ examples, live, onRunChange }: { examples: string[]
       setRunRange(selected);
       setSaveMessage(null);
       setSaveFailed(false);
-      setEditing(false);
       setView('map');
       stopPlayback();
       setDraft(q);
@@ -280,7 +275,7 @@ export function ChronosApp({ examples, live, onRunChange }: { examples: string[]
     savedRun.current = state.runId + 1;
     stopPlayback();
     setDetailId(null); setFocusId(null); setArea(null); setHover(null); setReveal(null); setFlash(null);
-    setDraft(a.state.query); setMode(a.state.mode); setView('map'); setEditing(false);
+    setDraft(a.state.query); setMode(a.state.mode); setView('map');
     setSaveMessage('Saved'); setSaveFailed(false); setDateError(null);
     const selected = a.state.intent?.rangeFrom === 'selected' ? a.state.intent.range : undefined;
     setRunRange(selected);
@@ -288,22 +283,23 @@ export function ChronosApp({ examples, live, onRunChange }: { examples: string[]
     restore(a.state);
     window.scrollTo({top: 0});
   };
-  const prepareTopic = (q: string) => {
-    setDraft(q); setDates({start: '', end: ''}); setDateError(null); setEditing(true);
+  const prepareTopic = (q: string, range?: YearRange) => {
+    stopPlayback(); reset();
+    setDraft(q); setDates(range ? {start: String(range.start), end: String(range.end)} : {start: '', end: ''}); setDateError(null);
     window.scrollTo({top: 0});
     requestAnimationFrame(() => document.querySelector<HTMLTextAreaElement>('textarea[aria-label="Topic, place or period"]')?.focus({preventScroll: true}));
   };
   const discovery = <DiscoveryControls dates={dates} onDates={value => {setDates(value); setDateError(null);}}
     error={dateError} onSurprise={() => {
-      const choices = SURPRISE_TOPICS.filter(q => q !== draft);
-      prepareTopic(choices[Math.floor(Math.random() * choices.length)]);
+      const next = pickSurprise();
+      if (next) prepareTopic(surpriseQuery(next), next.range);
     }}>
     <ArchivesButton onRestore={restoreArchive} />
   </DiscoveryControls>;
 
   if (state.status === "idle") {
     return <Hero draft={draft} setDraft={setDraft} mode={mode} setMode={setMode}
-      onSubmit={(q) => start(q)} examples={examples} onExample={(q) => start(q, { replay: true, mode: "quick" })}>
+      onSubmit={(q) => start(q)}>
       {discovery}
     </Hero>;
   }
@@ -314,16 +310,12 @@ export function ChronosApp({ examples, live, onRunChange }: { examples: string[]
   return (
     <div className="mx-auto w-full max-w-[1440px] px-4 pt-4 pb-12 sm:px-6">
       {!running && <div className="mb-4 flex flex-wrap items-center gap-1">
-        <button type="button" className={toolClass} aria-expanded={editing} onClick={() => setEditing(!editing)}>{editing ? 'Close search' : 'New search'}</button>
+        <button type="button" className={toolClass} onClick={() => prepareTopic('')}>New search</button>
         <ArchivesButton onRestore={restoreArchive} />
         {events.length > 0 && <ExportButton archive={archive} />}
         {saveMessage && <span role="status" className={cn('px-2 text-[12px] sm:ml-auto', saveFailed ? 'text-red' : 'text-ink-3')}>{saveMessage}
           {saveFailed && <button type="button" className={toolClass} onClick={saveCurrent}>Try saving again</button>}
         </span>}
-      </div>}
-      {editing && !running && <div className="mb-5 max-w-[620px]">
-        <PromptComposer value={draft} onChange={setDraft} onSubmit={(q) => start(q)} mode={mode} onModeChange={setMode} />
-        {discovery}
       </div>}
       <RunHeader state={state} events={events} onLive={runLive} />
 
@@ -346,7 +338,7 @@ export function ChronosApp({ examples, live, onRunChange }: { examples: string[]
           <div className="chronos-stage min-w-0 lg:flex lg:flex-col lg:gap-4">
             <section id="chronos-map" aria-label="Map" className="chronos-map-panel flex flex-col gap-3">
               <div className="rounded-[14px] bg-surface p-2 shadow-card sm:p-3">
-                <DotMap events={events} cursorYear={cursorForViews} playing={playback.playing} range={range}
+                <InvestigationMap events={events} cursorYear={cursorForViews} playing={playback.playing} range={range}
                   selectedId={focusId} hoverIds={hover?.ids ?? null} onHover={onMapHover} onFocusEvent={onMapFocus}
                   onOpen={onSelect} area={area} onAreaChange={setArea} interactive loading={running}
                   liveModel={isLive} resetKey={state.runId} legend />

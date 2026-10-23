@@ -360,9 +360,9 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
   const hist = historySections(sections, resolved.fragment);
   let paragraphs: Paragraph[] = [];
   let links: string[] = [];
-  const mineInto = (html: string) => {
+  const mineInto = (html: string, sourceUrl = articleUrl) => {
     const mined = mineHtml(html);
-    paragraphs = [...paragraphs, ...mined.paragraphs];
+    paragraphs = [...paragraphs, ...mined.paragraphs.map(p => ({...p, sourceUrl}))];
     links = Array.from(new Set([...links, ...mined.links]));
   };
   // deep mode with no "History of X" article reads the whole topic article instead of just its History section
@@ -378,7 +378,7 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
   mineInto(historyHtml);
   // a dedicated "History of X" article is the richest source; read it when the section is thin or in deep mode
   if (historyOf && (mode === "deep" || paragraphs.length < 18)) {
-    mineInto(await fetchHtml(historyOf.title, null, signal).catch((err) => { sourceFailure("wikipedia", "History article text failed", err); return ""; }));
+    mineInto(await fetchHtml(historyOf.title, null, signal).catch((err) => { sourceFailure("wikipedia", "History article text failed", err); return ""; }), `https://en.wikipedia.org/wiki/${encodeURIComponent(historyOf.title.replace(/ /g, '_'))}`);
   }
   if (!historyHtml && !historyOf && !wholeArticle && summary) {
     // no history section: read the whole article
@@ -713,6 +713,26 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
   const linkedDone = wikidataLinked().then(() => emitEras(false));
   await Promise.all([linkedDone, wikipediaLane(), crossCheckLane(), modelLane()]);
   if (signal.aborted) return;
+
+  // A provider limit must not discard useful dates already read from the source.
+  // These are attributed to Wikipedia, with the actual sentence and article;
+  // they are never counted as independent model confirmation.
+  if (live && engine.list().filter(e => e.sources.some(s => s !== 'llm')).length < 5) {
+    const picked = spreadPick(claims, L.claims, range);
+    for (const [i, claim] of picked.entries()) {
+      const id = `wp-prose:${i}`;
+      const url = claim.sourceUrl ?? articleUrl;
+      const title = claim.altTitle ?? claim.title;
+      accept({id, source: 'wikipedia', title, year: claim.year, endYear: claim.endYear,
+        approxYear: claim.approx || undefined, summary: claim.sentence, synthTitle: true,
+        weight: claim.weight,
+        citation: {source: 'wikipedia', label: claim.heading || resolved.title,
+          url: claim.anchor ? `${url}#${claim.anchor}` : url, detail: claim.sentence},
+      });
+      claimRecords.push({recordId: id, claim});
+    }
+    if (picked.length) tasks.step('wikipedia', 'Dated source passages', String(picked.length));
+  }
 
   tasks.set("wikidata", { status: sourceFailures.has("wikidata") ? "failed" : "done", count: found.wikidata });
   tasks.set("wikipedia", { status: sourceFailures.has("wikipedia") ? "failed" : "done", count: found.wikipedia });

@@ -1,0 +1,4502 @@
+[
+  {
+    "id": "ancient-egypt",
+    "topic": "Ancient Egypt",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -3100,
+      "end": -30
+    }
+  },
+  {
+    "id": "sumer",
+    "topic": "Sumer",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -4500,
+      "end": -1900
+    }
+  },
+  {
+    "id": "akkadian-empire",
+    "topic": "Akkadian Empire",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -2334,
+      "end": -2154
+    }
+  },
+  {
+    "id": "babylonia",
+    "topic": "Babylonia",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -1894,
+      "end": -539
+    }
+  },
+  {
+    "id": "assyria",
+    "topic": "Assyria",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -2025,
+      "end": -609
+    }
+  },
+  {
+    "id": "hittites",
+    "topic": "Hittites",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -1650,
+      "end": -1180
+    }
+  },
+  {
+    "id": "phoenicia",
+    "topic": "Phoenicia",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -1500,
+      "end": -300
+    }
+  },
+  {
+    "id": "carthage",
+    "topic": "Carthage",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -814,
+      "end": -146
+    }
+  },
+  {
+    "id": "minoan-civilization",
+    "topic": "Minoan civilization",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -3000,
+      "end": -1100
+    }
+  },
+  {
+    "id": "mycenaean-greece",
+    "topic": "Mycenaean Greece",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -1750,
+      "end": -1050
+    }
+  },
+  {
+    "id": "ancient-greece",
+    "topic": "Ancient Greece",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -800,
+      "end": -146
+    }
+  },
+  {
+    "id": "classical-athens",
+    "topic": "Classical Athens",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -508,
+      "end": -322
+    }
+  },
+  {
+    "id": "sparta",
+    "topic": "Sparta",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -900,
+      "end": -146
+    }
+  },
+  {
+    "id": "macedonia-ancient-kingdom",
+    "topic": "Macedonia (ancient kingdom)",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -808,
+      "end": -168
+    }
+  },
+  {
+    "id": "hellenistic-period",
+    "topic": "Hellenistic period",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -323,
+      "end": -31
+    }
+  },
+  {
+    "id": "roman-kingdom",
+    "topic": "Roman Kingdom",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -753,
+      "end": -509
+    }
+  },
+  {
+    "id": "roman-republic",
+    "topic": "Roman Republic",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -509,
+      "end": -27
+    }
+  },
+  {
+    "id": "roman-empire",
+    "topic": "Roman Empire",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -27,
+      "end": 476
+    }
+  },
+  {
+    "id": "byzantine-empire",
+    "topic": "Byzantine Empire",
+    "category": "Ancient worlds",
+    "range": {
+      "start": 330,
+      "end": 1453
+    }
+  },
+  {
+    "id": "achaemenid-empire",
+    "topic": "Achaemenid Empire",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -550,
+      "end": -330
+    }
+  },
+  {
+    "id": "parthian-empire",
+    "topic": "Parthian Empire",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -247,
+      "end": 224
+    }
+  },
+  {
+    "id": "sasanian-empire",
+    "topic": "Sasanian Empire",
+    "category": "Ancient worlds",
+    "range": {
+      "start": 224,
+      "end": 651
+    }
+  },
+  {
+    "id": "indus-valley-civilisation",
+    "topic": "Indus Valley Civilisation",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -3300,
+      "end": -1300
+    }
+  },
+  {
+    "id": "maurya-empire",
+    "topic": "Maurya Empire",
+    "category": "Ancient worlds",
+    "range": {
+      "start": -322,
+      "end": -185
+    }
+  },
+  {
+    "id": "gupta-empire",
+    "topic": "Gupta Empire",
+    "category": "Ancient worlds",
+    "range": {
+      "start": 320,
+      "end": 550
+    }
+  },
+  {
+    "id": "shang-dynasty",
+    "topic": "Shang dynasty",
+    "category": "Asian dynasties",
+    "range": {
+      "start": -1600,
+      "end": -1046
+    }
+  },
+  {
+    "id": "zhou-dynasty",
+    "topic": "Zhou dynasty",
+    "category": "Asian dynasties",
+    "range": {
+      "start": -1046,
+      "end": -256
+    }
+  },
+  {
+    "id": "qin-dynasty",
+    "topic": "Qin dynasty",
+    "category": "Asian dynasties",
+    "range": {
+      "start": -221,
+      "end": -206
+    }
+  },
+  {
+    "id": "han-dynasty",
+    "topic": "Han dynasty",
+    "category": "Asian dynasties",
+    "range": {
+      "start": -202,
+      "end": 220
+    }
+  },
+  {
+    "id": "three-kingdoms",
+    "topic": "Three Kingdoms",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 220,
+      "end": 280
+    }
+  },
+  {
+    "id": "jin-dynasty-266-420",
+    "topic": "Jin dynasty (266–420)",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 266,
+      "end": 420
+    }
+  },
+  {
+    "id": "sui-dynasty",
+    "topic": "Sui dynasty",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 581,
+      "end": 618
+    }
+  },
+  {
+    "id": "tang-dynasty",
+    "topic": "Tang dynasty",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 618,
+      "end": 907
+    }
+  },
+  {
+    "id": "song-dynasty",
+    "topic": "Song dynasty",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 960,
+      "end": 1279
+    }
+  },
+  {
+    "id": "yuan-dynasty",
+    "topic": "Yuan dynasty",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 1271,
+      "end": 1368
+    }
+  },
+  {
+    "id": "ming-dynasty",
+    "topic": "Ming dynasty",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 1368,
+      "end": 1644
+    }
+  },
+  {
+    "id": "qing-dynasty",
+    "topic": "Qing dynasty",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 1644,
+      "end": 1912
+    }
+  },
+  {
+    "id": "nara-period",
+    "topic": "Nara period",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 710,
+      "end": 794
+    }
+  },
+  {
+    "id": "heian-period",
+    "topic": "Heian period",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 794,
+      "end": 1185
+    }
+  },
+  {
+    "id": "kamakura-period",
+    "topic": "Kamakura period",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 1185,
+      "end": 1333
+    }
+  },
+  {
+    "id": "muromachi-period",
+    "topic": "Muromachi period",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 1336,
+      "end": 1573
+    }
+  },
+  {
+    "id": "sengoku-period",
+    "topic": "Sengoku period",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 1467,
+      "end": 1615
+    }
+  },
+  {
+    "id": "edo-period",
+    "topic": "Edo period",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 1603,
+      "end": 1868
+    }
+  },
+  {
+    "id": "meiji-era",
+    "topic": "Meiji era",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 1868,
+      "end": 1912
+    }
+  },
+  {
+    "id": "goryeo",
+    "topic": "Goryeo",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 918,
+      "end": 1392
+    }
+  },
+  {
+    "id": "joseon",
+    "topic": "Joseon",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 1392,
+      "end": 1897
+    }
+  },
+  {
+    "id": "khmer-empire",
+    "topic": "Khmer Empire",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 802,
+      "end": 1431
+    }
+  },
+  {
+    "id": "majapahit",
+    "topic": "Majapahit",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 1293,
+      "end": 1527
+    }
+  },
+  {
+    "id": "srivijaya",
+    "topic": "Srivijaya",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 650,
+      "end": 1377
+    }
+  },
+  {
+    "id": "mughal-empire",
+    "topic": "Mughal Empire",
+    "category": "Asian dynasties",
+    "range": {
+      "start": 1526,
+      "end": 1857
+    }
+  },
+  {
+    "id": "islamic-golden-age",
+    "topic": "Islamic Golden Age",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 750,
+      "end": 1258
+    }
+  },
+  {
+    "id": "rashidun-caliphate",
+    "topic": "Rashidun Caliphate",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 632,
+      "end": 661
+    }
+  },
+  {
+    "id": "umayyad-caliphate",
+    "topic": "Umayyad Caliphate",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 661,
+      "end": 750
+    }
+  },
+  {
+    "id": "abbasid-caliphate",
+    "topic": "Abbasid Caliphate",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 750,
+      "end": 1258
+    }
+  },
+  {
+    "id": "fatimid-caliphate",
+    "topic": "Fatimid Caliphate",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 909,
+      "end": 1171
+    }
+  },
+  {
+    "id": "ayyubid-dynasty",
+    "topic": "Ayyubid dynasty",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 1171,
+      "end": 1260
+    }
+  },
+  {
+    "id": "mamluk-sultanate",
+    "topic": "Mamluk Sultanate",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 1250,
+      "end": 1517
+    }
+  },
+  {
+    "id": "seljuk-empire",
+    "topic": "Seljuk Empire",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 1037,
+      "end": 1194
+    }
+  },
+  {
+    "id": "ottoman-empire",
+    "topic": "Ottoman Empire",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 1299,
+      "end": 1922
+    }
+  },
+  {
+    "id": "safavid-iran",
+    "topic": "Safavid Iran",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 1501,
+      "end": 1736
+    }
+  },
+  {
+    "id": "mongol-empire",
+    "topic": "Mongol Empire",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 1206,
+      "end": 1368
+    }
+  },
+  {
+    "id": "golden-horde",
+    "topic": "Golden Horde",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 1242,
+      "end": 1502
+    }
+  },
+  {
+    "id": "timurid-empire",
+    "topic": "Timurid Empire",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 1370,
+      "end": 1507
+    }
+  },
+  {
+    "id": "carolingian-empire",
+    "topic": "Carolingian Empire",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 800,
+      "end": 888
+    }
+  },
+  {
+    "id": "holy-roman-empire",
+    "topic": "Holy Roman Empire",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 962,
+      "end": 1806
+    }
+  },
+  {
+    "id": "viking-age",
+    "topic": "Viking Age",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 793,
+      "end": 1066
+    }
+  },
+  {
+    "id": "kievan-rus",
+    "topic": "Kievan Rus'",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 882,
+      "end": 1240
+    }
+  },
+  {
+    "id": "kingdom-of-jerusalem",
+    "topic": "Kingdom of Jerusalem",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 1099,
+      "end": 1291
+    }
+  },
+  {
+    "id": "republic-of-venice",
+    "topic": "Republic of Venice",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 697,
+      "end": 1797
+    }
+  },
+  {
+    "id": "hanseatic-league",
+    "topic": "Hanseatic League",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 1150,
+      "end": 1669
+    }
+  },
+  {
+    "id": "al-andalus",
+    "topic": "Al-Andalus",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 711,
+      "end": 1492
+    }
+  },
+  {
+    "id": "reconquista",
+    "topic": "Reconquista",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 718,
+      "end": 1492
+    }
+  },
+  {
+    "id": "delhi-sultanate",
+    "topic": "Delhi Sultanate",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 1206,
+      "end": 1526
+    }
+  },
+  {
+    "id": "chola-dynasty",
+    "topic": "Chola dynasty",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 850,
+      "end": 1279
+    }
+  },
+  {
+    "id": "vijayanagara-empire",
+    "topic": "Vijayanagara Empire",
+    "category": "Medieval worlds",
+    "range": {
+      "start": 1336,
+      "end": 1646
+    }
+  },
+  {
+    "id": "kingdom-of-kush",
+    "topic": "Kingdom of Kush",
+    "category": "African histories",
+    "range": {
+      "start": -1070,
+      "end": 350
+    }
+  },
+  {
+    "id": "kingdom-of-aksum",
+    "topic": "Kingdom of Aksum",
+    "category": "African histories",
+    "range": {
+      "start": 100,
+      "end": 940
+    }
+  },
+  {
+    "id": "ghana-empire",
+    "topic": "Ghana Empire",
+    "category": "African histories",
+    "range": {
+      "start": 300,
+      "end": 1240
+    }
+  },
+  {
+    "id": "mali-empire",
+    "topic": "Mali Empire",
+    "category": "African histories",
+    "range": {
+      "start": 1235,
+      "end": 1670
+    }
+  },
+  {
+    "id": "songhai-empire",
+    "topic": "Songhai Empire",
+    "category": "African histories",
+    "range": {
+      "start": 1464,
+      "end": 1591
+    }
+  },
+  {
+    "id": "kanem-bornu-empire",
+    "topic": "Kanem–Bornu Empire",
+    "category": "African histories",
+    "range": {
+      "start": 700,
+      "end": 1900
+    }
+  },
+  {
+    "id": "benin-empire",
+    "topic": "Benin Empire",
+    "category": "African histories",
+    "range": {
+      "start": 1180,
+      "end": 1897
+    }
+  },
+  {
+    "id": "oyo-empire",
+    "topic": "Oyo Empire",
+    "category": "African histories",
+    "range": {
+      "start": 1300,
+      "end": 1896
+    }
+  },
+  {
+    "id": "kingdom-of-kongo",
+    "topic": "Kingdom of Kongo",
+    "category": "African histories",
+    "range": {
+      "start": 1390,
+      "end": 1914
+    }
+  },
+  {
+    "id": "great-zimbabwe",
+    "topic": "Great Zimbabwe",
+    "category": "African histories",
+    "range": {
+      "start": 1000,
+      "end": 1450
+    }
+  },
+  {
+    "id": "kingdom-of-mapungubwe",
+    "topic": "Kingdom of Mapungubwe",
+    "category": "African histories",
+    "range": {
+      "start": 1075,
+      "end": 1220
+    }
+  },
+  {
+    "id": "ethiopian-empire",
+    "topic": "Ethiopian Empire",
+    "category": "African histories",
+    "range": {
+      "start": 1270,
+      "end": 1974
+    }
+  },
+  {
+    "id": "adal-sultanate",
+    "topic": "Adal Sultanate",
+    "category": "African histories",
+    "range": {
+      "start": 1415,
+      "end": 1577
+    }
+  },
+  {
+    "id": "swahili-coast",
+    "topic": "Swahili coast",
+    "category": "African histories",
+    "range": {
+      "start": 800,
+      "end": 1800
+    }
+  },
+  {
+    "id": "sultanate-of-kilwa",
+    "topic": "Sultanate of Kilwa",
+    "category": "African histories",
+    "range": {
+      "start": 957,
+      "end": 1513
+    }
+  },
+  {
+    "id": "almoravid-dynasty",
+    "topic": "Almoravid dynasty",
+    "category": "African histories",
+    "range": {
+      "start": 1040,
+      "end": 1147
+    }
+  },
+  {
+    "id": "almohad-caliphate",
+    "topic": "Almohad Caliphate",
+    "category": "African histories",
+    "range": {
+      "start": 1121,
+      "end": 1269
+    }
+  },
+  {
+    "id": "ashanti-empire",
+    "topic": "Ashanti Empire",
+    "category": "African histories",
+    "range": {
+      "start": 1701,
+      "end": 1900
+    }
+  },
+  {
+    "id": "zulu-kingdom",
+    "topic": "Zulu Kingdom",
+    "category": "African histories",
+    "range": {
+      "start": 1816,
+      "end": 1897
+    }
+  },
+  {
+    "id": "scramble-for-africa",
+    "topic": "Scramble for Africa",
+    "category": "African histories",
+    "range": {
+      "start": 1881,
+      "end": 1914
+    }
+  },
+  {
+    "id": "decolonisation-of-africa",
+    "topic": "Decolonisation of Africa",
+    "category": "African histories",
+    "range": {
+      "start": 1945,
+      "end": 1990
+    }
+  },
+  {
+    "id": "history-of-ghana",
+    "topic": "History of Ghana",
+    "category": "African histories",
+    "range": {
+      "start": 1800,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-nigeria",
+    "topic": "History of Nigeria",
+    "category": "African histories",
+    "range": {
+      "start": 1800,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-kenya",
+    "topic": "History of Kenya",
+    "category": "African histories",
+    "range": {
+      "start": 1800,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-south-africa",
+    "topic": "History of South Africa",
+    "category": "African histories",
+    "range": {
+      "start": 1652,
+      "end": 1994
+    }
+  },
+  {
+    "id": "olmecs",
+    "topic": "Olmecs",
+    "category": "Americas before 1800",
+    "range": {
+      "start": -1500,
+      "end": -400
+    }
+  },
+  {
+    "id": "maya-civilization",
+    "topic": "Maya civilization",
+    "category": "Americas before 1800",
+    "range": {
+      "start": -2000,
+      "end": 1697
+    }
+  },
+  {
+    "id": "teotihuacan",
+    "topic": "Teotihuacan",
+    "category": "Americas before 1800",
+    "range": {
+      "start": -100,
+      "end": 550
+    }
+  },
+  {
+    "id": "toltec",
+    "topic": "Toltec",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 900,
+      "end": 1150
+    }
+  },
+  {
+    "id": "aztec-empire",
+    "topic": "Aztec Empire",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 1428,
+      "end": 1521
+    }
+  },
+  {
+    "id": "inca-empire",
+    "topic": "Inca Empire",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 1438,
+      "end": 1533
+    }
+  },
+  {
+    "id": "moche-culture",
+    "topic": "Moche culture",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 100,
+      "end": 800
+    }
+  },
+  {
+    "id": "nazca-culture",
+    "topic": "Nazca culture",
+    "category": "Americas before 1800",
+    "range": {
+      "start": -100,
+      "end": 800
+    }
+  },
+  {
+    "id": "wari-empire",
+    "topic": "Wari Empire",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 600,
+      "end": 1000
+    }
+  },
+  {
+    "id": "tiwanaku",
+    "topic": "Tiwanaku",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 500,
+      "end": 1000
+    }
+  },
+  {
+    "id": "chimor",
+    "topic": "Chimor",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 900,
+      "end": 1470
+    }
+  },
+  {
+    "id": "muisca",
+    "topic": "Muisca",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 600,
+      "end": 1600
+    }
+  },
+  {
+    "id": "mississippian-culture",
+    "topic": "Mississippian culture",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 800,
+      "end": 1600
+    }
+  },
+  {
+    "id": "cahokia",
+    "topic": "Cahokia",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 1050,
+      "end": 1400
+    }
+  },
+  {
+    "id": "ancestral-puebloans",
+    "topic": "Ancestral Puebloans",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 100,
+      "end": 1600
+    }
+  },
+  {
+    "id": "iroquois",
+    "topic": "Iroquois",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 1450,
+      "end": 1800
+    }
+  },
+  {
+    "id": "norse-colonization-of-north-america",
+    "topic": "Norse colonization of North America",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 985,
+      "end": 1450
+    }
+  },
+  {
+    "id": "spanish-colonization-of-the-americas",
+    "topic": "Spanish colonization of the Americas",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 1492,
+      "end": 1800
+    }
+  },
+  {
+    "id": "portuguese-colonization-of-the-americas",
+    "topic": "Portuguese colonization of the Americas",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 1500,
+      "end": 1800
+    }
+  },
+  {
+    "id": "new-france",
+    "topic": "New France",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 1534,
+      "end": 1763
+    }
+  },
+  {
+    "id": "new-netherland",
+    "topic": "New Netherland",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 1609,
+      "end": 1664
+    }
+  },
+  {
+    "id": "jamestown-virginia",
+    "topic": "Jamestown, Virginia",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 1607,
+      "end": 1700
+    }
+  },
+  {
+    "id": "plymouth-colony",
+    "topic": "Plymouth Colony",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 1620,
+      "end": 1691
+    }
+  },
+  {
+    "id": "thirteen-colonies",
+    "topic": "Thirteen Colonies",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 1607,
+      "end": 1776
+    }
+  },
+  {
+    "id": "columbian-exchange",
+    "topic": "Columbian exchange",
+    "category": "Americas before 1800",
+    "range": {
+      "start": 1492,
+      "end": 1800
+    }
+  },
+  {
+    "id": "renaissance",
+    "topic": "Renaissance",
+    "category": "European transformations",
+    "range": {
+      "start": 1300,
+      "end": 1600
+    }
+  },
+  {
+    "id": "italian-renaissance",
+    "topic": "Italian Renaissance",
+    "category": "European transformations",
+    "range": {
+      "start": 1300,
+      "end": 1600
+    }
+  },
+  {
+    "id": "northern-renaissance",
+    "topic": "Northern Renaissance",
+    "category": "European transformations",
+    "range": {
+      "start": 1450,
+      "end": 1615
+    }
+  },
+  {
+    "id": "age-of-discovery",
+    "topic": "Age of Discovery",
+    "category": "European transformations",
+    "range": {
+      "start": 1415,
+      "end": 1700
+    }
+  },
+  {
+    "id": "scientific-revolution",
+    "topic": "Scientific Revolution",
+    "category": "European transformations",
+    "range": {
+      "start": 1543,
+      "end": 1687
+    }
+  },
+  {
+    "id": "age-of-enlightenment",
+    "topic": "Age of Enlightenment",
+    "category": "European transformations",
+    "range": {
+      "start": 1685,
+      "end": 1815
+    }
+  },
+  {
+    "id": "reformation",
+    "topic": "Reformation",
+    "category": "European transformations",
+    "range": {
+      "start": 1517,
+      "end": 1648
+    }
+  },
+  {
+    "id": "counter-reformation",
+    "topic": "Counter-Reformation",
+    "category": "European transformations",
+    "range": {
+      "start": 1545,
+      "end": 1648
+    }
+  },
+  {
+    "id": "english-reformation",
+    "topic": "English Reformation",
+    "category": "European transformations",
+    "range": {
+      "start": 1527,
+      "end": 1603
+    }
+  },
+  {
+    "id": "elizabethan-era",
+    "topic": "Elizabethan era",
+    "category": "European transformations",
+    "range": {
+      "start": 1558,
+      "end": 1603
+    }
+  },
+  {
+    "id": "stuart-period",
+    "topic": "Stuart period",
+    "category": "European transformations",
+    "range": {
+      "start": 1603,
+      "end": 1714
+    }
+  },
+  {
+    "id": "georgian-era",
+    "topic": "Georgian era",
+    "category": "European transformations",
+    "range": {
+      "start": 1714,
+      "end": 1837
+    }
+  },
+  {
+    "id": "victorian-era",
+    "topic": "Victorian era",
+    "category": "European transformations",
+    "range": {
+      "start": 1837,
+      "end": 1901
+    }
+  },
+  {
+    "id": "edwardian-era",
+    "topic": "Edwardian era",
+    "category": "European transformations",
+    "range": {
+      "start": 1901,
+      "end": 1910
+    }
+  },
+  {
+    "id": "industrial-revolution",
+    "topic": "Industrial Revolution",
+    "category": "European transformations",
+    "range": {
+      "start": 1760,
+      "end": 1840
+    }
+  },
+  {
+    "id": "second-industrial-revolution",
+    "topic": "Second Industrial Revolution",
+    "category": "European transformations",
+    "range": {
+      "start": 1870,
+      "end": 1914
+    }
+  },
+  {
+    "id": "french-revolution",
+    "topic": "French Revolution",
+    "category": "European transformations",
+    "range": {
+      "start": 1789,
+      "end": 1799
+    }
+  },
+  {
+    "id": "napoleonic-era",
+    "topic": "Napoleonic era",
+    "category": "European transformations",
+    "range": {
+      "start": 1799,
+      "end": 1815
+    }
+  },
+  {
+    "id": "congress-of-vienna",
+    "topic": "Congress of Vienna",
+    "category": "European transformations",
+    "range": {
+      "start": 1814,
+      "end": 1815
+    }
+  },
+  {
+    "id": "revolutions-of-1848",
+    "topic": "Revolutions of 1848",
+    "category": "European transformations",
+    "range": {
+      "start": 1848,
+      "end": 1849
+    }
+  },
+  {
+    "id": "unification-of-italy",
+    "topic": "Unification of Italy",
+    "category": "European transformations",
+    "range": {
+      "start": 1815,
+      "end": 1871
+    }
+  },
+  {
+    "id": "unification-of-germany",
+    "topic": "Unification of Germany",
+    "category": "European transformations",
+    "range": {
+      "start": 1848,
+      "end": 1871
+    }
+  },
+  {
+    "id": "belle-poque",
+    "topic": "Belle Époque",
+    "category": "European transformations",
+    "range": {
+      "start": 1871,
+      "end": 1914
+    }
+  },
+  {
+    "id": "weimar-republic",
+    "topic": "Weimar Republic",
+    "category": "European transformations",
+    "range": {
+      "start": 1918,
+      "end": 1933
+    }
+  },
+  {
+    "id": "european-integration",
+    "topic": "European integration",
+    "category": "European transformations",
+    "range": {
+      "start": 1945,
+      "end": 2004
+    }
+  },
+  {
+    "id": "meiji-restoration",
+    "topic": "Meiji Restoration",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1853,
+      "end": 1889
+    }
+  },
+  {
+    "id": "taish-era",
+    "topic": "Taishō era",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1912,
+      "end": 1926
+    }
+  },
+  {
+    "id": "sh-wa-era",
+    "topic": "Shōwa era",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1926,
+      "end": 1989
+    }
+  },
+  {
+    "id": "xinhai-revolution",
+    "topic": "Xinhai Revolution",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1895,
+      "end": 1912
+    }
+  },
+  {
+    "id": "may-fourth-movement",
+    "topic": "May Fourth Movement",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1915,
+      "end": 1923
+    }
+  },
+  {
+    "id": "chinese-civil-war",
+    "topic": "Chinese Civil War",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1927,
+      "end": 1949
+    }
+  },
+  {
+    "id": "cultural-revolution",
+    "topic": "Cultural Revolution",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1966,
+      "end": 1976
+    }
+  },
+  {
+    "id": "chinese-economic-reform",
+    "topic": "Chinese economic reform",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1978,
+      "end": 2001
+    }
+  },
+  {
+    "id": "indian-independence-movement",
+    "topic": "Indian independence movement",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1857,
+      "end": 1947
+    }
+  },
+  {
+    "id": "partition-of-india",
+    "topic": "Partition of India",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1946,
+      "end": 1948
+    }
+  },
+  {
+    "id": "history-of-the-republic-of-india",
+    "topic": "History of the Republic of India",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1947,
+      "end": 2000
+    }
+  },
+  {
+    "id": "pakistan-movement",
+    "topic": "Pakistan Movement",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1906,
+      "end": 1947
+    }
+  },
+  {
+    "id": "bengali-language-movement",
+    "topic": "Bengali Language Movement",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1948,
+      "end": 1956
+    }
+  },
+  {
+    "id": "indonesian-national-revolution",
+    "topic": "Indonesian National Revolution",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1945,
+      "end": 1949
+    }
+  },
+  {
+    "id": "philippine-revolution",
+    "topic": "Philippine Revolution",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1896,
+      "end": 1898
+    }
+  },
+  {
+    "id": "people-power-revolution",
+    "topic": "People Power Revolution",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1983,
+      "end": 1986
+    }
+  },
+  {
+    "id": "vietnamese-independence-movement",
+    "topic": "Vietnamese independence movement",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1885,
+      "end": 1945
+    }
+  },
+  {
+    "id": "history-of-singapore",
+    "topic": "History of Singapore",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1819,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-hong-kong",
+    "topic": "History of Hong Kong",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1841,
+      "end": 1997
+    }
+  },
+  {
+    "id": "history-of-taiwan",
+    "topic": "History of Taiwan",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1895,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-south-korea",
+    "topic": "History of South Korea",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1948,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-mongolia",
+    "topic": "History of Mongolia",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1206,
+      "end": 1990
+    }
+  },
+  {
+    "id": "history-of-thailand",
+    "topic": "History of Thailand",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1782,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-malaysia",
+    "topic": "History of Malaysia",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1786,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-nepal",
+    "topic": "History of Nepal",
+    "category": "Asian transformations",
+    "range": {
+      "start": 1768,
+      "end": 2008
+    }
+  },
+  {
+    "id": "american-revolution",
+    "topic": "American Revolution",
+    "category": "American transformations",
+    "range": {
+      "start": 1765,
+      "end": 1783
+    }
+  },
+  {
+    "id": "american-civil-war",
+    "topic": "American Civil War",
+    "category": "American transformations",
+    "range": {
+      "start": 1861,
+      "end": 1865
+    }
+  },
+  {
+    "id": "reconstruction-era",
+    "topic": "Reconstruction era",
+    "category": "American transformations",
+    "range": {
+      "start": 1865,
+      "end": 1877
+    }
+  },
+  {
+    "id": "gilded-age",
+    "topic": "Gilded Age",
+    "category": "American transformations",
+    "range": {
+      "start": 1877,
+      "end": 1900
+    }
+  },
+  {
+    "id": "progressive-era",
+    "topic": "Progressive Era",
+    "category": "American transformations",
+    "range": {
+      "start": 1890,
+      "end": 1920
+    }
+  },
+  {
+    "id": "roaring-twenties",
+    "topic": "Roaring Twenties",
+    "category": "American transformations",
+    "range": {
+      "start": 1920,
+      "end": 1929
+    }
+  },
+  {
+    "id": "great-depression",
+    "topic": "Great Depression",
+    "category": "American transformations",
+    "range": {
+      "start": 1929,
+      "end": 1939
+    }
+  },
+  {
+    "id": "new-deal",
+    "topic": "New Deal",
+    "category": "American transformations",
+    "range": {
+      "start": 1933,
+      "end": 1939
+    }
+  },
+  {
+    "id": "civil-rights-movement",
+    "topic": "Civil rights movement",
+    "category": "American transformations",
+    "range": {
+      "start": 1954,
+      "end": 1968
+    }
+  },
+  {
+    "id": "american-indian-movement",
+    "topic": "American Indian Movement",
+    "category": "American transformations",
+    "range": {
+      "start": 1968,
+      "end": 1980
+    }
+  },
+  {
+    "id": "haitian-revolution",
+    "topic": "Haitian Revolution",
+    "category": "American transformations",
+    "range": {
+      "start": 1791,
+      "end": 1804
+    }
+  },
+  {
+    "id": "spanish-american-wars-of-independence",
+    "topic": "Spanish American wars of independence",
+    "category": "American transformations",
+    "range": {
+      "start": 1808,
+      "end": 1833
+    }
+  },
+  {
+    "id": "mexican-war-of-independence",
+    "topic": "Mexican War of Independence",
+    "category": "American transformations",
+    "range": {
+      "start": 1810,
+      "end": 1821
+    }
+  },
+  {
+    "id": "mexican-revolution",
+    "topic": "Mexican Revolution",
+    "category": "American transformations",
+    "range": {
+      "start": 1910,
+      "end": 1920
+    }
+  },
+  {
+    "id": "independence-of-brazil",
+    "topic": "Independence of Brazil",
+    "category": "American transformations",
+    "range": {
+      "start": 1808,
+      "end": 1825
+    }
+  },
+  {
+    "id": "empire-of-brazil",
+    "topic": "Empire of Brazil",
+    "category": "American transformations",
+    "range": {
+      "start": 1822,
+      "end": 1889
+    }
+  },
+  {
+    "id": "cuban-revolution",
+    "topic": "Cuban Revolution",
+    "category": "American transformations",
+    "range": {
+      "start": 1953,
+      "end": 1959
+    }
+  },
+  {
+    "id": "argentine-war-of-independence",
+    "topic": "Argentine War of Independence",
+    "category": "American transformations",
+    "range": {
+      "start": 1810,
+      "end": 1818
+    }
+  },
+  {
+    "id": "chilean-war-of-independence",
+    "topic": "Chilean War of Independence",
+    "category": "American transformations",
+    "range": {
+      "start": 1810,
+      "end": 1826
+    }
+  },
+  {
+    "id": "gran-colombia",
+    "topic": "Gran Colombia",
+    "category": "American transformations",
+    "range": {
+      "start": 1819,
+      "end": 1831
+    }
+  },
+  {
+    "id": "canadian-confederation",
+    "topic": "Canadian Confederation",
+    "category": "American transformations",
+    "range": {
+      "start": 1864,
+      "end": 1873
+    }
+  },
+  {
+    "id": "quiet-revolution",
+    "topic": "Quiet Revolution",
+    "category": "American transformations",
+    "range": {
+      "start": 1960,
+      "end": 1970
+    }
+  },
+  {
+    "id": "history-of-the-caribbean",
+    "topic": "History of the Caribbean",
+    "category": "American transformations",
+    "range": {
+      "start": 1492,
+      "end": 1962
+    }
+  },
+  {
+    "id": "history-of-central-america",
+    "topic": "History of Central America",
+    "category": "American transformations",
+    "range": {
+      "start": 1821,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-latin-america",
+    "topic": "History of Latin America",
+    "category": "American transformations",
+    "range": {
+      "start": 1800,
+      "end": 2000
+    }
+  },
+  {
+    "id": "greco-persian-wars",
+    "topic": "Greco-Persian Wars",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": -499,
+      "end": -449
+    }
+  },
+  {
+    "id": "peloponnesian-war",
+    "topic": "Peloponnesian War",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": -431,
+      "end": -404
+    }
+  },
+  {
+    "id": "wars-of-alexander-the-great",
+    "topic": "Wars of Alexander the Great",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": -336,
+      "end": -323
+    }
+  },
+  {
+    "id": "wars-of-the-diadochi",
+    "topic": "Wars of the Diadochi",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": -322,
+      "end": -281
+    }
+  },
+  {
+    "id": "punic-wars",
+    "topic": "Punic Wars",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": -264,
+      "end": -146
+    }
+  },
+  {
+    "id": "first-punic-war",
+    "topic": "First Punic War",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": -264,
+      "end": -241
+    }
+  },
+  {
+    "id": "second-punic-war",
+    "topic": "Second Punic War",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": -218,
+      "end": -201
+    }
+  },
+  {
+    "id": "third-punic-war",
+    "topic": "Third Punic War",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": -149,
+      "end": -146
+    }
+  },
+  {
+    "id": "gallic-wars",
+    "topic": "Gallic Wars",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": -58,
+      "end": -50
+    }
+  },
+  {
+    "id": "caesar-s-civil-war",
+    "topic": "Caesar's civil war",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": -49,
+      "end": -45
+    }
+  },
+  {
+    "id": "roman-persian-wars",
+    "topic": "Roman–Persian Wars",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": -54,
+      "end": 628
+    }
+  },
+  {
+    "id": "jewish-roman-wars",
+    "topic": "Jewish–Roman wars",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": 66,
+      "end": 136
+    }
+  },
+  {
+    "id": "gothic-war-535-554",
+    "topic": "Gothic War (535–554)",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": 535,
+      "end": 554
+    }
+  },
+  {
+    "id": "byzantine-sasanian-war-of-602-628",
+    "topic": "Byzantine–Sasanian War of 602–628",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": 602,
+      "end": 628
+    }
+  },
+  {
+    "id": "early-muslim-conquests",
+    "topic": "Early Muslim conquests",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": 632,
+      "end": 750
+    }
+  },
+  {
+    "id": "an-lushan-rebellion",
+    "topic": "An Lushan Rebellion",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": 755,
+      "end": 763
+    }
+  },
+  {
+    "id": "norman-conquest-of-england",
+    "topic": "Norman conquest of England",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": 1066,
+      "end": 1071
+    }
+  },
+  {
+    "id": "crusades",
+    "topic": "Crusades",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": 1096,
+      "end": 1291
+    }
+  },
+  {
+    "id": "first-crusade",
+    "topic": "First Crusade",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": 1096,
+      "end": 1099
+    }
+  },
+  {
+    "id": "third-crusade",
+    "topic": "Third Crusade",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": 1189,
+      "end": 1192
+    }
+  },
+  {
+    "id": "fourth-crusade",
+    "topic": "Fourth Crusade",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": 1202,
+      "end": 1204
+    }
+  },
+  {
+    "id": "mongol-invasions-and-conquests",
+    "topic": "Mongol invasions and conquests",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": 1206,
+      "end": 1405
+    }
+  },
+  {
+    "id": "hundred-years-war",
+    "topic": "Hundred Years' War",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": 1337,
+      "end": 1453
+    }
+  },
+  {
+    "id": "wars-of-the-roses",
+    "topic": "Wars of the Roses",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": 1455,
+      "end": 1487
+    }
+  },
+  {
+    "id": "genpei-war",
+    "topic": "Genpei War",
+    "category": "Wars of antiquity and the Middle Ages",
+    "range": {
+      "start": 1180,
+      "end": 1185
+    }
+  },
+  {
+    "id": "italian-wars",
+    "topic": "Italian Wars",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1494,
+      "end": 1559
+    }
+  },
+  {
+    "id": "french-wars-of-religion",
+    "topic": "French Wars of Religion",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1562,
+      "end": 1598
+    }
+  },
+  {
+    "id": "eighty-years-war",
+    "topic": "Eighty Years' War",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1568,
+      "end": 1648
+    }
+  },
+  {
+    "id": "thirty-years-war",
+    "topic": "Thirty Years' War",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1618,
+      "end": 1648
+    }
+  },
+  {
+    "id": "english-civil-war",
+    "topic": "English Civil War",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1642,
+      "end": 1651
+    }
+  },
+  {
+    "id": "great-northern-war",
+    "topic": "Great Northern War",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1700,
+      "end": 1721
+    }
+  },
+  {
+    "id": "war-of-the-spanish-succession",
+    "topic": "War of the Spanish Succession",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1701,
+      "end": 1714
+    }
+  },
+  {
+    "id": "war-of-the-austrian-succession",
+    "topic": "War of the Austrian Succession",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1740,
+      "end": 1748
+    }
+  },
+  {
+    "id": "seven-years-war",
+    "topic": "Seven Years' War",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1756,
+      "end": 1763
+    }
+  },
+  {
+    "id": "french-and-indian-war",
+    "topic": "French and Indian War",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1754,
+      "end": 1763
+    }
+  },
+  {
+    "id": "american-revolutionary-war",
+    "topic": "American Revolutionary War",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1775,
+      "end": 1783
+    }
+  },
+  {
+    "id": "french-revolutionary-wars",
+    "topic": "French Revolutionary Wars",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1792,
+      "end": 1802
+    }
+  },
+  {
+    "id": "napoleonic-wars",
+    "topic": "Napoleonic Wars",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1803,
+      "end": 1815
+    }
+  },
+  {
+    "id": "peninsular-war",
+    "topic": "Peninsular War",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1807,
+      "end": 1814
+    }
+  },
+  {
+    "id": "war-of-1812",
+    "topic": "War of 1812",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1812,
+      "end": 1815
+    }
+  },
+  {
+    "id": "first-opium-war",
+    "topic": "First Opium War",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1839,
+      "end": 1842
+    }
+  },
+  {
+    "id": "second-opium-war",
+    "topic": "Second Opium War",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1856,
+      "end": 1860
+    }
+  },
+  {
+    "id": "taiping-rebellion",
+    "topic": "Taiping Rebellion",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1850,
+      "end": 1864
+    }
+  },
+  {
+    "id": "crimean-war",
+    "topic": "Crimean War",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1853,
+      "end": 1856
+    }
+  },
+  {
+    "id": "indian-rebellion-of-1857",
+    "topic": "Indian Rebellion of 1857",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1857,
+      "end": 1858
+    }
+  },
+  {
+    "id": "franco-prussian-war",
+    "topic": "Franco-Prussian War",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1870,
+      "end": 1871
+    }
+  },
+  {
+    "id": "paraguayan-war",
+    "topic": "Paraguayan War",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1864,
+      "end": 1870
+    }
+  },
+  {
+    "id": "war-of-the-pacific",
+    "topic": "War of the Pacific",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1879,
+      "end": 1884
+    }
+  },
+  {
+    "id": "first-sino-japanese-war",
+    "topic": "First Sino-Japanese War",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1894,
+      "end": 1895
+    }
+  },
+  {
+    "id": "second-boer-war",
+    "topic": "Second Boer War",
+    "category": "Wars from 1500 to 1900",
+    "range": {
+      "start": 1899,
+      "end": 1902
+    }
+  },
+  {
+    "id": "russo-japanese-war",
+    "topic": "Russo-Japanese War",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1904,
+      "end": 1905
+    }
+  },
+  {
+    "id": "balkan-wars",
+    "topic": "Balkan Wars",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1912,
+      "end": 1913
+    }
+  },
+  {
+    "id": "world-war-i",
+    "topic": "World War I",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1914,
+      "end": 1918
+    }
+  },
+  {
+    "id": "russian-revolution",
+    "topic": "Russian Revolution",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1905,
+      "end": 1923
+    }
+  },
+  {
+    "id": "russian-civil-war",
+    "topic": "Russian Civil War",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1917,
+      "end": 1923
+    }
+  },
+  {
+    "id": "irish-war-of-independence",
+    "topic": "Irish War of Independence",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1919,
+      "end": 1921
+    }
+  },
+  {
+    "id": "turkish-war-of-independence",
+    "topic": "Turkish War of Independence",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1919,
+      "end": 1923
+    }
+  },
+  {
+    "id": "spanish-civil-war",
+    "topic": "Spanish Civil War",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1936,
+      "end": 1939
+    }
+  },
+  {
+    "id": "second-sino-japanese-war",
+    "topic": "Second Sino-Japanese War",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1937,
+      "end": 1945
+    }
+  },
+  {
+    "id": "world-war-ii",
+    "topic": "World War II",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1939,
+      "end": 1945
+    }
+  },
+  {
+    "id": "pacific-war",
+    "topic": "Pacific War",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1941,
+      "end": 1945
+    }
+  },
+  {
+    "id": "winter-war",
+    "topic": "Winter War",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1939,
+      "end": 1940
+    }
+  },
+  {
+    "id": "battle-of-the-atlantic",
+    "topic": "Battle of the Atlantic",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1939,
+      "end": 1945
+    }
+  },
+  {
+    "id": "battle-of-britain",
+    "topic": "Battle of Britain",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1940,
+      "end": 1941
+    }
+  },
+  {
+    "id": "cold-war",
+    "topic": "Cold War",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1947,
+      "end": 1991
+    }
+  },
+  {
+    "id": "korean-war",
+    "topic": "Korean War",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1950,
+      "end": 1953
+    }
+  },
+  {
+    "id": "vietnam-war",
+    "topic": "Vietnam War",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1955,
+      "end": 1975
+    }
+  },
+  {
+    "id": "algerian-war",
+    "topic": "Algerian War",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1954,
+      "end": 1962
+    }
+  },
+  {
+    "id": "suez-crisis",
+    "topic": "Suez Crisis",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1956,
+      "end": 1957
+    }
+  },
+  {
+    "id": "cuban-missile-crisis",
+    "topic": "Cuban Missile Crisis",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1962,
+      "end": 1963
+    }
+  },
+  {
+    "id": "bangladesh-liberation-war",
+    "topic": "Bangladesh Liberation War",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1971,
+      "end": 1972
+    }
+  },
+  {
+    "id": "d-tente",
+    "topic": "Détente",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1969,
+      "end": 1979
+    }
+  },
+  {
+    "id": "fall-of-the-berlin-wall",
+    "topic": "Fall of the Berlin Wall",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1989,
+      "end": 1990
+    }
+  },
+  {
+    "id": "revolutions-of-1989",
+    "topic": "Revolutions of 1989",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1989,
+      "end": 1991
+    }
+  },
+  {
+    "id": "good-friday-agreement",
+    "topic": "Good Friday Agreement",
+    "category": "Twentieth-century conflict and peace",
+    "range": {
+      "start": 1994,
+      "end": 1998
+    }
+  },
+  {
+    "id": "history-of-astronomy",
+    "topic": "History of astronomy",
+    "category": "Science and discovery",
+    "range": {
+      "start": -600,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-mathematics",
+    "topic": "History of mathematics",
+    "category": "Science and discovery",
+    "range": {
+      "start": -2000,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-physics",
+    "topic": "History of physics",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1500,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-chemistry",
+    "topic": "History of chemistry",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1600,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-biology",
+    "topic": "History of biology",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1600,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-geology",
+    "topic": "History of geology",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1600,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-geography",
+    "topic": "History of geography",
+    "category": "Science and discovery",
+    "range": {
+      "start": -600,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-cartography",
+    "topic": "History of cartography",
+    "category": "Science and discovery",
+    "range": {
+      "start": -600,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-evolutionary-thought",
+    "topic": "History of evolutionary thought",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1700,
+      "end": 1950
+    }
+  },
+  {
+    "id": "history-of-genetics",
+    "topic": "History of genetics",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1860,
+      "end": 2003
+    }
+  },
+  {
+    "id": "history-of-the-periodic-table",
+    "topic": "History of the periodic table",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1789,
+      "end": 1960
+    }
+  },
+  {
+    "id": "history-of-quantum-mechanics",
+    "topic": "History of quantum mechanics",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1900,
+      "end": 1950
+    }
+  },
+  {
+    "id": "history-of-thermodynamics",
+    "topic": "History of thermodynamics",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1650,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-electromagnetism",
+    "topic": "History of electromagnetism",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1600,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-optics",
+    "topic": "History of optics",
+    "category": "Science and discovery",
+    "range": {
+      "start": -300,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-the-telescope",
+    "topic": "History of the telescope",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1608,
+      "end": 1990
+    }
+  },
+  {
+    "id": "history-of-the-microscope",
+    "topic": "History of the microscope",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1590,
+      "end": 1935
+    }
+  },
+  {
+    "id": "history-of-paleontology",
+    "topic": "History of paleontology",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1700,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-meteorology",
+    "topic": "History of meteorology",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1600,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-oceanography",
+    "topic": "History of oceanography",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1700,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-seismology",
+    "topic": "History of seismology",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1750,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-archaeology",
+    "topic": "History of archaeology",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1700,
+      "end": 2000
+    }
+  },
+  {
+    "id": "human-genome-project",
+    "topic": "Human Genome Project",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1990,
+      "end": 2003
+    }
+  },
+  {
+    "id": "manhattan-project",
+    "topic": "Manhattan Project",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1939,
+      "end": 1946
+    }
+  },
+  {
+    "id": "cern",
+    "topic": "CERN",
+    "category": "Science and discovery",
+    "range": {
+      "start": 1954,
+      "end": 2012
+    }
+  },
+  {
+    "id": "history-of-printing",
+    "topic": "History of printing",
+    "category": "Invention and technology",
+    "range": {
+      "start": 600,
+      "end": 1900
+    }
+  },
+  {
+    "id": "printing-press",
+    "topic": "Printing press",
+    "category": "Invention and technology",
+    "range": {
+      "start": 1400,
+      "end": 1850
+    }
+  },
+  {
+    "id": "history-of-paper",
+    "topic": "History of paper",
+    "category": "Invention and technology",
+    "range": {
+      "start": -200,
+      "end": 1800
+    }
+  },
+  {
+    "id": "history-of-writing",
+    "topic": "History of writing",
+    "category": "Invention and technology",
+    "range": {
+      "start": -3400,
+      "end": 1500
+    }
+  },
+  {
+    "id": "history-of-the-alphabet",
+    "topic": "History of the alphabet",
+    "category": "Invention and technology",
+    "range": {
+      "start": -1800,
+      "end": 1000
+    }
+  },
+  {
+    "id": "history-of-computing",
+    "topic": "History of computing",
+    "category": "Invention and technology",
+    "range": {
+      "start": 1800,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-the-internet",
+    "topic": "History of the Internet",
+    "category": "Invention and technology",
+    "range": {
+      "start": 1960,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-the-world-wide-web",
+    "topic": "History of the World Wide Web",
+    "category": "Invention and technology",
+    "range": {
+      "start": 1989,
+      "end": 2005
+    }
+  },
+  {
+    "id": "history-of-artificial-intelligence",
+    "topic": "History of artificial intelligence",
+    "category": "Invention and technology",
+    "range": {
+      "start": 1940,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-telecommunications",
+    "topic": "History of telecommunications",
+    "category": "Invention and technology",
+    "range": {
+      "start": 1790,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-the-telephone",
+    "topic": "History of the telephone",
+    "category": "Invention and technology",
+    "range": {
+      "start": 1840,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-radio",
+    "topic": "History of radio",
+    "category": "Invention and technology",
+    "range": {
+      "start": 1860,
+      "end": 1950
+    }
+  },
+  {
+    "id": "history-of-television",
+    "topic": "History of television",
+    "category": "Invention and technology",
+    "range": {
+      "start": 1880,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-photography",
+    "topic": "History of photography",
+    "category": "Invention and technology",
+    "range": {
+      "start": 1800,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-film-technology",
+    "topic": "History of film technology",
+    "category": "Invention and technology",
+    "range": {
+      "start": 1870,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-the-steam-engine",
+    "topic": "History of the steam engine",
+    "category": "Invention and technology",
+    "range": {
+      "start": 1600,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-the-internal-combustion-engine",
+    "topic": "History of the internal combustion engine",
+    "category": "Invention and technology",
+    "range": {
+      "start": 1790,
+      "end": 1950
+    }
+  },
+  {
+    "id": "history-of-electric-power-transmission",
+    "topic": "History of electric power transmission",
+    "category": "Invention and technology",
+    "range": {
+      "start": 1870,
+      "end": 1950
+    }
+  },
+  {
+    "id": "history-of-the-transistor",
+    "topic": "History of the transistor",
+    "category": "Invention and technology",
+    "range": {
+      "start": 1925,
+      "end": 1970
+    }
+  },
+  {
+    "id": "history-of-the-integrated-circuit",
+    "topic": "History of the integrated circuit",
+    "category": "Invention and technology",
+    "range": {
+      "start": 1947,
+      "end": 1980
+    }
+  },
+  {
+    "id": "history-of-robots",
+    "topic": "History of robots",
+    "category": "Invention and technology",
+    "range": {
+      "start": 1500,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-timekeeping-devices",
+    "topic": "History of timekeeping devices",
+    "category": "Invention and technology",
+    "range": {
+      "start": -1500,
+      "end": 1970
+    }
+  },
+  {
+    "id": "history-of-the-battery",
+    "topic": "History of the battery",
+    "category": "Invention and technology",
+    "range": {
+      "start": 1740,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-glass",
+    "topic": "History of glass",
+    "category": "Invention and technology",
+    "range": {
+      "start": -2500,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-metallurgy",
+    "topic": "History of metallurgy",
+    "category": "Invention and technology",
+    "range": {
+      "start": -5000,
+      "end": 1900
+    }
+  },
+  {
+    "id": "silk-road",
+    "topic": "Silk Road",
+    "category": "Travel and exploration",
+    "range": {
+      "start": -130,
+      "end": 1453
+    }
+  },
+  {
+    "id": "trans-saharan-trade",
+    "topic": "Trans-Saharan trade",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 700,
+      "end": 1900
+    }
+  },
+  {
+    "id": "indian-ocean-trade",
+    "topic": "Indian Ocean trade",
+    "category": "Travel and exploration",
+    "range": {
+      "start": -300,
+      "end": 1600
+    }
+  },
+  {
+    "id": "maritime-silk-road",
+    "topic": "Maritime Silk Road",
+    "category": "Travel and exploration",
+    "range": {
+      "start": -200,
+      "end": 1500
+    }
+  },
+  {
+    "id": "spice-trade",
+    "topic": "Spice trade",
+    "category": "Travel and exploration",
+    "range": {
+      "start": -1000,
+      "end": 1800
+    }
+  },
+  {
+    "id": "history-of-navigation",
+    "topic": "History of navigation",
+    "category": "Travel and exploration",
+    "range": {
+      "start": -1000,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-aviation",
+    "topic": "History of aviation",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1783,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-rail-transport",
+    "topic": "History of rail transport",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1800,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-the-automobile",
+    "topic": "History of the automobile",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1769,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-the-bicycle",
+    "topic": "History of the bicycle",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1817,
+      "end": 2000
+    }
+  },
+  {
+    "id": "age-of-sail",
+    "topic": "Age of Sail",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1571,
+      "end": 1862
+    }
+  },
+  {
+    "id": "history-of-the-panama-canal",
+    "topic": "History of the Panama Canal",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1880,
+      "end": 1914
+    }
+  },
+  {
+    "id": "history-of-the-suez-canal",
+    "topic": "History of the Suez Canal",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1854,
+      "end": 1956
+    }
+  },
+  {
+    "id": "transcontinental-railroad",
+    "topic": "Transcontinental railroad",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1862,
+      "end": 1869
+    }
+  },
+  {
+    "id": "trans-siberian-railway",
+    "topic": "Trans-Siberian Railway",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1891,
+      "end": 1916
+    }
+  },
+  {
+    "id": "lewis-and-clark-expedition",
+    "topic": "Lewis and Clark Expedition",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1803,
+      "end": 1806
+    }
+  },
+  {
+    "id": "voyages-of-christopher-columbus",
+    "topic": "Voyages of Christopher Columbus",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1492,
+      "end": 1504
+    }
+  },
+  {
+    "id": "magellan-expedition",
+    "topic": "Magellan expedition",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1519,
+      "end": 1522
+    }
+  },
+  {
+    "id": "voyages-of-james-cook",
+    "topic": "Voyages of James Cook",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1768,
+      "end": 1779
+    }
+  },
+  {
+    "id": "ming-treasure-voyages",
+    "topic": "Ming treasure voyages",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1405,
+      "end": 1433
+    }
+  },
+  {
+    "id": "heroic-age-of-antarctic-exploration",
+    "topic": "Heroic Age of Antarctic Exploration",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1897,
+      "end": 1922
+    }
+  },
+  {
+    "id": "terra-nova-expedition",
+    "topic": "Terra Nova Expedition",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1910,
+      "end": 1913
+    }
+  },
+  {
+    "id": "imperial-trans-antarctic-expedition",
+    "topic": "Imperial Trans-Antarctic Expedition",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1914,
+      "end": 1917
+    }
+  },
+  {
+    "id": "northwest-passage",
+    "topic": "Northwest Passage",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1497,
+      "end": 1906
+    }
+  },
+  {
+    "id": "history-of-mount-everest",
+    "topic": "History of Mount Everest",
+    "category": "Travel and exploration",
+    "range": {
+      "start": 1800,
+      "end": 2000
+    }
+  },
+  {
+    "id": "space-race",
+    "topic": "Space Race",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1955,
+      "end": 1975
+    }
+  },
+  {
+    "id": "apollo-program",
+    "topic": "Apollo program",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1961,
+      "end": 1972
+    }
+  },
+  {
+    "id": "project-mercury",
+    "topic": "Project Mercury",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1958,
+      "end": 1963
+    }
+  },
+  {
+    "id": "project-gemini",
+    "topic": "Project Gemini",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1961,
+      "end": 1966
+    }
+  },
+  {
+    "id": "vostok-programme",
+    "topic": "Vostok programme",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1956,
+      "end": 1963
+    }
+  },
+  {
+    "id": "soyuz-programme",
+    "topic": "Soyuz programme",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1960,
+      "end": 2000
+    }
+  },
+  {
+    "id": "salyut-programme",
+    "topic": "Salyut programme",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1971,
+      "end": 1991
+    }
+  },
+  {
+    "id": "skylab",
+    "topic": "Skylab",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1965,
+      "end": 1979
+    }
+  },
+  {
+    "id": "space-shuttle-program",
+    "topic": "Space Shuttle program",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1972,
+      "end": 2011
+    }
+  },
+  {
+    "id": "international-space-station",
+    "topic": "International Space Station",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1984,
+      "end": 2011
+    }
+  },
+  {
+    "id": "mir",
+    "topic": "Mir",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1976,
+      "end": 2001
+    }
+  },
+  {
+    "id": "voyager-program",
+    "topic": "Voyager program",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1972,
+      "end": 2012
+    }
+  },
+  {
+    "id": "viking-program",
+    "topic": "Viking program",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1968,
+      "end": 1982
+    }
+  },
+  {
+    "id": "luna-programme",
+    "topic": "Luna programme",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1958,
+      "end": 1976
+    }
+  },
+  {
+    "id": "mariner-program",
+    "topic": "Mariner program",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1962,
+      "end": 1973
+    }
+  },
+  {
+    "id": "hubble-space-telescope",
+    "topic": "Hubble Space Telescope",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1946,
+      "end": 2009
+    }
+  },
+  {
+    "id": "exploration-of-mars",
+    "topic": "Exploration of Mars",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1960,
+      "end": 2012
+    }
+  },
+  {
+    "id": "exploration-of-the-moon",
+    "topic": "Exploration of the Moon",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1959,
+      "end": 1976
+    }
+  },
+  {
+    "id": "history-of-spaceflight",
+    "topic": "History of spaceflight",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1903,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-rocketry",
+    "topic": "History of rocketry",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1200,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-satellites",
+    "topic": "History of satellites",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1957,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-nuclear-power",
+    "topic": "History of nuclear power",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1930,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-wind-power",
+    "topic": "History of wind power",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1000,
+      "end": 2000
+    }
+  },
+  {
+    "id": "hoover-dam",
+    "topic": "Hoover Dam",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1922,
+      "end": 1936
+    }
+  },
+  {
+    "id": "channel-tunnel",
+    "topic": "Channel Tunnel",
+    "category": "Space and engineering",
+    "range": {
+      "start": 1802,
+      "end": 1994
+    }
+  },
+  {
+    "id": "history-of-art",
+    "topic": "History of art",
+    "category": "Art and architecture",
+    "range": {
+      "start": -3000,
+      "end": 2000
+    }
+  },
+  {
+    "id": "ancient-egyptian-art",
+    "topic": "Ancient Egyptian art",
+    "category": "Art and architecture",
+    "range": {
+      "start": -3100,
+      "end": -30
+    }
+  },
+  {
+    "id": "art-of-ancient-greece",
+    "topic": "Art of ancient Greece",
+    "category": "Art and architecture",
+    "range": {
+      "start": -800,
+      "end": -31
+    }
+  },
+  {
+    "id": "roman-art",
+    "topic": "Roman art",
+    "category": "Art and architecture",
+    "range": {
+      "start": -500,
+      "end": 476
+    }
+  },
+  {
+    "id": "byzantine-art",
+    "topic": "Byzantine art",
+    "category": "Art and architecture",
+    "range": {
+      "start": 330,
+      "end": 1453
+    }
+  },
+  {
+    "id": "islamic-art",
+    "topic": "Islamic art",
+    "category": "Art and architecture",
+    "range": {
+      "start": 650,
+      "end": 1800
+    }
+  },
+  {
+    "id": "romanesque-art",
+    "topic": "Romanesque art",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1000,
+      "end": 1200
+    }
+  },
+  {
+    "id": "gothic-art",
+    "topic": "Gothic art",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1100,
+      "end": 1500
+    }
+  },
+  {
+    "id": "renaissance-art",
+    "topic": "Renaissance art",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1300,
+      "end": 1600
+    }
+  },
+  {
+    "id": "baroque",
+    "topic": "Baroque",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1600,
+      "end": 1750
+    }
+  },
+  {
+    "id": "rococo",
+    "topic": "Rococo",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1710,
+      "end": 1780
+    }
+  },
+  {
+    "id": "neoclassicism",
+    "topic": "Neoclassicism",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1750,
+      "end": 1850
+    }
+  },
+  {
+    "id": "romanticism",
+    "topic": "Romanticism",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1780,
+      "end": 1850
+    }
+  },
+  {
+    "id": "realism-arts",
+    "topic": "Realism (arts)",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1840,
+      "end": 1900
+    }
+  },
+  {
+    "id": "impressionism",
+    "topic": "Impressionism",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1860,
+      "end": 1890
+    }
+  },
+  {
+    "id": "post-impressionism",
+    "topic": "Post-Impressionism",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1886,
+      "end": 1905
+    }
+  },
+  {
+    "id": "cubism",
+    "topic": "Cubism",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1907,
+      "end": 1920
+    }
+  },
+  {
+    "id": "dada",
+    "topic": "Dada",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1916,
+      "end": 1924
+    }
+  },
+  {
+    "id": "surrealism",
+    "topic": "Surrealism",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1924,
+      "end": 1966
+    }
+  },
+  {
+    "id": "abstract-expressionism",
+    "topic": "Abstract expressionism",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1940,
+      "end": 1960
+    }
+  },
+  {
+    "id": "pop-art",
+    "topic": "Pop art",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1950,
+      "end": 1970
+    }
+  },
+  {
+    "id": "bauhaus",
+    "topic": "Bauhaus",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1919,
+      "end": 1933
+    }
+  },
+  {
+    "id": "art-nouveau",
+    "topic": "Art Nouveau",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1890,
+      "end": 1914
+    }
+  },
+  {
+    "id": "art-deco",
+    "topic": "Art Deco",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1920,
+      "end": 1940
+    }
+  },
+  {
+    "id": "modern-architecture",
+    "topic": "Modern architecture",
+    "category": "Art and architecture",
+    "range": {
+      "start": 1900,
+      "end": 1970
+    }
+  },
+  {
+    "id": "history-of-music",
+    "topic": "History of music",
+    "category": "Music and literature",
+    "range": {
+      "start": -1000,
+      "end": 2000
+    }
+  },
+  {
+    "id": "medieval-music",
+    "topic": "Medieval music",
+    "category": "Music and literature",
+    "range": {
+      "start": 500,
+      "end": 1400
+    }
+  },
+  {
+    "id": "renaissance-music",
+    "topic": "Renaissance music",
+    "category": "Music and literature",
+    "range": {
+      "start": 1400,
+      "end": 1600
+    }
+  },
+  {
+    "id": "baroque-music",
+    "topic": "Baroque music",
+    "category": "Music and literature",
+    "range": {
+      "start": 1600,
+      "end": 1750
+    }
+  },
+  {
+    "id": "classical-period-music",
+    "topic": "Classical period (music)",
+    "category": "Music and literature",
+    "range": {
+      "start": 1730,
+      "end": 1820
+    }
+  },
+  {
+    "id": "romantic-music",
+    "topic": "Romantic music",
+    "category": "Music and literature",
+    "range": {
+      "start": 1800,
+      "end": 1910
+    }
+  },
+  {
+    "id": "history-of-opera",
+    "topic": "History of opera",
+    "category": "Music and literature",
+    "range": {
+      "start": 1597,
+      "end": 2000
+    }
+  },
+  {
+    "id": "jazz",
+    "topic": "Jazz",
+    "category": "Music and literature",
+    "range": {
+      "start": 1890,
+      "end": 1970
+    }
+  },
+  {
+    "id": "blues",
+    "topic": "Blues",
+    "category": "Music and literature",
+    "range": {
+      "start": 1860,
+      "end": 1970
+    }
+  },
+  {
+    "id": "history-of-rock-and-roll",
+    "topic": "History of rock and roll",
+    "category": "Music and literature",
+    "range": {
+      "start": 1940,
+      "end": 1970
+    }
+  },
+  {
+    "id": "hip-hop",
+    "topic": "Hip-hop",
+    "category": "Music and literature",
+    "range": {
+      "start": 1970,
+      "end": 2000
+    }
+  },
+  {
+    "id": "reggae",
+    "topic": "Reggae",
+    "category": "Music and literature",
+    "range": {
+      "start": 1960,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-musical-theatre",
+    "topic": "History of musical theatre",
+    "category": "Music and literature",
+    "range": {
+      "start": 1800,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-ballet",
+    "topic": "History of ballet",
+    "category": "Music and literature",
+    "range": {
+      "start": 1450,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-the-piano",
+    "topic": "History of the piano",
+    "category": "Music and literature",
+    "range": {
+      "start": 1700,
+      "end": 2000
+    }
+  },
+  {
+    "id": "ancient-greek-literature",
+    "topic": "Ancient Greek literature",
+    "category": "Music and literature",
+    "range": {
+      "start": -800,
+      "end": 300
+    }
+  },
+  {
+    "id": "latin-literature",
+    "topic": "Latin literature",
+    "category": "Music and literature",
+    "range": {
+      "start": -240,
+      "end": 500
+    }
+  },
+  {
+    "id": "sanskrit-literature",
+    "topic": "Sanskrit literature",
+    "category": "Music and literature",
+    "range": {
+      "start": -1500,
+      "end": 1200
+    }
+  },
+  {
+    "id": "chinese-literature",
+    "topic": "Chinese literature",
+    "category": "Music and literature",
+    "range": {
+      "start": -1000,
+      "end": 1900
+    }
+  },
+  {
+    "id": "japanese-literature",
+    "topic": "Japanese literature",
+    "category": "Music and literature",
+    "range": {
+      "start": 700,
+      "end": 1900
+    }
+  },
+  {
+    "id": "persian-literature",
+    "topic": "Persian literature",
+    "category": "Music and literature",
+    "range": {
+      "start": 900,
+      "end": 1900
+    }
+  },
+  {
+    "id": "arabic-literature",
+    "topic": "Arabic literature",
+    "category": "Music and literature",
+    "range": {
+      "start": 500,
+      "end": 1900
+    }
+  },
+  {
+    "id": "english-literature",
+    "topic": "English literature",
+    "category": "Music and literature",
+    "range": {
+      "start": 700,
+      "end": 1900
+    }
+  },
+  {
+    "id": "harlem-renaissance",
+    "topic": "Harlem Renaissance",
+    "category": "Music and literature",
+    "range": {
+      "start": 1918,
+      "end": 1937
+    }
+  },
+  {
+    "id": "latin-american-boom",
+    "topic": "Latin American Boom",
+    "category": "Music and literature",
+    "range": {
+      "start": 1960,
+      "end": 1980
+    }
+  },
+  {
+    "id": "history-of-democracy",
+    "topic": "History of democracy",
+    "category": "Society and institutions",
+    "range": {
+      "start": -500,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-human-rights",
+    "topic": "History of human rights",
+    "category": "Society and institutions",
+    "range": {
+      "start": 1215,
+      "end": 2000
+    }
+  },
+  {
+    "id": "abolitionism",
+    "topic": "Abolitionism",
+    "category": "Society and institutions",
+    "range": {
+      "start": 1780,
+      "end": 1888
+    }
+  },
+  {
+    "id": "women-s-suffrage",
+    "topic": "Women's suffrage",
+    "category": "Society and institutions",
+    "range": {
+      "start": 1848,
+      "end": 1971
+    }
+  },
+  {
+    "id": "history-of-feminism",
+    "topic": "History of feminism",
+    "category": "Society and institutions",
+    "range": {
+      "start": 1792,
+      "end": 2000
+    }
+  },
+  {
+    "id": "labour-movement",
+    "topic": "Labour movement",
+    "category": "Society and institutions",
+    "range": {
+      "start": 1800,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-trade-unions-in-the-united-kingdom",
+    "topic": "History of trade unions in the United Kingdom",
+    "category": "Society and institutions",
+    "range": {
+      "start": 1800,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-education",
+    "topic": "History of education",
+    "category": "Society and institutions",
+    "range": {
+      "start": -500,
+      "end": 2000
+    }
+  },
+  {
+    "id": "medieval-university",
+    "topic": "Medieval university",
+    "category": "Society and institutions",
+    "range": {
+      "start": 1088,
+      "end": 1500
+    }
+  },
+  {
+    "id": "history-of-libraries",
+    "topic": "History of libraries",
+    "category": "Society and institutions",
+    "range": {
+      "start": -2600,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-museums",
+    "topic": "History of museums",
+    "category": "Society and institutions",
+    "range": {
+      "start": 1471,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-journalism",
+    "topic": "History of journalism",
+    "category": "Society and institutions",
+    "range": {
+      "start": 1600,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-the-united-nations",
+    "topic": "History of the United Nations",
+    "category": "Society and institutions",
+    "range": {
+      "start": 1941,
+      "end": 2000
+    }
+  },
+  {
+    "id": "league-of-nations",
+    "topic": "League of Nations",
+    "category": "Society and institutions",
+    "range": {
+      "start": 1919,
+      "end": 1946
+    }
+  },
+  {
+    "id": "history-of-the-red-cross",
+    "topic": "History of the Red Cross",
+    "category": "Society and institutions",
+    "range": {
+      "start": 1859,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-the-olympic-games",
+    "topic": "History of the Olympic Games",
+    "category": "Society and institutions",
+    "range": {
+      "start": -776,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-association-football",
+    "topic": "History of association football",
+    "category": "Society and institutions",
+    "range": {
+      "start": 1863,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-cricket",
+    "topic": "History of cricket",
+    "category": "Society and institutions",
+    "range": {
+      "start": 1600,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-baseball",
+    "topic": "History of baseball",
+    "category": "Society and institutions",
+    "range": {
+      "start": 1840,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-basketball",
+    "topic": "History of basketball",
+    "category": "Society and institutions",
+    "range": {
+      "start": 1891,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-money",
+    "topic": "History of money",
+    "category": "Society and institutions",
+    "range": {
+      "start": -700,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-banking",
+    "topic": "History of banking",
+    "category": "Society and institutions",
+    "range": {
+      "start": 1400,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-agriculture",
+    "topic": "History of agriculture",
+    "category": "Society and institutions",
+    "range": {
+      "start": -10000,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-coffee",
+    "topic": "History of coffee",
+    "category": "Society and institutions",
+    "range": {
+      "start": 1400,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-tea",
+    "topic": "History of tea",
+    "category": "Society and institutions",
+    "range": {
+      "start": -200,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-rome",
+    "topic": "History of Rome",
+    "category": "Cities of the world",
+    "range": {
+      "start": -753,
+      "end": 1870
+    }
+  },
+  {
+    "id": "history-of-athens",
+    "topic": "History of Athens",
+    "category": "Cities of the world",
+    "range": {
+      "start": -500,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-istanbul",
+    "topic": "History of Istanbul",
+    "category": "Cities of the world",
+    "range": {
+      "start": 330,
+      "end": 1923
+    }
+  },
+  {
+    "id": "history-of-cairo",
+    "topic": "History of Cairo",
+    "category": "Cities of the world",
+    "range": {
+      "start": 969,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-alexandria",
+    "topic": "History of Alexandria",
+    "category": "Cities of the world",
+    "range": {
+      "start": -331,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-baghdad",
+    "topic": "History of Baghdad",
+    "category": "Cities of the world",
+    "range": {
+      "start": 762,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-jerusalem",
+    "topic": "History of Jerusalem",
+    "category": "Cities of the world",
+    "range": {
+      "start": -1000,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-damascus",
+    "topic": "History of Damascus",
+    "category": "Cities of the world",
+    "range": {
+      "start": -1000,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-london",
+    "topic": "History of London",
+    "category": "Cities of the world",
+    "range": {
+      "start": 43,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-paris",
+    "topic": "History of Paris",
+    "category": "Cities of the world",
+    "range": {
+      "start": 500,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-berlin",
+    "topic": "History of Berlin",
+    "category": "Cities of the world",
+    "range": {
+      "start": 1237,
+      "end": 1990
+    }
+  },
+  {
+    "id": "history-of-vienna",
+    "topic": "History of Vienna",
+    "category": "Cities of the world",
+    "range": {
+      "start": 1278,
+      "end": 1918
+    }
+  },
+  {
+    "id": "history-of-prague",
+    "topic": "History of Prague",
+    "category": "Cities of the world",
+    "range": {
+      "start": 870,
+      "end": 1918
+    }
+  },
+  {
+    "id": "history-of-amsterdam",
+    "topic": "History of Amsterdam",
+    "category": "Cities of the world",
+    "range": {
+      "start": 1275,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-venice",
+    "topic": "History of Venice",
+    "category": "Cities of the world",
+    "range": {
+      "start": 697,
+      "end": 1797
+    }
+  },
+  {
+    "id": "history-of-florence",
+    "topic": "History of Florence",
+    "category": "Cities of the world",
+    "range": {
+      "start": 1115,
+      "end": 1600
+    }
+  },
+  {
+    "id": "history-of-lisbon",
+    "topic": "History of Lisbon",
+    "category": "Cities of the world",
+    "range": {
+      "start": 1147,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-madrid",
+    "topic": "History of Madrid",
+    "category": "Cities of the world",
+    "range": {
+      "start": 1085,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-moscow",
+    "topic": "History of Moscow",
+    "category": "Cities of the world",
+    "range": {
+      "start": 1147,
+      "end": 1917
+    }
+  },
+  {
+    "id": "history-of-saint-petersburg",
+    "topic": "History of Saint Petersburg",
+    "category": "Cities of the world",
+    "range": {
+      "start": 1703,
+      "end": 1917
+    }
+  },
+  {
+    "id": "history-of-beijing",
+    "topic": "History of Beijing",
+    "category": "Cities of the world",
+    "range": {
+      "start": 1271,
+      "end": 1912
+    }
+  },
+  {
+    "id": "history-of-shanghai",
+    "topic": "History of Shanghai",
+    "category": "Cities of the world",
+    "range": {
+      "start": 1842,
+      "end": 1949
+    }
+  },
+  {
+    "id": "history-of-tokyo",
+    "topic": "History of Tokyo",
+    "category": "Cities of the world",
+    "range": {
+      "start": 1603,
+      "end": 1964
+    }
+  },
+  {
+    "id": "history-of-kyoto",
+    "topic": "History of Kyoto",
+    "category": "Cities of the world",
+    "range": {
+      "start": 794,
+      "end": 1868
+    }
+  },
+  {
+    "id": "history-of-seoul",
+    "topic": "History of Seoul",
+    "category": "Cities of the world",
+    "range": {
+      "start": 1394,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-delhi",
+    "topic": "History of Delhi",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1206,
+      "end": 1947
+    }
+  },
+  {
+    "id": "history-of-mumbai",
+    "topic": "History of Mumbai",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1500,
+      "end": 1947
+    }
+  },
+  {
+    "id": "history-of-kolkata",
+    "topic": "History of Kolkata",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1690,
+      "end": 1947
+    }
+  },
+  {
+    "id": "history-of-dhaka",
+    "topic": "History of Dhaka",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1608,
+      "end": 1971
+    }
+  },
+  {
+    "id": "history-of-bangkok",
+    "topic": "History of Bangkok",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1782,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-jakarta",
+    "topic": "History of Jakarta",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1527,
+      "end": 1949
+    }
+  },
+  {
+    "id": "history-of-manila",
+    "topic": "History of Manila",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1571,
+      "end": 1946
+    }
+  },
+  {
+    "id": "history-of-malacca",
+    "topic": "History of Malacca",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1400,
+      "end": 1824
+    }
+  },
+  {
+    "id": "history-of-samarkand",
+    "topic": "History of Samarkand",
+    "category": "More places and cultures",
+    "range": {
+      "start": -329,
+      "end": 1500
+    }
+  },
+  {
+    "id": "history-of-bukhara",
+    "topic": "History of Bukhara",
+    "category": "More places and cultures",
+    "range": {
+      "start": 700,
+      "end": 1920
+    }
+  },
+  {
+    "id": "history-of-timbuktu",
+    "topic": "History of Timbuktu",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1100,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-lagos",
+    "topic": "History of Lagos",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1472,
+      "end": 1960
+    }
+  },
+  {
+    "id": "history-of-cape-town",
+    "topic": "History of Cape Town",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1652,
+      "end": 1994
+    }
+  },
+  {
+    "id": "history-of-mexico-city",
+    "topic": "History of Mexico City",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1325,
+      "end": 1910
+    }
+  },
+  {
+    "id": "history-of-lima",
+    "topic": "History of Lima",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1535,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-buenos-aires",
+    "topic": "History of Buenos Aires",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1536,
+      "end": 1910
+    }
+  },
+  {
+    "id": "history-of-rio-de-janeiro",
+    "topic": "History of Rio de Janeiro",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1565,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-new-york-city",
+    "topic": "History of New York City",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1624,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-boston",
+    "topic": "History of Boston",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1630,
+      "end": 1900
+    }
+  },
+  {
+    "id": "history-of-san-francisco",
+    "topic": "History of San Francisco",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1776,
+      "end": 1915
+    }
+  },
+  {
+    "id": "history-of-new-orleans",
+    "topic": "History of New Orleans",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1718,
+      "end": 1960
+    }
+  },
+  {
+    "id": "history-of-berkeley-california",
+    "topic": "History of Berkeley, California",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1850,
+      "end": 1970
+    }
+  },
+  {
+    "id": "history-of-sydney",
+    "topic": "History of Sydney",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1788,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-new-zealand",
+    "topic": "History of New Zealand",
+    "category": "More places and cultures",
+    "range": {
+      "start": 1300,
+      "end": 2000
+    }
+  },
+  {
+    "id": "history-of-polynesia",
+    "topic": "History of Polynesia",
+    "category": "More places and cultures",
+    "range": {
+      "start": 800,
+      "end": 1900
+    }
+  }
+]

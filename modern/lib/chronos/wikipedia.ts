@@ -37,7 +37,7 @@ export type Summary = PageInfo & { url: string; lead: string };
 export type Section = { index: number; line: string; level: number; anchor: string };
 
 export type Link = { title: string; start: number; end: number; text: string };
-export type Paragraph = { text: string; links: Link[]; heading: string; anchor: string };
+export type Paragraph = { text: string; links: Link[]; heading: string; anchor: string; sourceUrl?: string };
 
 const api = (params: Record<string, string>) =>
   `${WIKI_API}?${new URLSearchParams({ format: "json", formatversion: "2", ...params }).toString()}`;
@@ -392,6 +392,7 @@ export function mineHtml(html: string): { paragraphs: Paragraph[]; links: string
 /* ── the scripted model: dated sentences in the history prose ── */
 
 export type Claim = {
+  sourceUrl?: string;
   year: number;
   endYear?: number;
   approx: boolean;
@@ -496,6 +497,7 @@ export function proseClaims(paragraphs: Paragraph[], range: YearRange, now: numb
           if (distance(nearest) > 140) continue;
           if (!inRange({ year: nearest.start, endYear: nearest.end }, range)) continue;
           claims.push({
+            sourceUrl: p.sourceUrl,
             year: nearest.start,
             endYear: nearest.end !== nearest.start ? nearest.end : undefined,
             approx: nearest.fuzzy,
@@ -520,6 +522,7 @@ export function proseClaims(paragraphs: Paragraph[], range: YearRange, now: numb
       const title = synthesizeTitle(clean, x);
       if (!title || REPORTING.test(title)) continue;
       claims.push({
+        sourceUrl: p.sourceUrl,
         year: x.start,
         endYear: x.end !== x.start ? x.end : undefined,
         approx: x.fuzzy,

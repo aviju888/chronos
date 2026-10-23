@@ -1,3 +1,4 @@
+import { ChronosWordmark } from './brand/ChronosWordmark';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { GenerationMode } from '../types';
 import { Calendar, Zap, BookOpen, Clock, Loader2, CheckCircle2, Hourglass, Wand2, Search, Globe, Shuffle, MapPin, Compass, BookMarked, History } from 'lucide-react';
@@ -259,7 +260,7 @@ export const SetupForm: React.FC<SetupFormProps> = ({ onGenerate, isLoading, pro
 
       <div className="bg-ink p-5 md:p-8 text-paper text-center relative overflow-hidden vignette">
          <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-leather.png')] opacity-20"></div>
-        <h1 className="text-3xl md:text-5xl font-display font-bold text-gold mb-1 md:mb-2 tracking-[0.15em] md:tracking-[0.25em] relative z-10 text-embossed animate-candle">CHRONOS</h1>
+        <h1 className="mb-1 md:mb-2 relative z-10"><ChronosWordmark onDark /></h1>
         <p className="text-gold-light/70 font-antique text-sm md:text-lg tracking-widest relative z-10">Deep History Explorer</p>
 
           <button

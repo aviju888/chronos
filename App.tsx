@@ -1,3 +1,4 @@
+import { ChronosWordmark } from './components/brand/ChronosWordmark';
 import React, { useState, useEffect, useCallback } from 'react';
 import { SetupForm } from './components/SetupForm';
 import { MapView } from './components/MapView';
@@ -285,9 +286,9 @@ const App: React.FC = () => {
             <div className="flex items-center gap-4 relative z-10 ml-12 md:ml-0 min-w-0">
               <button
                 onClick={() => setActiveTimelineId(null)}
-                className="font-display font-bold text-xl text-ink dark:text-gold hidden md:block tracking-[0.2em] text-embossed animate-candle hover:text-gold dark:hover:text-paper transition-colors cursor-pointer flex-shrink-0"
+                className="hidden md:block min-h-11 cursor-pointer flex-shrink-0"
                 title="Return to Home"
-              >CHRONOS</button>
+              ><ChronosWordmark size="compact" /></button>
               <div className="h-8 w-px bg-gradient-to-b from-transparent via-gold to-transparent hidden md:block"></div>
               <div className="min-w-0">
                 <span className="block font-dramatic font-bold text-ink dark:text-paper text-base md:text-lg leading-none truncate max-w-[45vw] md:max-w-none">{activeData.region}</span>

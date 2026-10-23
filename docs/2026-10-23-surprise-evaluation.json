@@ -1,0 +1,6349 @@
+{
+  "checkedAt": "2026-10-23T16:20:08.095383+00:00",
+  "candidateCount": 500,
+  "enabledCount": 85,
+  "criteria": {
+    "minimumEvents": 5,
+    "minimumSourceBackedEvents": 3,
+    "minimumDistinctYears": 3,
+    "matchingRange": true,
+    "completedStory": true
+  },
+  "limitation": "Coverage checks are not expert factual review. Model and Wikimedia rate limits prevented full catalog validation. Only passed topics are selectable.",
+  "candidates": [
+    {
+      "id": "ancient-egypt",
+      "topic": "Ancient Egypt",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 22,
+      "sourceBackedEvents": 22,
+      "distinctYears": 19,
+      "articleUrl": "https://en.wikipedia.org/wiki/Ancient_Egypt",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "sumer",
+      "topic": "Sumer",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 8,
+      "sourceBackedEvents": 8,
+      "distinctYears": 6,
+      "articleUrl": "https://en.wikipedia.org/wiki/Sumer",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "akkadian-empire",
+      "topic": "Akkadian Empire",
+      "status": "held",
+      "reasons": [
+        "fewer_than_5_events"
+      ],
+      "eventCount": 3,
+      "sourceBackedEvents": 3,
+      "distinctYears": 3,
+      "articleUrl": "https://en.wikipedia.org/wiki/Akkadian_Empire",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "babylonia",
+      "topic": "Babylonia",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 12,
+      "sourceBackedEvents": 12,
+      "distinctYears": 12,
+      "articleUrl": "https://en.wikipedia.org/wiki/Babylonia",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "assyria",
+      "topic": "Assyria",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 6,
+      "sourceBackedEvents": 6,
+      "distinctYears": 6,
+      "articleUrl": "https://en.wikipedia.org/wiki/Assyria",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "hittites",
+      "topic": "Hittites",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 8,
+      "sourceBackedEvents": 8,
+      "distinctYears": 7,
+      "articleUrl": "https://en.wikipedia.org/wiki/Hittites",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "phoenicia",
+      "topic": "Phoenicia",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 6,
+      "sourceBackedEvents": 6,
+      "distinctYears": 6,
+      "articleUrl": "https://en.wikipedia.org/wiki/Phoenicia",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "carthage",
+      "topic": "Carthage",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 27,
+      "sourceBackedEvents": 27,
+      "distinctYears": 24,
+      "articleUrl": "https://en.wikipedia.org/wiki/Carthage",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "minoan-civilization",
+      "topic": "Minoan civilization",
+      "status": "held",
+      "reasons": [
+        "insufficient_date_variety"
+      ],
+      "eventCount": 5,
+      "sourceBackedEvents": 5,
+      "distinctYears": 2,
+      "articleUrl": "https://en.wikipedia.org/wiki/Minoan_civilization",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "mycenaean-greece",
+      "topic": "Mycenaean Greece",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 16,
+      "sourceBackedEvents": 16,
+      "distinctYears": 13,
+      "articleUrl": "https://en.wikipedia.org/wiki/Mycenaean_Greece",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "ancient-greece",
+      "topic": "Ancient Greece",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 43,
+      "sourceBackedEvents": 43,
+      "distinctYears": 39,
+      "articleUrl": "https://en.wikipedia.org/wiki/Ancient_Greece",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "classical-athens",
+      "topic": "Classical Athens",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 58,
+      "sourceBackedEvents": 58,
+      "distinctYears": 44,
+      "articleUrl": "https://en.wikipedia.org/wiki/Classical_Athens",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "sparta",
+      "topic": "Sparta",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 56,
+      "sourceBackedEvents": 56,
+      "distinctYears": 46,
+      "articleUrl": "https://en.wikipedia.org/wiki/Sparta",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "macedonia-ancient-kingdom",
+      "topic": "Macedonia (ancient kingdom)",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 95,
+      "sourceBackedEvents": 95,
+      "distinctYears": 68,
+      "articleUrl": "https://en.wikipedia.org/wiki/Macedonia_(ancient_kingdom)",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "hellenistic-period",
+      "topic": "Hellenistic period",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 40,
+      "sourceBackedEvents": 40,
+      "distinctYears": 35,
+      "articleUrl": "https://en.wikipedia.org/wiki/Hellenistic_period",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "roman-kingdom",
+      "topic": "Roman Kingdom",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 5,
+      "sourceBackedEvents": 5,
+      "distinctYears": 4,
+      "articleUrl": "https://en.wikipedia.org/wiki/Roman_Kingdom",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "roman-republic",
+      "topic": "Roman Republic",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 132,
+      "sourceBackedEvents": 132,
+      "distinctYears": 103,
+      "articleUrl": "https://en.wikipedia.org/wiki/Roman_Republic",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "roman-empire",
+      "topic": "Roman Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 62,
+      "sourceBackedEvents": 62,
+      "distinctYears": 54,
+      "articleUrl": "https://en.wikipedia.org/wiki/Roman_Empire",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "byzantine-empire",
+      "topic": "Byzantine Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 95,
+      "sourceBackedEvents": 95,
+      "distinctYears": 90,
+      "articleUrl": "https://en.wikipedia.org/wiki/Byzantine_Empire",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "achaemenid-empire",
+      "topic": "Achaemenid Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 53,
+      "sourceBackedEvents": 53,
+      "distinctYears": 36,
+      "articleUrl": "https://en.wikipedia.org/wiki/Achaemenid_Empire",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "parthian-empire",
+      "topic": "Parthian Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 49,
+      "sourceBackedEvents": 49,
+      "distinctYears": 41,
+      "articleUrl": "https://en.wikipedia.org/wiki/Parthian_Empire",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "sasanian-empire",
+      "topic": "Sasanian Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 56,
+      "sourceBackedEvents": 56,
+      "distinctYears": 44,
+      "articleUrl": "https://en.wikipedia.org/wiki/Sasanian_Empire",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "indus-valley-civilisation",
+      "topic": "Indus Valley Civilisation",
+      "status": "held",
+      "reasons": [
+        "pipeline_error",
+        "fewer_than_5_events",
+        "fewer_than_3_source_backed_events",
+        "insufficient_date_variety",
+        "missing_story"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": "https://en.wikipedia.org/wiki/Indus_Valley_Civilisation",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "maurya-empire",
+      "topic": "Maurya Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 8,
+      "sourceBackedEvents": 8,
+      "distinctYears": 8,
+      "articleUrl": "https://en.wikipedia.org/wiki/Maurya_Empire",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "gupta-empire",
+      "topic": "Gupta Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 15,
+      "sourceBackedEvents": 15,
+      "distinctYears": 13,
+      "articleUrl": "https://en.wikipedia.org/wiki/Gupta_Empire",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "shang-dynasty",
+      "topic": "Shang dynasty",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 9,
+      "sourceBackedEvents": 9,
+      "distinctYears": 7,
+      "articleUrl": "https://en.wikipedia.org/wiki/Shang_dynasty",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "zhou-dynasty",
+      "topic": "Zhou dynasty",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 5,
+      "sourceBackedEvents": 5,
+      "distinctYears": 5,
+      "articleUrl": "https://en.wikipedia.org/wiki/Zhou_dynasty",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "qin-dynasty",
+      "topic": "Qin dynasty",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 11,
+      "sourceBackedEvents": 11,
+      "distinctYears": 7,
+      "articleUrl": "https://en.wikipedia.org/wiki/Qin_dynasty",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "han-dynasty",
+      "topic": "Han dynasty",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 22,
+      "sourceBackedEvents": 22,
+      "distinctYears": 20,
+      "articleUrl": "https://en.wikipedia.org/wiki/Han_dynasty",
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "three-kingdoms",
+      "topic": "Three Kingdoms",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "jin-dynasty-266-420",
+      "topic": "Jin dynasty (266\u2013420)",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "sui-dynasty",
+      "topic": "Sui dynasty",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 5,
+      "sourceBackedEvents": 5,
+      "distinctYears": 4,
+      "articleUrl": "https://en.wikipedia.org/wiki/Sui_dynasty",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "tang-dynasty",
+      "topic": "Tang dynasty",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 36,
+      "sourceBackedEvents": 36,
+      "distinctYears": 32,
+      "articleUrl": "https://en.wikipedia.org/wiki/Tang_dynasty",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "song-dynasty",
+      "topic": "Song dynasty",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 17,
+      "sourceBackedEvents": 17,
+      "distinctYears": 15,
+      "articleUrl": "https://en.wikipedia.org/wiki/Song_dynasty",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "yuan-dynasty",
+      "topic": "Yuan dynasty",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 28,
+      "sourceBackedEvents": 21,
+      "distinctYears": 24,
+      "articleUrl": "https://en.wikipedia.org/wiki/Yuan_dynasty",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "ming-dynasty",
+      "topic": "Ming dynasty",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 42,
+      "sourceBackedEvents": 42,
+      "distinctYears": 35,
+      "articleUrl": "https://en.wikipedia.org/wiki/Ming_dynasty",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "qing-dynasty",
+      "topic": "Qing dynasty",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 73,
+      "sourceBackedEvents": 73,
+      "distinctYears": 49,
+      "articleUrl": "https://en.wikipedia.org/wiki/Qing_dynasty",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "nara-period",
+      "topic": "Nara period",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 6,
+      "sourceBackedEvents": 4,
+      "distinctYears": 6,
+      "articleUrl": "https://en.wikipedia.org/wiki/Nara_period",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "heian-period",
+      "topic": "Heian period",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 7,
+      "sourceBackedEvents": 7,
+      "distinctYears": 7,
+      "articleUrl": "https://en.wikipedia.org/wiki/Heian_period",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "kamakura-period",
+      "topic": "Kamakura period",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 8,
+      "sourceBackedEvents": 8,
+      "distinctYears": 8,
+      "articleUrl": "https://en.wikipedia.org/wiki/Kamakura_period",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "muromachi-period",
+      "topic": "Muromachi period",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 5,
+      "sourceBackedEvents": 5,
+      "distinctYears": 5,
+      "articleUrl": "https://en.wikipedia.org/wiki/Muromachi_period",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "sengoku-period",
+      "topic": "Sengoku period",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 35,
+      "sourceBackedEvents": 32,
+      "distinctYears": 30,
+      "articleUrl": "https://en.wikipedia.org/wiki/Sengoku_period",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "edo-period",
+      "topic": "Edo period",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 25,
+      "sourceBackedEvents": 25,
+      "distinctYears": 23,
+      "articleUrl": "https://en.wikipedia.org/wiki/Edo_period",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "meiji-era",
+      "topic": "Meiji era",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 31,
+      "sourceBackedEvents": 26,
+      "distinctYears": 22,
+      "articleUrl": "https://en.wikipedia.org/wiki/Meiji_era",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "goryeo",
+      "topic": "Goryeo",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 39,
+      "sourceBackedEvents": 39,
+      "distinctYears": 32,
+      "articleUrl": "https://en.wikipedia.org/wiki/Goryeo",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "joseon",
+      "topic": "Joseon",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 76,
+      "sourceBackedEvents": 71,
+      "distinctYears": 36,
+      "articleUrl": "https://en.wikipedia.org/wiki/Joseon",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "khmer-empire",
+      "topic": "Khmer Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 11,
+      "sourceBackedEvents": 3,
+      "distinctYears": 11,
+      "articleUrl": "https://en.wikipedia.org/wiki/Khmer_Empire",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "majapahit",
+      "topic": "Majapahit",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 15,
+      "sourceBackedEvents": 15,
+      "distinctYears": 13,
+      "articleUrl": "https://en.wikipedia.org/wiki/Majapahit",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "srivijaya",
+      "topic": "Srivijaya",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "mughal-empire",
+      "topic": "Mughal Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 54,
+      "sourceBackedEvents": 54,
+      "distinctYears": 44,
+      "articleUrl": "https://en.wikipedia.org/wiki/Mughal_Empire",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "islamic-golden-age",
+      "topic": "Islamic Golden Age",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "rashidun-caliphate",
+      "topic": "Rashidun Caliphate",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 48,
+      "sourceBackedEvents": 48,
+      "distinctYears": 19,
+      "articleUrl": "https://en.wikipedia.org/wiki/Rashidun_Caliphate",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "umayyad-caliphate",
+      "topic": "Umayyad Caliphate",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 62,
+      "sourceBackedEvents": 62,
+      "distinctYears": 41,
+      "articleUrl": "https://en.wikipedia.org/wiki/Umayyad_Caliphate",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "abbasid-caliphate",
+      "topic": "Abbasid Caliphate",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 53,
+      "sourceBackedEvents": 53,
+      "distinctYears": 50,
+      "articleUrl": "https://en.wikipedia.org/wiki/Abbasid_Caliphate",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "fatimid-caliphate",
+      "topic": "Fatimid Caliphate",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 56,
+      "sourceBackedEvents": 56,
+      "distinctYears": 45,
+      "articleUrl": "https://en.wikipedia.org/wiki/Fatimid_Caliphate",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "ayyubid-dynasty",
+      "topic": "Ayyubid dynasty",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 32,
+      "sourceBackedEvents": 28,
+      "distinctYears": 23,
+      "articleUrl": "https://en.wikipedia.org/wiki/Ayyubid_dynasty",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "mamluk-sultanate",
+      "topic": "Mamluk Sultanate",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 59,
+      "sourceBackedEvents": 58,
+      "distinctYears": 40,
+      "articleUrl": "https://en.wikipedia.org/wiki/Mamluk_Sultanate",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "seljuk-empire",
+      "topic": "Seljuk Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 56,
+      "sourceBackedEvents": 56,
+      "distinctYears": 41,
+      "articleUrl": "https://en.wikipedia.org/wiki/Seljuk_Empire",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "ottoman-empire",
+      "topic": "Ottoman Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 115,
+      "sourceBackedEvents": 114,
+      "distinctYears": 89,
+      "articleUrl": "https://en.wikipedia.org/wiki/Ottoman_Empire",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "safavid-iran",
+      "topic": "Safavid Iran",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 59,
+      "sourceBackedEvents": 59,
+      "distinctYears": 45,
+      "articleUrl": "https://en.wikipedia.org/wiki/Safavid_Iran",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "mongol-empire",
+      "topic": "Mongol Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 81,
+      "sourceBackedEvents": 75,
+      "distinctYears": 46,
+      "articleUrl": "https://en.wikipedia.org/wiki/Mongol_Empire",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "golden-horde",
+      "topic": "Golden Horde",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 42,
+      "sourceBackedEvents": 42,
+      "distinctYears": 37,
+      "articleUrl": "https://en.wikipedia.org/wiki/Golden_Horde",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "timurid-empire",
+      "topic": "Timurid Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 55,
+      "sourceBackedEvents": 53,
+      "distinctYears": 27,
+      "articleUrl": "https://en.wikipedia.org/wiki/Timurid_Empire",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "carolingian-empire",
+      "topic": "Carolingian Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 26,
+      "sourceBackedEvents": 19,
+      "distinctYears": 22,
+      "articleUrl": "https://en.wikipedia.org/wiki/Carolingian_Empire",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "holy-roman-empire",
+      "topic": "Holy Roman Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 77,
+      "sourceBackedEvents": 72,
+      "distinctYears": 67,
+      "articleUrl": "https://en.wikipedia.org/wiki/Holy_Roman_Empire",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "viking-age",
+      "topic": "Viking Age",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 21,
+      "sourceBackedEvents": 21,
+      "distinctYears": 19,
+      "articleUrl": "https://en.wikipedia.org/wiki/Viking_Age",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "kievan-rus",
+      "topic": "Kievan Rus'",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 63,
+      "sourceBackedEvents": 53,
+      "distinctYears": 50,
+      "articleUrl": "https://en.wikipedia.org/wiki/Kievan_Rus'",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "kingdom-of-jerusalem",
+      "topic": "Kingdom of Jerusalem",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 96,
+      "sourceBackedEvents": 90,
+      "distinctYears": 63,
+      "articleUrl": "https://en.wikipedia.org/wiki/Kingdom_of_Jerusalem",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "republic-of-venice",
+      "topic": "Republic of Venice",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 94,
+      "sourceBackedEvents": 86,
+      "distinctYears": 77,
+      "articleUrl": "https://en.wikipedia.org/wiki/Republic_of_Venice",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "hanseatic-league",
+      "topic": "Hanseatic League",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 36,
+      "sourceBackedEvents": 32,
+      "distinctYears": 30,
+      "articleUrl": "https://en.wikipedia.org/wiki/Hanseatic_League",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "al-andalus",
+      "topic": "Al-Andalus",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 39,
+      "sourceBackedEvents": 32,
+      "distinctYears": 29,
+      "articleUrl": "https://en.wikipedia.org/wiki/Al-Andalus",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "reconquista",
+      "topic": "Reconquista",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 80,
+      "sourceBackedEvents": 80,
+      "distinctYears": 72,
+      "articleUrl": "https://en.wikipedia.org/wiki/Reconquista",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "delhi-sultanate",
+      "topic": "Delhi Sultanate",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 15,
+      "sourceBackedEvents": 15,
+      "distinctYears": 11,
+      "articleUrl": "https://en.wikipedia.org/wiki/Delhi_Sultanate",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "chola-dynasty",
+      "topic": "Chola dynasty",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "vijayanagara-empire",
+      "topic": "Vijayanagara Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 13,
+      "sourceBackedEvents": 13,
+      "distinctYears": 11,
+      "articleUrl": "https://en.wikipedia.org/wiki/Vijayanagara_Empire",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "kingdom-of-kush",
+      "topic": "Kingdom of Kush",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 13,
+      "sourceBackedEvents": 4,
+      "distinctYears": 12,
+      "articleUrl": "https://en.wikipedia.org/wiki/Kingdom_of_Kush",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "kingdom-of-aksum",
+      "topic": "Kingdom of Aksum",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 9,
+      "sourceBackedEvents": 9,
+      "distinctYears": 6,
+      "articleUrl": "https://en.wikipedia.org/wiki/Kingdom_of_Aksum",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "ghana-empire",
+      "topic": "Ghana Empire",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "mali-empire",
+      "topic": "Mali Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 6,
+      "sourceBackedEvents": 6,
+      "distinctYears": 6,
+      "articleUrl": "https://en.wikipedia.org/wiki/Mali_Empire",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "songhai-empire",
+      "topic": "Songhai Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 6,
+      "sourceBackedEvents": 3,
+      "distinctYears": 5,
+      "articleUrl": "https://en.wikipedia.org/wiki/Songhai_Empire",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "kanem-bornu-empire",
+      "topic": "Kanem\u2013Bornu Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 15,
+      "sourceBackedEvents": 8,
+      "distinctYears": 12,
+      "articleUrl": "https://en.wikipedia.org/wiki/Kanem%E2%80%93Bornu_Empire",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "benin-empire",
+      "topic": "Benin Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 9,
+      "sourceBackedEvents": 5,
+      "distinctYears": 8,
+      "articleUrl": "https://en.wikipedia.org/wiki/Kingdom_of_Benin",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "oyo-empire",
+      "topic": "Oyo Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 5,
+      "sourceBackedEvents": 5,
+      "distinctYears": 5,
+      "articleUrl": "https://en.wikipedia.org/wiki/Oyo_Empire",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "kingdom-of-kongo",
+      "topic": "Kingdom of Kongo",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 16,
+      "sourceBackedEvents": 9,
+      "distinctYears": 15,
+      "articleUrl": "https://en.wikipedia.org/wiki/Kingdom_of_Kongo",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "great-zimbabwe",
+      "topic": "Great Zimbabwe",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "kingdom-of-mapungubwe",
+      "topic": "Kingdom of Mapungubwe",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "ethiopian-empire",
+      "topic": "Ethiopian Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 67,
+      "sourceBackedEvents": 67,
+      "distinctYears": 51,
+      "articleUrl": "https://en.wikipedia.org/wiki/Ethiopian_Empire",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "adal-sultanate",
+      "topic": "Adal Sultanate",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 30,
+      "sourceBackedEvents": 28,
+      "distinctYears": 19,
+      "articleUrl": "https://en.wikipedia.org/wiki/Adal_Sultanate",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "swahili-coast",
+      "topic": "Swahili coast",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 5,
+      "sourceBackedEvents": 5,
+      "distinctYears": 5,
+      "articleUrl": "https://en.wikipedia.org/wiki/Swahili_coast",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "sultanate-of-kilwa",
+      "topic": "Sultanate of Kilwa",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "almoravid-dynasty",
+      "topic": "Almoravid dynasty",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 60,
+      "sourceBackedEvents": 54,
+      "distinctYears": 41,
+      "articleUrl": "https://en.wikipedia.org/wiki/Almoravid_dynasty",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "almohad-caliphate",
+      "topic": "Almohad Caliphate",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 52,
+      "sourceBackedEvents": 52,
+      "distinctYears": 38,
+      "articleUrl": "https://en.wikipedia.org/wiki/Almohad_Caliphate",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "ashanti-empire",
+      "topic": "Ashanti Empire",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 14,
+      "sourceBackedEvents": 14,
+      "distinctYears": 10,
+      "articleUrl": "https://en.wikipedia.org/wiki/Asante_Empire",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "zulu-kingdom",
+      "topic": "Zulu Kingdom",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 12,
+      "sourceBackedEvents": 12,
+      "distinctYears": 6,
+      "articleUrl": "https://en.wikipedia.org/wiki/Zulu_Kingdom",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "scramble-for-africa",
+      "topic": "Scramble for Africa",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 48,
+      "sourceBackedEvents": 48,
+      "distinctYears": 25,
+      "articleUrl": "https://en.wikipedia.org/wiki/Scramble_for_Africa",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "decolonisation-of-africa",
+      "topic": "Decolonisation of Africa",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 33,
+      "sourceBackedEvents": 33,
+      "distinctYears": 22,
+      "articleUrl": "https://en.wikipedia.org/wiki/Decolonisation_of_Africa",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "history-of-ghana",
+      "topic": "History of Ghana",
+      "status": "enabled",
+      "reasons": [],
+      "eventCount": 68,
+      "sourceBackedEvents": 63,
+      "distinctYears": 37,
+      "articleUrl": "https://en.wikipedia.org/wiki/Ghana",
+      "evaluationMode": "hosted-live"
+    },
+    {
+      "id": "history-of-nigeria",
+      "topic": "History of Nigeria",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-kenya",
+      "topic": "History of Kenya",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-south-africa",
+      "topic": "History of South Africa",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "olmecs",
+      "topic": "Olmecs",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "maya-civilization",
+      "topic": "Maya civilization",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "teotihuacan",
+      "topic": "Teotihuacan",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "toltec",
+      "topic": "Toltec",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "aztec-empire",
+      "topic": "Aztec Empire",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "inca-empire",
+      "topic": "Inca Empire",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "moche-culture",
+      "topic": "Moche culture",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "nazca-culture",
+      "topic": "Nazca culture",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "wari-empire",
+      "topic": "Wari Empire",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "tiwanaku",
+      "topic": "Tiwanaku",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "chimor",
+      "topic": "Chimor",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "muisca",
+      "topic": "Muisca",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "mississippian-culture",
+      "topic": "Mississippian culture",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "cahokia",
+      "topic": "Cahokia",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "ancestral-puebloans",
+      "topic": "Ancestral Puebloans",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "iroquois",
+      "topic": "Iroquois",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "norse-colonization-of-north-america",
+      "topic": "Norse colonization of North America",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "spanish-colonization-of-the-americas",
+      "topic": "Spanish colonization of the Americas",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "portuguese-colonization-of-the-americas",
+      "topic": "Portuguese colonization of the Americas",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "new-france",
+      "topic": "New France",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "new-netherland",
+      "topic": "New Netherland",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "jamestown-virginia",
+      "topic": "Jamestown, Virginia",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "plymouth-colony",
+      "topic": "Plymouth Colony",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "thirteen-colonies",
+      "topic": "Thirteen Colonies",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "columbian-exchange",
+      "topic": "Columbian exchange",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "renaissance",
+      "topic": "Renaissance",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "italian-renaissance",
+      "topic": "Italian Renaissance",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "northern-renaissance",
+      "topic": "Northern Renaissance",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "age-of-discovery",
+      "topic": "Age of Discovery",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "scientific-revolution",
+      "topic": "Scientific Revolution",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "age-of-enlightenment",
+      "topic": "Age of Enlightenment",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "reformation",
+      "topic": "Reformation",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "counter-reformation",
+      "topic": "Counter-Reformation",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "english-reformation",
+      "topic": "English Reformation",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "elizabethan-era",
+      "topic": "Elizabethan era",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "stuart-period",
+      "topic": "Stuart period",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "georgian-era",
+      "topic": "Georgian era",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "victorian-era",
+      "topic": "Victorian era",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "edwardian-era",
+      "topic": "Edwardian era",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "industrial-revolution",
+      "topic": "Industrial Revolution",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "second-industrial-revolution",
+      "topic": "Second Industrial Revolution",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "french-revolution",
+      "topic": "French Revolution",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "napoleonic-era",
+      "topic": "Napoleonic era",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "congress-of-vienna",
+      "topic": "Congress of Vienna",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "revolutions-of-1848",
+      "topic": "Revolutions of 1848",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "unification-of-italy",
+      "topic": "Unification of Italy",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "unification-of-germany",
+      "topic": "Unification of Germany",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "belle-poque",
+      "topic": "Belle \u00c9poque",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "weimar-republic",
+      "topic": "Weimar Republic",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "european-integration",
+      "topic": "European integration",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "meiji-restoration",
+      "topic": "Meiji Restoration",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "taish-era",
+      "topic": "Taish\u014d era",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "sh-wa-era",
+      "topic": "Sh\u014dwa era",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "xinhai-revolution",
+      "topic": "Xinhai Revolution",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "may-fourth-movement",
+      "topic": "May Fourth Movement",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "chinese-civil-war",
+      "topic": "Chinese Civil War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "cultural-revolution",
+      "topic": "Cultural Revolution",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "chinese-economic-reform",
+      "topic": "Chinese economic reform",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "indian-independence-movement",
+      "topic": "Indian independence movement",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "partition-of-india",
+      "topic": "Partition of India",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-republic-of-india",
+      "topic": "History of the Republic of India",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "pakistan-movement",
+      "topic": "Pakistan Movement",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "bengali-language-movement",
+      "topic": "Bengali Language Movement",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "indonesian-national-revolution",
+      "topic": "Indonesian National Revolution",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "philippine-revolution",
+      "topic": "Philippine Revolution",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "people-power-revolution",
+      "topic": "People Power Revolution",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "vietnamese-independence-movement",
+      "topic": "Vietnamese independence movement",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-singapore",
+      "topic": "History of Singapore",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-hong-kong",
+      "topic": "History of Hong Kong",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-taiwan",
+      "topic": "History of Taiwan",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-south-korea",
+      "topic": "History of South Korea",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-mongolia",
+      "topic": "History of Mongolia",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-thailand",
+      "topic": "History of Thailand",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-malaysia",
+      "topic": "History of Malaysia",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-nepal",
+      "topic": "History of Nepal",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "american-revolution",
+      "topic": "American Revolution",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "american-civil-war",
+      "topic": "American Civil War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "reconstruction-era",
+      "topic": "Reconstruction era",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "gilded-age",
+      "topic": "Gilded Age",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "progressive-era",
+      "topic": "Progressive Era",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "roaring-twenties",
+      "topic": "Roaring Twenties",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "great-depression",
+      "topic": "Great Depression",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "new-deal",
+      "topic": "New Deal",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "civil-rights-movement",
+      "topic": "Civil rights movement",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "american-indian-movement",
+      "topic": "American Indian Movement",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "haitian-revolution",
+      "topic": "Haitian Revolution",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "spanish-american-wars-of-independence",
+      "topic": "Spanish American wars of independence",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "mexican-war-of-independence",
+      "topic": "Mexican War of Independence",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "mexican-revolution",
+      "topic": "Mexican Revolution",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "independence-of-brazil",
+      "topic": "Independence of Brazil",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "empire-of-brazil",
+      "topic": "Empire of Brazil",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "cuban-revolution",
+      "topic": "Cuban Revolution",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "argentine-war-of-independence",
+      "topic": "Argentine War of Independence",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "chilean-war-of-independence",
+      "topic": "Chilean War of Independence",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "gran-colombia",
+      "topic": "Gran Colombia",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "canadian-confederation",
+      "topic": "Canadian Confederation",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "quiet-revolution",
+      "topic": "Quiet Revolution",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-caribbean",
+      "topic": "History of the Caribbean",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-central-america",
+      "topic": "History of Central America",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-latin-america",
+      "topic": "History of Latin America",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "greco-persian-wars",
+      "topic": "Greco-Persian Wars",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "peloponnesian-war",
+      "topic": "Peloponnesian War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "wars-of-alexander-the-great",
+      "topic": "Wars of Alexander the Great",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "wars-of-the-diadochi",
+      "topic": "Wars of the Diadochi",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "punic-wars",
+      "topic": "Punic Wars",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "first-punic-war",
+      "topic": "First Punic War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "second-punic-war",
+      "topic": "Second Punic War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "third-punic-war",
+      "topic": "Third Punic War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "gallic-wars",
+      "topic": "Gallic Wars",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "caesar-s-civil-war",
+      "topic": "Caesar's civil war",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "roman-persian-wars",
+      "topic": "Roman\u2013Persian Wars",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "jewish-roman-wars",
+      "topic": "Jewish\u2013Roman wars",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "gothic-war-535-554",
+      "topic": "Gothic War (535\u2013554)",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "byzantine-sasanian-war-of-602-628",
+      "topic": "Byzantine\u2013Sasanian War of 602\u2013628",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "early-muslim-conquests",
+      "topic": "Early Muslim conquests",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "an-lushan-rebellion",
+      "topic": "An Lushan Rebellion",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "norman-conquest-of-england",
+      "topic": "Norman conquest of England",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "crusades",
+      "topic": "Crusades",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "first-crusade",
+      "topic": "First Crusade",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "third-crusade",
+      "topic": "Third Crusade",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "fourth-crusade",
+      "topic": "Fourth Crusade",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "mongol-invasions-and-conquests",
+      "topic": "Mongol invasions and conquests",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "hundred-years-war",
+      "topic": "Hundred Years' War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "wars-of-the-roses",
+      "topic": "Wars of the Roses",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "genpei-war",
+      "topic": "Genpei War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "italian-wars",
+      "topic": "Italian Wars",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "french-wars-of-religion",
+      "topic": "French Wars of Religion",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "eighty-years-war",
+      "topic": "Eighty Years' War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "thirty-years-war",
+      "topic": "Thirty Years' War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "english-civil-war",
+      "topic": "English Civil War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "great-northern-war",
+      "topic": "Great Northern War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "war-of-the-spanish-succession",
+      "topic": "War of the Spanish Succession",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "war-of-the-austrian-succession",
+      "topic": "War of the Austrian Succession",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "seven-years-war",
+      "topic": "Seven Years' War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "french-and-indian-war",
+      "topic": "French and Indian War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "american-revolutionary-war",
+      "topic": "American Revolutionary War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "french-revolutionary-wars",
+      "topic": "French Revolutionary Wars",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "napoleonic-wars",
+      "topic": "Napoleonic Wars",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "peninsular-war",
+      "topic": "Peninsular War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "war-of-1812",
+      "topic": "War of 1812",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "first-opium-war",
+      "topic": "First Opium War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "second-opium-war",
+      "topic": "Second Opium War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "taiping-rebellion",
+      "topic": "Taiping Rebellion",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "crimean-war",
+      "topic": "Crimean War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "indian-rebellion-of-1857",
+      "topic": "Indian Rebellion of 1857",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "franco-prussian-war",
+      "topic": "Franco-Prussian War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "paraguayan-war",
+      "topic": "Paraguayan War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "war-of-the-pacific",
+      "topic": "War of the Pacific",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "first-sino-japanese-war",
+      "topic": "First Sino-Japanese War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "second-boer-war",
+      "topic": "Second Boer War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "russo-japanese-war",
+      "topic": "Russo-Japanese War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "balkan-wars",
+      "topic": "Balkan Wars",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "world-war-i",
+      "topic": "World War I",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "russian-revolution",
+      "topic": "Russian Revolution",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "russian-civil-war",
+      "topic": "Russian Civil War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "irish-war-of-independence",
+      "topic": "Irish War of Independence",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "turkish-war-of-independence",
+      "topic": "Turkish War of Independence",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "spanish-civil-war",
+      "topic": "Spanish Civil War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "second-sino-japanese-war",
+      "topic": "Second Sino-Japanese War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "world-war-ii",
+      "topic": "World War II",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "pacific-war",
+      "topic": "Pacific War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "winter-war",
+      "topic": "Winter War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "battle-of-the-atlantic",
+      "topic": "Battle of the Atlantic",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "battle-of-britain",
+      "topic": "Battle of Britain",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "cold-war",
+      "topic": "Cold War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "korean-war",
+      "topic": "Korean War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "vietnam-war",
+      "topic": "Vietnam War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "algerian-war",
+      "topic": "Algerian War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "suez-crisis",
+      "topic": "Suez Crisis",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "cuban-missile-crisis",
+      "topic": "Cuban Missile Crisis",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "bangladesh-liberation-war",
+      "topic": "Bangladesh Liberation War",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "d-tente",
+      "topic": "D\u00e9tente",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "fall-of-the-berlin-wall",
+      "topic": "Fall of the Berlin Wall",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "revolutions-of-1989",
+      "topic": "Revolutions of 1989",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "good-friday-agreement",
+      "topic": "Good Friday Agreement",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-astronomy",
+      "topic": "History of astronomy",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-mathematics",
+      "topic": "History of mathematics",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-physics",
+      "topic": "History of physics",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-chemistry",
+      "topic": "History of chemistry",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-biology",
+      "topic": "History of biology",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-geology",
+      "topic": "History of geology",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-geography",
+      "topic": "History of geography",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-cartography",
+      "topic": "History of cartography",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-evolutionary-thought",
+      "topic": "History of evolutionary thought",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-genetics",
+      "topic": "History of genetics",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-periodic-table",
+      "topic": "History of the periodic table",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-quantum-mechanics",
+      "topic": "History of quantum mechanics",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-thermodynamics",
+      "topic": "History of thermodynamics",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-electromagnetism",
+      "topic": "History of electromagnetism",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-optics",
+      "topic": "History of optics",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-telescope",
+      "topic": "History of the telescope",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-microscope",
+      "topic": "History of the microscope",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-paleontology",
+      "topic": "History of paleontology",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-meteorology",
+      "topic": "History of meteorology",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-oceanography",
+      "topic": "History of oceanography",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-seismology",
+      "topic": "History of seismology",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-archaeology",
+      "topic": "History of archaeology",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "human-genome-project",
+      "topic": "Human Genome Project",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "manhattan-project",
+      "topic": "Manhattan Project",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "cern",
+      "topic": "CERN",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-printing",
+      "topic": "History of printing",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "printing-press",
+      "topic": "Printing press",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-paper",
+      "topic": "History of paper",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-writing",
+      "topic": "History of writing",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-alphabet",
+      "topic": "History of the alphabet",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-computing",
+      "topic": "History of computing",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-internet",
+      "topic": "History of the Internet",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-world-wide-web",
+      "topic": "History of the World Wide Web",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-artificial-intelligence",
+      "topic": "History of artificial intelligence",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-telecommunications",
+      "topic": "History of telecommunications",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-telephone",
+      "topic": "History of the telephone",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-radio",
+      "topic": "History of radio",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-television",
+      "topic": "History of television",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-photography",
+      "topic": "History of photography",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-film-technology",
+      "topic": "History of film technology",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-steam-engine",
+      "topic": "History of the steam engine",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-internal-combustion-engine",
+      "topic": "History of the internal combustion engine",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-electric-power-transmission",
+      "topic": "History of electric power transmission",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-transistor",
+      "topic": "History of the transistor",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-integrated-circuit",
+      "topic": "History of the integrated circuit",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-robots",
+      "topic": "History of robots",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-timekeeping-devices",
+      "topic": "History of timekeeping devices",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-battery",
+      "topic": "History of the battery",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-glass",
+      "topic": "History of glass",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-metallurgy",
+      "topic": "History of metallurgy",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "silk-road",
+      "topic": "Silk Road",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "trans-saharan-trade",
+      "topic": "Trans-Saharan trade",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "indian-ocean-trade",
+      "topic": "Indian Ocean trade",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "maritime-silk-road",
+      "topic": "Maritime Silk Road",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "spice-trade",
+      "topic": "Spice trade",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-navigation",
+      "topic": "History of navigation",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-aviation",
+      "topic": "History of aviation",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-rail-transport",
+      "topic": "History of rail transport",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-automobile",
+      "topic": "History of the automobile",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-bicycle",
+      "topic": "History of the bicycle",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "age-of-sail",
+      "topic": "Age of Sail",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-panama-canal",
+      "topic": "History of the Panama Canal",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-suez-canal",
+      "topic": "History of the Suez Canal",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "transcontinental-railroad",
+      "topic": "Transcontinental railroad",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "trans-siberian-railway",
+      "topic": "Trans-Siberian Railway",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "lewis-and-clark-expedition",
+      "topic": "Lewis and Clark Expedition",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "voyages-of-christopher-columbus",
+      "topic": "Voyages of Christopher Columbus",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "magellan-expedition",
+      "topic": "Magellan expedition",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "voyages-of-james-cook",
+      "topic": "Voyages of James Cook",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "ming-treasure-voyages",
+      "topic": "Ming treasure voyages",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "heroic-age-of-antarctic-exploration",
+      "topic": "Heroic Age of Antarctic Exploration",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "terra-nova-expedition",
+      "topic": "Terra Nova Expedition",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "imperial-trans-antarctic-expedition",
+      "topic": "Imperial Trans-Antarctic Expedition",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "northwest-passage",
+      "topic": "Northwest Passage",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-mount-everest",
+      "topic": "History of Mount Everest",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "space-race",
+      "topic": "Space Race",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "apollo-program",
+      "topic": "Apollo program",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "project-mercury",
+      "topic": "Project Mercury",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "project-gemini",
+      "topic": "Project Gemini",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "vostok-programme",
+      "topic": "Vostok programme",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "soyuz-programme",
+      "topic": "Soyuz programme",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "salyut-programme",
+      "topic": "Salyut programme",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "skylab",
+      "topic": "Skylab",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "space-shuttle-program",
+      "topic": "Space Shuttle program",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "international-space-station",
+      "topic": "International Space Station",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "mir",
+      "topic": "Mir",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "voyager-program",
+      "topic": "Voyager program",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "viking-program",
+      "topic": "Viking program",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "luna-programme",
+      "topic": "Luna programme",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "mariner-program",
+      "topic": "Mariner program",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "hubble-space-telescope",
+      "topic": "Hubble Space Telescope",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "exploration-of-mars",
+      "topic": "Exploration of Mars",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "exploration-of-the-moon",
+      "topic": "Exploration of the Moon",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-spaceflight",
+      "topic": "History of spaceflight",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-rocketry",
+      "topic": "History of rocketry",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-satellites",
+      "topic": "History of satellites",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-nuclear-power",
+      "topic": "History of nuclear power",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-wind-power",
+      "topic": "History of wind power",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "hoover-dam",
+      "topic": "Hoover Dam",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "channel-tunnel",
+      "topic": "Channel Tunnel",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-art",
+      "topic": "History of art",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "ancient-egyptian-art",
+      "topic": "Ancient Egyptian art",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "art-of-ancient-greece",
+      "topic": "Art of ancient Greece",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "roman-art",
+      "topic": "Roman art",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "byzantine-art",
+      "topic": "Byzantine art",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "islamic-art",
+      "topic": "Islamic art",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "romanesque-art",
+      "topic": "Romanesque art",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "gothic-art",
+      "topic": "Gothic art",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "renaissance-art",
+      "topic": "Renaissance art",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "baroque",
+      "topic": "Baroque",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "rococo",
+      "topic": "Rococo",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "neoclassicism",
+      "topic": "Neoclassicism",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "romanticism",
+      "topic": "Romanticism",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "realism-arts",
+      "topic": "Realism (arts)",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "impressionism",
+      "topic": "Impressionism",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "post-impressionism",
+      "topic": "Post-Impressionism",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "cubism",
+      "topic": "Cubism",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "dada",
+      "topic": "Dada",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "surrealism",
+      "topic": "Surrealism",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "abstract-expressionism",
+      "topic": "Abstract expressionism",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "pop-art",
+      "topic": "Pop art",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "bauhaus",
+      "topic": "Bauhaus",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "art-nouveau",
+      "topic": "Art Nouveau",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "art-deco",
+      "topic": "Art Deco",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "modern-architecture",
+      "topic": "Modern architecture",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-music",
+      "topic": "History of music",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "medieval-music",
+      "topic": "Medieval music",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "renaissance-music",
+      "topic": "Renaissance music",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "baroque-music",
+      "topic": "Baroque music",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "classical-period-music",
+      "topic": "Classical period (music)",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "romantic-music",
+      "topic": "Romantic music",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-opera",
+      "topic": "History of opera",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "jazz",
+      "topic": "Jazz",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "blues",
+      "topic": "Blues",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-rock-and-roll",
+      "topic": "History of rock and roll",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "hip-hop",
+      "topic": "Hip-hop",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "reggae",
+      "topic": "Reggae",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-musical-theatre",
+      "topic": "History of musical theatre",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-ballet",
+      "topic": "History of ballet",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-piano",
+      "topic": "History of the piano",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "ancient-greek-literature",
+      "topic": "Ancient Greek literature",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "latin-literature",
+      "topic": "Latin literature",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "sanskrit-literature",
+      "topic": "Sanskrit literature",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "chinese-literature",
+      "topic": "Chinese literature",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "japanese-literature",
+      "topic": "Japanese literature",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "persian-literature",
+      "topic": "Persian literature",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "arabic-literature",
+      "topic": "Arabic literature",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "english-literature",
+      "topic": "English literature",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "harlem-renaissance",
+      "topic": "Harlem Renaissance",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "latin-american-boom",
+      "topic": "Latin American Boom",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-democracy",
+      "topic": "History of democracy",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-human-rights",
+      "topic": "History of human rights",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "abolitionism",
+      "topic": "Abolitionism",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "women-s-suffrage",
+      "topic": "Women's suffrage",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-feminism",
+      "topic": "History of feminism",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "labour-movement",
+      "topic": "Labour movement",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-trade-unions-in-the-united-kingdom",
+      "topic": "History of trade unions in the United Kingdom",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-education",
+      "topic": "History of education",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "medieval-university",
+      "topic": "Medieval university",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-libraries",
+      "topic": "History of libraries",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-museums",
+      "topic": "History of museums",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-journalism",
+      "topic": "History of journalism",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-united-nations",
+      "topic": "History of the United Nations",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "league-of-nations",
+      "topic": "League of Nations",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-red-cross",
+      "topic": "History of the Red Cross",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-the-olympic-games",
+      "topic": "History of the Olympic Games",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-association-football",
+      "topic": "History of association football",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-cricket",
+      "topic": "History of cricket",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-baseball",
+      "topic": "History of baseball",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-basketball",
+      "topic": "History of basketball",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-money",
+      "topic": "History of money",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-banking",
+      "topic": "History of banking",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-agriculture",
+      "topic": "History of agriculture",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-coffee",
+      "topic": "History of coffee",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-tea",
+      "topic": "History of tea",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-rome",
+      "topic": "History of Rome",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-athens",
+      "topic": "History of Athens",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-istanbul",
+      "topic": "History of Istanbul",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-cairo",
+      "topic": "History of Cairo",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-alexandria",
+      "topic": "History of Alexandria",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-baghdad",
+      "topic": "History of Baghdad",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-jerusalem",
+      "topic": "History of Jerusalem",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-damascus",
+      "topic": "History of Damascus",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-london",
+      "topic": "History of London",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-paris",
+      "topic": "History of Paris",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-berlin",
+      "topic": "History of Berlin",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-vienna",
+      "topic": "History of Vienna",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-prague",
+      "topic": "History of Prague",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-amsterdam",
+      "topic": "History of Amsterdam",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-venice",
+      "topic": "History of Venice",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-florence",
+      "topic": "History of Florence",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-lisbon",
+      "topic": "History of Lisbon",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-madrid",
+      "topic": "History of Madrid",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-moscow",
+      "topic": "History of Moscow",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-saint-petersburg",
+      "topic": "History of Saint Petersburg",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-beijing",
+      "topic": "History of Beijing",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-shanghai",
+      "topic": "History of Shanghai",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-tokyo",
+      "topic": "History of Tokyo",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-kyoto",
+      "topic": "History of Kyoto",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-seoul",
+      "topic": "History of Seoul",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-delhi",
+      "topic": "History of Delhi",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-mumbai",
+      "topic": "History of Mumbai",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-kolkata",
+      "topic": "History of Kolkata",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-dhaka",
+      "topic": "History of Dhaka",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-bangkok",
+      "topic": "History of Bangkok",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-jakarta",
+      "topic": "History of Jakarta",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-manila",
+      "topic": "History of Manila",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-malacca",
+      "topic": "History of Malacca",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-samarkand",
+      "topic": "History of Samarkand",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-bukhara",
+      "topic": "History of Bukhara",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-timbuktu",
+      "topic": "History of Timbuktu",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-lagos",
+      "topic": "History of Lagos",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-cape-town",
+      "topic": "History of Cape Town",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-mexico-city",
+      "topic": "History of Mexico City",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-lima",
+      "topic": "History of Lima",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-buenos-aires",
+      "topic": "History of Buenos Aires",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-rio-de-janeiro",
+      "topic": "History of Rio de Janeiro",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-new-york-city",
+      "topic": "History of New York City",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-boston",
+      "topic": "History of Boston",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-san-francisco",
+      "topic": "History of San Francisco",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-new-orleans",
+      "topic": "History of New Orleans",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-berkeley-california",
+      "topic": "History of Berkeley, California",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-sydney",
+      "topic": "History of Sydney",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-new-zealand",
+      "topic": "History of New Zealand",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    },
+    {
+      "id": "history-of-polynesia",
+      "topic": "History of Polynesia",
+      "status": "held",
+      "reasons": [
+        "upstream_rate_limit"
+      ],
+      "eventCount": 0,
+      "sourceBackedEvents": 0,
+      "distinctYears": 0,
+      "articleUrl": null,
+      "evaluationMode": "live-sources-model-unavailable"
+    }
+  ]
+}

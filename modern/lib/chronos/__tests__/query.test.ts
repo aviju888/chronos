@@ -3,6 +3,13 @@ import { describe, expect, it } from "vitest";
 import { labelForSpan, parseQuery, quickDetectQueryType, sanitizeString, typeFromDescription } from "../query";
 
 describe("parseQuery", () => {
+  it.each([
+    ['The Islamic Golden Age 750 - 1258', 'Islamic Golden Age', 750, 1258],
+    ['Tang dynasty 618–907', 'Tang dynasty', 618, 907],
+    ['Han dynasty 202 BCE - 220 CE', 'Han dynasty', -202, 220],
+  ])('reads the complete explicit range in %s', (query, topic, start, end) => {
+    expect(parseQuery(query, 2026)).toMatchObject({topic, range: {start, end}});
+  });
   it("splits topic and explicit range", () => {
     expect(parseQuery("Roman Empire 27 BCE - 476 CE", 2026)).toMatchObject({
       topic: "Roman Empire",

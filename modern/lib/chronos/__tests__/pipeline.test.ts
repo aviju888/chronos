@@ -138,6 +138,27 @@ describe("runChronos on a fake network", () => {
     clearHttpCache();
   });
 
+  it('keeps a cited timeline when the model is rate-limited and only source prose is available', async () => {
+    vi.stubEnv('GROQ_API_KEY', 'test-only-placeholder');
+    vi.stubGlobal('fetch', vi.fn(async () => new Response('rate limited', {status: 429})));
+    setFetcher(((input: RequestInfo | URL, init?: RequestInit) => {
+      const url = new URL(String(input));
+      if (url.hostname === 'query.wikidata.org') return json({results:{bindings:[]}});
+      if (url.searchParams.has('exintro')) return json({query:{pages:[]}});
+      return fakeNetwork(String(input), init);
+    }) as typeof fetch);
+    const frames = await collect('Roman Empire 27 BCE - 476 CE', {live:true, fixtureFallback:false});
+    const state = finalState(frames);
+    expect(state.order.length).toBeGreaterThanOrEqual(2);
+    for (const event of Object.values(state.events)) {
+      expect(event.sources).toEqual(['wikipedia']);
+      expect(event.citations[0].url).toContain('https://en.wikipedia.org/wiki/Roman_Empire');
+      expect(event.citations[0].detail).toBe(event.summary);
+    }
+    expect(state.tasks.llm.status).toBe('failed');
+    expect(state.narrativeSource).toBe('composed');
+  });
+
   it('honors selected dates over dates in the query, including source results', async () => {
     const frames: Frame[] = [];
     await runChronos({query:'Roman Empire 27 BCE - 476 CE',mode:'quick',range:{start:1,end:10}},
@@ -260,7 +281,10 @@ describe("runChronos on a fake network", () => {
     const lane = failure.startsWith('wikipedia') ? 'wikipedia' : 'wikidata';
     expect(state.order.length).toBeGreaterThan(0);
     expect(state.tasks[lane].status).toBe('failed');
-    expect(state.tasks[lane].count).toEqual(failure.endsWith('before records') ? 0 : expect.any(Number));
+    // Wikipedia article lookups can fail after its history prose was fetched;
+    // those dated passages now remain usable and count toward partial coverage.
+    expect(state.tasks[lane].count).toEqual(failure === 'wikidata before records' ? 0 : expect.any(Number));
+    if (failure === 'wikipedia before records') expect(state.tasks.wikipedia.count).toBeGreaterThan(0);
     if (failure.endsWith('after records')) expect(state.tasks[lane].count).toBeGreaterThan(0);
     expect(state.notices).toEqual(expect.arrayContaining([expect.objectContaining({kind: 'partial', text: expect.stringContaining(lane === 'wikipedia' ? 'Wikipedia' : 'Wikidata')})]));
     const html = renderToStaticMarkup(createElement(TaskList, {tasks: state.tasks, live: true}));
