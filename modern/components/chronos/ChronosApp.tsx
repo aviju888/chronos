@@ -130,7 +130,7 @@ export const PipelineSection = memo(function PipelineSection({ state, onStop }: 
   return (
     <section aria-label="Investigation progress" data-expanded={open} data-source-ready={hasDetails} data-compact={running && !hasDetails}
       className="chronos-research mx-auto w-full rounded-[18px] border border-line bg-inset px-3 py-1.5 sm:px-4 sm:py-2">
-      <div className="flex items-start gap-1">
+      <div className="flex items-center gap-1">
         <button type="button" aria-label={toggleLabel} aria-expanded={open}
           onClick={() => setManual({runId: state.runId, status: state.status, open: !open})}
           className="press flex min-h-11 min-w-0 flex-1 items-center justify-between gap-2 rounded-control text-left hover:bg-hover">
