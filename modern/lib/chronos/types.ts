@@ -108,7 +108,7 @@ export type Era = {
   url?: string;
 };
 
-export type RangeOrigin = "query" | "wikipedia" | "wikidata" | "llm" | "events" | "default";
+export type RangeOrigin = "selected" | "query" | "wikipedia" | "wikidata" | "llm" | "events" | "default";
 
 export type Intent = {
   query: string;

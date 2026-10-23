@@ -155,3 +155,20 @@
     animation: none;
   }
 }
+
+.chronos-dialog {
+  margin: auto;
+  width: min(540px, calc(100% - 32px));
+  max-height: 85dvh;
+  overscroll-behavior: contain;
+}
+.chronos-dialog::backdrop { background: rgb(0 0 0 / .42); }
+@media (max-width: 639px) {
+  .chronos-dialog { margin: auto 0 0; width: 100%; max-width: 100%; }
+}
+@media (max-width: 1023px) {
+  .chronos-stage { display: contents; }
+  .chronos-results:not([data-mobile-view="map"]) .chronos-map-panel,
+  .chronos-results:not([data-mobile-view="story"]) .chronos-story-panel,
+  .chronos-results:not([data-mobile-view="events"]) .chronos-events-panel { display: none; }
+}

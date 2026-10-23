@@ -138,6 +138,16 @@ describe("runChronos on a fake network", () => {
     clearHttpCache();
   });
 
+  it('honors selected dates over dates in the query, including source results', async () => {
+    const frames: Frame[] = [];
+    await runChronos({query:'Roman Empire 27 BCE - 476 CE',mode:'quick',range:{start:1,end:10}},
+      (event,data)=>frames.push({event,data}),new AbortController().signal,{live:false,pace:false,now:2026});
+    expect(frames.find(f=>f.event==='intent')!.data).toMatchObject({range:{start:1,end:10},rangeFrom:'selected'});
+    const events=frames.filter(f=>f.event==='event').map(f=>(f.data as {event:ChronosEvent}).event);
+    expect(events.length).toBeGreaterThan(0);
+    expect(events.every(e=>e.year>=1&&e.year<=10)).toBe(true);
+  });
+
   it("streams intent, tasks, the SPARQL trace, events, merges, eras and a cited narrative", async () => {
     const frames = await collect("Roman Empire 27 BCE - 476 CE", { fixtureFallback: false });
     const names = frames.map((f) => f.event);
@@ -313,6 +323,14 @@ describe("degrading to fixtures", () => {
     expect(notice.text).toMatch(/unreachable/);
     expect(frames.filter((f) => f.event === "event").length).toBeGreaterThan(10);
     expect(frames.some((f) => f.event === "narrative")).toBe(true);
+  });
+
+  it('does not replace explicitly selected dates with a different recorded range on failure', async () => {
+    clearHttpCache(); setFetcher((()=>Promise.reject(new TypeError('fetch failed'))) as typeof fetch);
+    const frames: Frame[]=[];
+    await expect(runChronos({query:'Silk Road',mode:'quick',range:{start:100,end:200}},
+      (event,data)=>frames.push({event,data}),new AbortController().signal,{live:false,pace:false})).rejects.toThrow(/Couldn't reach Wikipedia/);
+    expect(frames.some(f=>f.event==='event')).toBe(false);
   });
 
   it("fails with a clear message when there's no saved run", async () => {

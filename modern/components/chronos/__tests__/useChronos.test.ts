@@ -59,3 +59,14 @@ describe('narrative provenance and persistent notices', () => {
     expect(state.narrativeSource).toBe('composed');
   });
 });
+
+it('restores saved evidence without a request and ignores frames from the interrupted run', () => {
+  let emit: Parameters<typeof postSSE>[2]; let signal: AbortSignal;
+  vi.mocked(postSSE).mockImplementation(async (_url,_body,cb,s) => {emit=cb;signal=s!;await new Promise(()=>{});});
+  const {result}=renderHook(()=>useChronos());
+  act(()=>{void result.current.run('live','quick');});
+  act(()=>result.current.restore({...initialState,status:'done',query:'archive',narrative:'saved story',stopped:true}));
+  act(()=>emit('narrative',{delta:'late live fragment'}));
+  expect(signal!.aborted).toBe(true); expect(postSSE).toHaveBeenCalledTimes(1);
+  expect(result.current.state.narrative).toBe('saved story'); expect(result.current.state.stopped).toBe(true);
+});

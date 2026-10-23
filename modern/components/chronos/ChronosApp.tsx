@@ -1,9 +1,9 @@
 "use client";
 
 import "./chronos.css";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { ArrowUpRight, CaretDown, Lightning } from "@phosphor-icons/react";
-import type { ChronosEvent, Mode, MergeIncoming } from "@/modern/lib/chronos/types";
+import type { ChronosEvent, Mode, MergeIncoming, YearRange } from "@/modern/lib/chronos/types";
 import { formatRange } from "@/modern/lib/chronos/time";
 import { PROMPT_SUGGESTIONS } from "@/modern/lib/chronos/examples";
 import { inBox, type GeoBox } from "@/modern/lib/chronos/mapview";
@@ -21,6 +21,10 @@ import { TimeScrubber } from "./TimeScrubber";
 import { EventList } from "./EventList";
 import { Narrative } from "./Narrative";
 import { EventDetail } from "./EventDetail";
+import { ArchivesButton, DiscoveryControls, ExportButton, toolClass, type DateDraft } from './InvestigationTools';
+import { rangeError, relatedTopics, SURPRISE_TOPICS } from '@/modern/lib/chronos/discovery';
+import { saveArchive, snapshot, type Archive } from '@/modern/lib/chronos/archives';
+import { progressLabel } from '@/modern/lib/chronos/progress';
 
 /* ─────────────────────────────────────────────────────────
  * CHRONOS — query in, a cited timeline assembling out.
@@ -33,6 +37,7 @@ import { EventDetail } from "./EventDetail";
  * ───────────────────────────────────────────────────────── */
 
 const RANGE_FROM: Record<string, string> = {
+  selected: "your selected dates",
   query: "range from your query",
   wikipedia: "range from Wikipedia",
   wikidata: "range from Wikidata",
@@ -49,7 +54,9 @@ function Hero({
   onSubmit,
   examples,
   onExample,
+  children,
 }: {
+  children?: ReactNode;
   draft: string;
   setDraft: (v: string) => void;
   mode: Mode;
@@ -75,6 +82,7 @@ function Hero({
         <div className="w-full pt-1">
           <PromptComposer value={draft} onChange={setDraft} onSubmit={onSubmit} mode={mode} onModeChange={setMode} tall autoFocus suggestions={PROMPT_SUGGESTIONS} />
         </div>
+        {children}
         <SuggestionChips examples={examples} onPick={onExample} wrap />
       </div>
     </div>
@@ -84,47 +92,21 @@ function Hero({
 const RunHeader = memo(function RunHeader({ state, events, onLive }: { state: ChronosState; events: ChronosEvent[]; onLive: () => void }) {
   const { intent, status } = state;
   const running = status === "running";
-  const sources = new Set(events.flatMap((e) => e.sources)).size;
   return (
     <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3" style={{ animation: "fade-in 300ms ease-out both" }}>
       <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-ink-3">
-          {intent ? (
-            <>
-              <span className="inline-flex h-5 items-center rounded-[5px] bg-field px-1.5 font-medium text-ink-2 capitalize">{intent.queryType}</span>
-              <span>{RANGE_FROM[intent.rangeFrom]}</span>
-              {intent.article && (
-                <a href={intent.article.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-0.5 text-ink-3 hover:text-ink">
-                  Wikipedia
-                  <ArrowUpRight size={11} weight="bold" />
-                </a>
-              )}
-            </>
-          ) : (
-            <span>{status === "error" ? "Couldn't resolve" : "Resolving"} “{state.query}”</span>
-          )}
-        </div>
-        <h1 className="mt-1 truncate text-[24px] leading-tight font-semibold tracking-[-0.02em] text-ink sm:text-[28px]">{intent?.topic ?? state.query}</h1>
+        <h1 className="mt-1 break-words text-[24px] leading-tight font-semibold tracking-[-0.02em] text-ink sm:text-[28px]">{intent?.topic ?? state.query}</h1>
         <div className={cn("mt-1 flex flex-wrap items-center gap-x-2 text-[13px] text-ink-2", status === "error" && !intent && "hidden")}>
           {intent && <span className="num">{formatRange(intent.range.start, intent.range.end)}</span>}
           {intent && <span className="text-ink-3">·</span>}
           <span className="inline-flex items-baseline gap-1">
             <RollingNumber value={events.length} duration={450} /> events
           </span>
-          <span className="text-ink-3">·</span>
-          <span className="inline-flex items-baseline gap-1">
-            <RollingNumber value={state.mergeCount} duration={450} /> merges
-          </span>
-          {!running && events.length > 0 && (
-            <>
-              <span className="text-ink-3">·</span>
-              <span>{sources} of 3 sources</span>
-            </>
-          )}
+
         </div>
       </div>
       <div className="flex flex-col items-start gap-2 sm:items-end">
-        <PixelLoader label={running ? (intent ? "Assembling timeline" : "Resolving topic") : status === "error" ? "Failed" : state.stopped ? "Stopped early" : "Assembled"} startedAt={state.startedAt} finishedAt={state.finishedAt} />
+        {!running && <PixelLoader label={progressLabel(state)} startedAt={state.startedAt} finishedAt={state.finishedAt} />}
         {state.notices.map((notice) => (
           <span key={notice.kind} role="status" className="inline-flex max-w-full items-center gap-1.5 rounded-card bg-accent-tint py-1 pr-1 pl-2.5 text-[11.5px] text-accent-ink" style={{ animation: "pop-in 220ms cubic-bezier(0.23,1,0.32,1) both" }}>
             <Lightning size={11} weight="fill" />
@@ -141,46 +123,53 @@ const RunHeader = memo(function RunHeader({ state, events, onLive }: { state: Ch
   );
 });
 
-const PipelineSection = memo(function PipelineSection({ state }: { state: ChronosState }) {
+const PipelineSection = memo(function PipelineSection({ state, onStop }: { state: ChronosState; onStop: () => void }) {
   const running = state.status === "running";
-  // open while running (or failed); after that the reader decides, until the next run
   const [manual, setManual] = useState<{ runId: number; open: boolean } | null>(null);
-  const auto = running || state.status === "error";
-  const open = running ? true : manual && manual.runId === state.runId ? manual.open : auto;
-  const setOpen = (fn: (o: boolean) => boolean) => setManual({ runId: state.runId, open: fn(open) });
-  const live = state.intent?.live ?? null;
-  const totalEvents = Object.keys(state.events).length;
-
+  const open = running || (manual?.runId === state.runId && manual.open);
   return (
-    <section aria-label="Pipeline" className="flex flex-col">
-      <button
-        type="button"
-        aria-expanded={open}
-        onClick={() => setOpen((o) => !o)}
-        disabled={running}
-        className="-mx-1 flex min-h-11 items-center gap-2 rounded-control px-1 py-0.5 text-left enabled:hover:bg-hover sm:min-h-0"
-      >
-        <h2 className="text-[13px] font-semibold tracking-[-0.01em] text-ink">Pipeline</h2>
-        <span className="truncate text-[12px] text-ink-3">
-          {running ? "Model, Wikidata and Wikipedia in parallel" : `${totalEvents} events, ${state.mergeCount} ${state.mergeCount === 1 ? "merge" : "merges"} · ${state.traces.length} trace steps`}
-        </span>
-        {!running && <CaretDown size={13} weight="bold" className="ml-auto shrink-0 text-ink-3 transition-transform duration-300" style={{ transform: open ? "rotate(180deg)" : "none" }} />}
-      </button>
-      <div
-        className="grid transition-[grid-template-rows,opacity] duration-400"
-        style={{ gridTemplateRows: open ? "1fr" : "0fr", opacity: open ? 1 : 0, transitionTimingFunction: "cubic-bezier(0.23,1,0.32,1)" }}
-      >
-        <div className={cn("flex min-h-0 flex-col gap-3", open ? "overflow-visible pt-2.5" : "overflow-hidden")}>
-          <TaskList tasks={state.tasks} live={live} />
-          <TraceLog traces={state.traces} running={running} />
-        </div>
+    <section aria-label="Investigation progress" className={cn("rounded-[18px]", running && "border border-line bg-inset p-4 sm:p-5")}>
+      <div className="flex items-center justify-between gap-2">
+        {running ? <PixelLoader label={progressLabel(state)} startedAt={state.startedAt} finishedAt={state.finishedAt} /> :
+          <button type="button" aria-expanded={open} onClick={() => setManual({runId: state.runId, open: !open})} className={toolClass}>Sources & process <CaretDown size={13} style={{transform: open ? 'rotate(180deg)' : 'none'}} /></button>}
+        {running && <button type="button" onClick={onStop} className={`${toolClass} -mr-2`}>Stop</button>}
       </div>
+      {open && <div className="mt-3 flex flex-col gap-2">
+        {state.intent && <p className="mb-1 text-[12px] text-ink-3">{RANGE_FROM[state.intent.rangeFrom]}{state.intent.article && <> · <a href={state.intent.article.url} target="_blank" rel="noreferrer" className="underline">Wikipedia article</a></>}</p>}
+        <TaskList tasks={state.tasks} live={state.intent?.live ?? null} active={running} />
+        <TraceLog key={state.runId} traces={state.traces} running={running} />
+      </div>}
     </section>
   );
 });
 
 export function ChronosApp({ examples, live, onRunChange }: { examples: string[]; live?: boolean; onRunChange?: (hasRun: boolean) => void }) {
-  const { state, run, stop } = useChronos();
+  const { state, run, stop, restore } = useChronos();
+  const [dates, setDates] = useState<DateDraft>({start: '', end: ''});
+  const [dateError, setDateError] = useState<string | null>(null);
+  const [runRange, setRunRange] = useState<YearRange | undefined>();
+  const [editing, setEditing] = useState(false);
+  const [view, setView] = useState('map');
+  const sectionNav = useRef<HTMLElement>(null);
+  const switchView = (next: string) => {
+    setView(next);
+    requestAnimationFrame(() => sectionNav.current?.scrollIntoView({block: 'start'}));
+  };
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  const [saveFailed, setSaveFailed] = useState(false);
+  const savedRun = useRef<number | null>(null);
+  const archive = useMemo(() => snapshot(state), [state]);
+  const saveCurrent = useCallback(() => {
+    const result = saveArchive(snapshot(state));
+    setSaveFailed(Boolean(result.error));
+    setSaveMessage(result.error ?? 'Saved');
+  }, [state]);
+  useEffect(() => {
+    if ((state.status === 'done' || state.status === 'error') && state.order.length && savedRun.current !== state.runId) {
+      savedRun.current = state.runId;
+      saveCurrent();
+    }
+  }, [state.status, state.runId, state.order.length, saveCurrent]);
   const [draft, setDraft] = useState("");
   useEffect(() => { onRunChange?.(state.status !== "idle"); }, [state.status, onRunChange]);
 
@@ -226,7 +215,21 @@ export function ChronosApp({ examples, live, onRunChange }: { examples: string[]
   }, [state.merges]);
 
   const start = useCallback(
-    (q: string, opts: { replay?: boolean; mode?: Mode } = {}) => {
+    (q: string, opts: { replay?: boolean; mode?: Mode; range?: YearRange; useDates?: boolean } = {}) => {
+      let selected = opts.range;
+      if (!opts.replay && opts.useDates !== false && (dates.start || dates.end)) {
+        selected = {start: Number(dates.start), end: Number(dates.end)};
+        const error = rangeError(selected);
+        if (error) { setDateError(error); return; }
+      }
+      setDateError(null);
+      if (opts.replay) setDates({start: '', end: ''});
+      setRunRange(selected);
+      setSaveMessage(null);
+      setSaveFailed(false);
+      setEditing(false);
+      setView('map');
+      stopPlayback();
       setDraft(q);
       setFocusId(null);
       setDetailId(null);
@@ -234,10 +237,10 @@ export function ChronosApp({ examples, live, onRunChange }: { examples: string[]
       setHover(null);
       setArea(null);
       setReveal(null);
-      run(q, opts.mode ?? mode, { replay: opts.replay });
+      run(q, opts.mode ?? mode, { replay: opts.replay, range: selected });
       if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    [run, mode],
+    [run, mode, dates, stopPlayback],
   );
 
   const onCite = useCallback(
@@ -247,6 +250,7 @@ export function ChronosApp({ examples, live, onRunChange }: { examples: string[]
       stopPlayback();
       setFocusId(target);
       setFlash({ id: target, key: Date.now() });
+      setDetailId(target);
     },
     [state.events, state.alias, stopPlayback],
   );
@@ -260,7 +264,7 @@ export function ChronosApp({ examples, live, onRunChange }: { examples: string[]
     [stopPlayback],
   );
 
-  const runLive = useCallback(() => start(state.query, { replay: false, mode: state.mode }), [start, state.query, state.mode]);
+  const runLive = useCallback(() => start(state.query, { replay: false, mode: state.mode, range: runRange, useDates: false }), [start, state.query, state.mode, runRange]);
   const closeDetail = useCallback(() => setDetailId(null), []);
 
   const onListHover = useCallback((id: string | null) => setHover(id ? { ids: [id], from: "list" } : null), []);
@@ -272,128 +276,102 @@ export function ChronosApp({ examples, live, onRunChange }: { examples: string[]
   const clearArea = useCallback(() => setArea(null), []);
   const areaFilter = useMemo(() => (area ? { count: filtered.length, unplaced, onClear: clearArea } : null), [area, filtered.length, unplaced, clearArea]);
 
+  const restoreArchive = (a: Archive) => {
+    savedRun.current = state.runId + 1;
+    stopPlayback();
+    setDetailId(null); setFocusId(null); setArea(null); setHover(null); setReveal(null); setFlash(null);
+    setDraft(a.state.query); setMode(a.state.mode); setView('map'); setEditing(false);
+    setSaveMessage('Saved'); setSaveFailed(false); setDateError(null);
+    const selected = a.state.intent?.rangeFrom === 'selected' ? a.state.intent.range : undefined;
+    setRunRange(selected);
+    setDates(selected ? {start: String(selected.start), end: String(selected.end)} : {start: '', end: ''});
+    restore(a.state);
+    window.scrollTo({top: 0});
+  };
+  const prepareTopic = (q: string) => {
+    setDraft(q); setDates({start: '', end: ''}); setDateError(null); setEditing(true);
+    window.scrollTo({top: 0});
+    requestAnimationFrame(() => document.querySelector<HTMLTextAreaElement>('textarea[aria-label="Topic, place or period"]')?.focus({preventScroll: true}));
+  };
+  const discovery = <DiscoveryControls dates={dates} onDates={value => {setDates(value); setDateError(null);}}
+    error={dateError} onSurprise={() => {
+      const choices = SURPRISE_TOPICS.filter(q => q !== draft);
+      prepareTopic(choices[Math.floor(Math.random() * choices.length)]);
+    }}>
+    <ArchivesButton onRestore={restoreArchive} />
+  </DiscoveryControls>;
+
   if (state.status === "idle") {
-    return (
-      <Hero
-        draft={draft}
-        setDraft={setDraft}
-        mode={mode}
-        setMode={setMode}
-        onSubmit={(q) => start(q)}
-        examples={examples}
-        onExample={(q) => start(q, { replay: true, mode: "quick" })}
-      />
-    );
+    return <Hero draft={draft} setDraft={setDraft} mode={mode} setMode={setMode}
+      onSubmit={(q) => start(q)} examples={examples} onExample={(q) => start(q, { replay: true, mode: "quick" })}>
+      {discovery}
+    </Hero>;
   }
 
   const cursorForViews = playback.cursor === null ? null : Math.floor(playback.cursor);
+  const related = relatedTopics(state.intent?.topic ?? state.query, events);
 
   return (
-    <div className="mx-auto w-full max-w-[1440px] px-4 pt-4 pb-20 sm:px-6">
-      <div className="flex flex-col gap-1.5 md:flex-row md:items-center md:gap-2.5">
-        <div className="w-full shrink-0 md:max-w-[620px]">
-          <PromptComposer value={draft} onChange={setDraft} onSubmit={(q) => start(q)} mode={mode} onModeChange={setMode} running={running} onStop={stop} />
-        </div>
-        <SuggestionChips examples={examples} onPick={(q) => start(q, { replay: true, mode: "quick" })} disabled={running} className="md:ml-1" />
+    <div className="mx-auto w-full max-w-[1440px] px-4 pt-4 pb-12 sm:px-6">
+      {!running && <div className="mb-4 flex flex-wrap items-center gap-1">
+        <button type="button" className={toolClass} aria-expanded={editing} onClick={() => setEditing(!editing)}>{editing ? 'Close search' : 'New search'}</button>
+        <ArchivesButton onRestore={restoreArchive} />
+        {events.length > 0 && <ExportButton archive={archive} />}
+        {saveMessage && <span role="status" className={cn('px-2 text-[12px] sm:ml-auto', saveFailed ? 'text-red' : 'text-ink-3')}>{saveMessage}
+          {saveFailed && <button type="button" className={toolClass} onClick={saveCurrent}>Try saving again</button>}
+        </span>}
+      </div>}
+      {editing && !running && <div className="mb-5 max-w-[620px]">
+        <PromptComposer value={draft} onChange={setDraft} onSubmit={(q) => start(q)} mode={mode} onModeChange={setMode} />
+        {discovery}
+      </div>}
+      <RunHeader state={state} events={events} onLive={runLive} />
+
+      {state.status === 'error' && <div role="alert" className="mt-4 rounded-card bg-red-tint px-4 py-3 text-[13px] text-red">
+        <p>{state.error}</p>
+        <button type="button" className={toolClass} onClick={runLive}>Try again</button>
+      </div>}
+
+      <div className={cn('mt-4', running && !events.length && 'mx-auto max-w-[680px]')}>
+        <PipelineSection state={state} onStop={stop} />
       </div>
 
-      <div className="mt-6">
-        <RunHeader state={state} events={events} onLive={runLive} />
-      </div>
-
-      {events.length > 0 && (
-        <nav aria-label="Timeline sections" className="sticky top-12 z-20 -mx-4 mt-4 flex gap-1 border-b border-line bg-page/95 px-4 backdrop-blur-sm sm:-mx-6 sm:px-6 lg:hidden">
-          {[['chronos-map', 'Map'], ['chronos-events', 'Events'], ['chronos-story', 'Story']].map(([id, label]) => (
-            <a key={id} href={`#${id}`} className="flex min-h-11 flex-1 items-center justify-center rounded-control px-3 text-[13px] font-medium text-ink-2 hover:bg-hover hover:text-ink">{label}</a>
-          ))}
+      {events.length > 0 ? <>
+        <nav ref={sectionNav} aria-label="Timeline sections" className="scroll-mt-12 sticky top-12 z-20 -mx-4 mt-4 flex gap-1 border-b border-line bg-page/95 px-4 backdrop-blur-sm sm:-mx-6 sm:px-6 lg:hidden">
+          {['map', 'events', 'story'].map(id => <button key={id} type="button" aria-controls={`chronos-${id}`} aria-pressed={view === id}
+            onClick={() => {switchView(id); if(id !== 'map') stopPlayback();}}
+            className={cn('min-h-11 flex-1 border-b-2 px-3 text-[14px] font-medium capitalize', view === id ? 'border-accent-ink text-ink' : 'border-transparent text-ink-3')}>{id[0].toUpperCase() + id.slice(1)}</button>)}
         </nav>
-      )}
-
-      {state.status === "error" && (
-        <div role="alert" className="mt-5 flex flex-col gap-3 rounded-card bg-red-tint px-4 py-3 text-[13px] text-red sm:flex-row sm:items-center" style={{ animation: "fade-up 300ms cubic-bezier(0.23,1,0.32,1) both" }}>
-          <span className="flex-1 text-pretty">{state.error}</span>
-          <SuggestionChips examples={examples} onPick={(q) => start(q, { replay: true, mode: "quick" })} label="Try" wrap />
-        </div>
-      )}
-
-      {/* an error before the topic resolved has nothing to show below the message */}
-      {!(state.status === "error" && !state.intent) && (
-      <div className="mt-5 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_400px] xl:grid-cols-[minmax(0,1fr)_420px]">
-        {/* stage (second on phones while the pipeline runs above it) */}
-        <div className="flex min-w-0 flex-col gap-4 max-lg:order-2">
-          <div id="chronos-map" className="scroll-mt-28 rounded-[14px] bg-surface p-3 shadow-card">
-            <DotMap
-              events={events}
-              cursorYear={cursorForViews}
-              playing={playback.playing}
-              range={range}
-              selectedId={focusId}
-              hoverIds={hover?.ids ?? null}
-              onHover={onMapHover}
-              onFocusEvent={onMapFocus}
-              onOpen={onSelect}
-              area={area}
-              onAreaChange={setArea}
-              interactive
-              loading={running}
-              liveModel={isLive}
-              resetKey={state.runId}
-              legend
-            />
-          </div>
-
-          <div className="rounded-[14px] bg-surface px-3 pt-3 pb-1.5 shadow-card sm:px-4">
-            {range ? (
-              <TimeScrubber range={range} events={filtered} eras={state.eras} cursor={playback.cursor} playing={playback.playing} onScrub={playback.scrub} onTogglePlay={playback.toggle} />
-            ) : (
-              <div className="flex h-[120px] items-center gap-3 px-1 text-[12.5px] text-ink-3">
-                <span className="h-px flex-1 bg-line" />
-                Waiting for a time range
-                <span className="h-px flex-1 bg-line" />
+        <div data-mobile-view={view} className="chronos-results mt-4 grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_400px] xl:grid-cols-[minmax(0,1fr)_420px]">
+          <div className="chronos-stage min-w-0 lg:flex lg:flex-col lg:gap-4">
+            <section id="chronos-map" aria-label="Map" className="chronos-map-panel flex flex-col gap-3">
+              <div className="rounded-[14px] bg-surface p-2 shadow-card sm:p-3">
+                <DotMap events={events} cursorYear={cursorForViews} playing={playback.playing} range={range}
+                  selectedId={focusId} hoverIds={hover?.ids ?? null} onHover={onMapHover} onFocusEvent={onMapFocus}
+                  onOpen={onSelect} area={area} onAreaChange={setArea} interactive loading={running}
+                  liveModel={isLive} resetKey={state.runId} legend />
               </div>
-            )}
+              {range && <div className="rounded-[14px] bg-surface px-3 pt-3 pb-1.5 shadow-card sm:px-4">
+                <TimeScrubber range={range} events={filtered} eras={state.eras} cursor={playback.cursor} playing={playback.playing} onScrub={playback.scrub} onTogglePlay={playback.toggle} />
+              </div>}
+              {area && <button type="button" className={toolClass} onClick={() => switchView('events')}>View {filtered.length} events in this area</button>}
+            </section>
+            <section id="chronos-story" aria-label="Story" className="chronos-story-panel px-0.5 pt-2">
+              {state.narrative ? <Narrative text={state.narrative} streaming={running && state.narrative.length > 0}
+                events={state.events} alias={state.alias} intent={state.intent} source={state.narrativeSource} onCite={onCite} emphasis={emphasis} /> :
+                <p className="py-8 text-[14px] text-ink-3">{running ? 'Your story will appear here after the sources finish.' : 'No story was completed. You can still explore and export the events.'}</p>}
+            </section>
           </div>
-
-          <div id="chronos-story" className="scroll-mt-28 px-0.5 pt-2">
-            <Narrative
-              text={state.narrative}
-              streaming={running && state.narrative.length > 0}
-              events={state.events}
-              alias={state.alias}
-              intent={state.intent}
-              source={state.narrativeSource}
-              onCite={onCite}
-              emphasis={emphasis}
-            />
-          </div>
-        </div>
-
-        {/* side: pipeline + events; on phones these become grid items so the pipeline can lead */}
-        <div className="flex min-w-0 flex-col gap-5 max-lg:contents lg:sticky lg:top-[60px] lg:max-h-[calc(100dvh-72px)] lg:self-start">
-          <div className="max-lg:order-1">
-            <PipelineSection state={state} />
-          </div>
-          <ScrollFade id="chronos-events" axis="y" className="min-h-0 flex-1 scroll-mt-28 max-lg:order-3 lg:-mx-2 lg:px-2 lg:pb-2" fade={32}>
-            <EventList
-              events={filtered}
-              live={isLive}
-              cursor={cursorForViews}
-              selectedId={focusId}
-              flash={flash}
-              merges={merges}
-              running={running}
-              onSelect={onSelect}
-              linkedIds={hover?.from === "map" ? hover.ids : null}
-              onHover={onListHover}
-              reveal={reveal}
-              areaFilter={areaFilter}
-            />
+          <ScrollFade id="chronos-events" axis="y" className="chronos-events-panel min-w-0 lg:sticky lg:top-[60px] lg:max-h-[calc(100dvh-72px)] lg:self-start lg:-mx-2 lg:px-2 lg:pb-2" fade={32}>
+            <EventList events={filtered} live={isLive} cursor={cursorForViews} selectedId={focusId} flash={flash} merges={merges}
+              running={running} onSelect={onSelect} linkedIds={hover?.from === 'map' ? hover.ids : null} onHover={onListHover} reveal={reveal} areaFilter={areaFilter} />
           </ScrollFade>
         </div>
-      </div>
-
-      )}
-
+        {!running && related.length > 0 && <section className="mt-8 border-t border-line pt-4">
+          <h2 className="mb-2 text-[13px] font-semibold text-ink-2">Keep exploring</h2>
+          <div className="flex flex-wrap gap-2">{related.map(q => <button type="button" key={q} onClick={() => prepareTopic(q)} className={`${toolClass} max-w-full border border-line bg-surface text-left`}>{q}<ArrowUpRight className="shrink-0" size={13} /></button>)}</div>
+        </section>}
+      </> : !running && state.status !== 'error' && <p className="py-10 text-center text-[14px] text-ink-2">{state.stopped ? 'Stopped before any events arrived.' : 'No events were found. Try another topic or a wider date range.'}</p>}
       <EventDetail event={detailId ? state.events[detailId] ?? null : null} live={isLive} onClose={closeDetail} />
     </div>
   );

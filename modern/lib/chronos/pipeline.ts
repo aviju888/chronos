@@ -64,7 +64,7 @@ import { llmEras, llmNarrative, llmRange, llmSeedEvents } from "./llm.js";
 import { HttpError } from "./http.js";
 import { findFixture, replayFixture } from "./fixtures.js";
 
-export type RunInput = { query: string; mode: Mode; replay?: boolean };
+export type RunInput = { query: string; mode: Mode; replay?: boolean; range?: YearRange };
 export type RunOptions = {
   /** force live (Groq) or demo; defaults to whether GROQ_API_KEY is set */
   live?: boolean;
@@ -303,6 +303,7 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
   }
 
   const parsed = parseQuery(input.query, now);
+  if (input.range) parsed.range = input.range;
   if (!parsed.topic) throw new Error("Type a topic, place or period, like “Silk Road”.");
 
   const out = new Outbox(send, signal, pace);
@@ -316,7 +317,7 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
   };
 
   const fallback = async (reason: string): Promise<boolean> => {
-    if (opts.fixtureFallback === false) return false;
+    if (opts.fixtureFallback === false || input.range) return false;
     const fx = findFixture(input.query);
     if (!fx) return false;
     await out.flush();
@@ -406,7 +407,7 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
     query: parsed.raw,
     topic: resolved.title,
     range,
-    rangeFrom: rangeInfo.from,
+    rangeFrom: input.range ? 'selected' : rangeInfo.from,
     queryType,
     mode,
     live,
@@ -420,6 +421,7 @@ export async function runChronos(input: RunInput, send: SSESend, signal: AbortSi
   };
   out.push("intent", intent);
   const rangeWhy: Record<RangeOrigin, string> = {
+    selected: "from your selected dates",
     query: "from your query",
     wikipedia: "from the Wikipedia article",
     wikidata: "from Wikidata start and end dates",
