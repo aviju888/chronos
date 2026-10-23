@@ -70,3 +70,11 @@ it('restores saved evidence without a request and ignores frames from the interr
   expect(signal!.aborted).toBe(true); expect(postSSE).toHaveBeenCalledTimes(1);
   expect(result.current.state.narrative).toBe('saved story'); expect(result.current.state.stopped).toBe(true);
 });
+
+it('every new run requests live research while preserving dates and depth', async () => {
+  vi.mocked(postSSE).mockResolvedValue(undefined);
+  const {result} = renderHook(() => useChronos());
+  await act(async () => {await result.current.run('Roman Empire', 'deep', {range:{start:-27,end:476}});});
+  expect(vi.mocked(postSSE).mock.calls[0][1]).toEqual({query:'Roman Empire',mode:'deep',range:{start:-27,end:476}});
+  expect(result.current.state.replay).toBe(false);
+});

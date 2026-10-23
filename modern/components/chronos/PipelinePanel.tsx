@@ -54,10 +54,10 @@ export function PixelLoader({ label, startedAt, finishedAt }: { label: string; s
   const running = !finishedAt;
   const text = elapsed < 60 ? `${elapsed.toFixed(1)}s` : `${Math.floor(elapsed / 60)}m ${(elapsed % 60).toFixed(1)}s`;
   return (
-    <div className="flex min-w-0 items-center gap-2.5">
+    <div className="flex min-h-11 min-w-0 items-center gap-2.5">
       <LoaderGrid still={!running} />
       <span role="status" className={cn("text-[14px] font-medium", running ? "text-ink" : "text-ink-2")}>{label}</span>
-      <span aria-hidden="true" className="num shrink-0 font-mono text-[12px] text-ink-3">{text}</span>
+      <span aria-hidden="true" className="num min-w-[5ch] shrink-0 font-mono text-[12px] text-ink-3">{text}</span>
     </div>
   );
 }
@@ -121,7 +121,7 @@ export function TaskList({ tasks, live, active = true }: { tasks: Record<TaskId,
           <div
             key={id}
             className="self-stretch overflow-hidden bg-surface shadow-card transition-[border-radius] duration-300 hover:bg-inset"
-            style={{ borderRadius: isOpen ? 14 : 22, animation: `fade-up 450ms cubic-bezier(0.23,1,0.32,1) ${i * 60}ms both` }}
+            style={{ borderRadius: isOpen ? 14 : 22, animation: `fade-up 220ms cubic-bezier(0.23,1,0.32,1) ${i * 30}ms both` }}
           >
             <button
               type="button"
@@ -216,7 +216,7 @@ function highlight(line: string) {
 
 export function TraceLog({ traces, running }: { traces: TraceLine[]; running: boolean }) {
   const [manual, setManual] = useState<boolean | null>(null);
-  const expanded = manual ?? false;
+  const expanded = manual ?? true;
   const contentRef = useRef<HTMLDivElement>(null);
   const stick = useRef(true);
 
@@ -226,7 +226,6 @@ export function TraceLog({ traces, running }: { traces: TraceLine[]; running: bo
     if (scroller && stick.current && expanded) scroller.scrollTop = scroller.scrollHeight;
   }, [traces.length, expanded]);
 
-  const merges = traces.filter((t) => t.source === "dedup" && t.text.startsWith("Merged")).length;
 
   return (
     <div className="flex w-full flex-col">
@@ -239,20 +238,12 @@ export function TraceLog({ traces, running }: { traces: TraceLine[]; running: bo
         <svg width="15" height="15" viewBox="0 0 24 24" fill={running ? "var(--ink-2)" : "var(--ink-3)"} aria-hidden>
           <path d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z" />
         </svg>
-        <span className="contents">
-          {running ? (
-            <span className="text-[13px] font-medium whitespace-nowrap text-ink">Source details</span>
-          ) : (
-            <span className="text-[13px] font-medium whitespace-nowrap text-ink-2" style={{ animation: "fade-in 350ms ease-out both" }}>
-              Traced {traces.length} steps{merges ? `, ${merges} merges` : ""}
-            </span>
-          )}
-        </span>
+        <span className="text-[13px] font-medium text-ink-2">Source details</span>
         <CaretDown size={13} weight="bold" className="text-ink-3 transition-transform duration-300" style={{ transform: expanded ? "rotate(180deg)" : "none" }} />
       </button>
 
       <div
-        className="grid transition-[grid-template-rows,opacity] duration-400"
+        className="grid transition-[grid-template-rows,opacity] duration-200" inert={!expanded}
         style={{ gridTemplateRows: expanded ? "1fr" : "0fr", opacity: expanded ? 1 : 0, transitionTimingFunction: "cubic-bezier(0.23,1,0.32,1)" }}
       >
         <div className="overflow-hidden">
@@ -261,7 +252,7 @@ export function TraceLog({ traces, running }: { traces: TraceLine[]; running: bo
             <ScrollFade
               axis="y"
               fade={22}
-              className="max-h-[300px]"
+              className="h-44"
               onScroll={(e) => {
                 const el = e.currentTarget;
                 stick.current = el.scrollTop + el.clientHeight >= el.scrollHeight - 24;

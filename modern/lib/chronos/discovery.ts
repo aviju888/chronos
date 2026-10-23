@@ -31,10 +31,16 @@ export function createSurprisePicker(topics = READY_SURPRISE_TOPICS, random = Ma
   };
 }
 
-/** Suggestions come from the investigation itself, without another model request. */
-export function relatedTopics(topic: string, events: ChronosEvent[]): string[] {
-  const candidates = [...events].sort((a, b) => b.weight - a.weight);
-  return [...new Set(candidates.flatMap(e => [e.wikipediaTitle ?? e.title, e.location?.name]).filter(
-    (name): name is string => Boolean(name?.trim()) && name!.toLowerCase() !== topic.toLowerCase(),
-  ))].slice(0, 4);
+/** Only offer validated named topics actually present in this investigation's evidence.
+ * A sentence is not a searchable topic. If there is no supported match, omit the section.
+ */
+export function relatedTopics(topic: string, events: ChronosEvent[]): SurpriseTopic[] {
+  const normalize = (value: string) => value.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  const current = normalize(topic);
+  const names = new Set(events.flatMap(e => [e.wikipediaTitle, e.location?.name])
+    .filter((name): name is string => Boolean(name?.trim())).map(normalize));
+  return READY_SURPRISE_TOPICS.filter(candidate => {
+    const name = normalize(candidate.topic);
+    return name !== current && names.has(name);
+  }).slice(0, 4);
 }

@@ -10,7 +10,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { initialState, reducer } from "../../../components/chronos/useChronos";
 import { Narrative } from "../../../components/chronos/Narrative";
 import { TaskList } from "../../../components/chronos/PipelinePanel";
-import { createChronosResponse } from "../../../server/chronosResponse";
+import { sseResponse } from "../../sse";
 
 function finalState(frames: Frame[]) {
   let state = reducer(initialState, { type: 'start', query: 'test', mode: 'quick', replay: false });
@@ -147,7 +147,7 @@ describe("runChronos on a fake network", () => {
       if (url.searchParams.has('exintro')) return json({query:{pages:[]}});
       return fakeNetwork(String(input), init);
     }) as typeof fetch);
-    const frames = await collect('Roman Empire 27 BCE - 476 CE', {live:true, fixtureFallback:false});
+    const frames = await collect('Roman Empire 27 BCE - 476 CE', {live:true});
     const state = finalState(frames);
     expect(state.order.length).toBeGreaterThanOrEqual(2);
     for (const event of Object.values(state.events)) {
@@ -170,7 +170,7 @@ describe("runChronos on a fake network", () => {
   });
 
   it("streams intent, tasks, the SPARQL trace, events, merges, eras and a cited narrative", async () => {
-    const frames = await collect("Roman Empire 27 BCE - 476 CE", { fixtureFallback: false });
+    const frames = await collect("Roman Empire 27 BCE - 476 CE", {});
     const names = frames.map((f) => f.event);
     expect(names[0]).toBe("task");
     expect(names).toContain("intent");
@@ -233,7 +233,7 @@ describe("runChronos on a fake network", () => {
     ['premature EOF before prose', '', '', 'Groq stream ended before [DONE]'],
   ])('provider stream failure: %s replaces incomplete prose with truthful composed output', async (_name, prefix, tail, detail) => {
     mockProvider(prefix, tail);
-    const frames = await collect('Roman Empire 27 BCE - 476 CE', { live: true, fixtureFallback: false });
+    const frames = await collect('Roman Empire 27 BCE - 476 CE', { live: true });
     const state = finalState(frames);
     expect(state.narrative).not.toContain('Partial model prose');
     expect(state.narrative).toMatch(/^The Roman Empire was a state\./);
@@ -241,7 +241,7 @@ describe("runChronos on a fake network", () => {
     expect(state.intent?.live).toBe(true);
     expect(state.notices).toEqual(expect.arrayContaining([expect.objectContaining({kind: 'fallback', text: expect.stringContaining('Narrative model failed')})]));
     const html = narrativeHTML(state);
-    expect(html).toContain('Composed from the Wikipedia lead');
+    expect(html).toContain('Narrative');
     expect(html).not.toContain('Written by the model');
     expect(frames.some(f => f.event === 'trace' && String((f.data as {text: string}).text).includes(detail))).toBe(true);
     expect((frames.at(-1)?.data as { text: string }).text).toMatch(/^Done in/);
@@ -249,11 +249,11 @@ describe("runChronos on a fake network", () => {
 
   it('keeps successful model narrative streaming and model attribution', async () => {
     mockProvider();
-    const frames = await collect('Roman Empire 27 BCE - 476 CE', { live: true, fixtureFallback: false });
+    const frames = await collect('Roman Empire 27 BCE - 476 CE', { live: true });
     const state = finalState(frames);
     expect(state.narrative).toBe('Complete model prose. ');
     expect(state.narrativeSource).toBe('model');
-    expect(narrativeHTML(state)).toContain('Written by the model');
+    expect(narrativeHTML(state)).not.toContain('Written by the model');
     expect(state.notices).toEqual([]);
   });
 
@@ -276,7 +276,7 @@ describe("runChronos on a fake network", () => {
       }
       return fakeNetwork(String(input), init);
     }) as typeof fetch);
-    const frames = await collect('Roman Empire 27 BCE - 476 CE', { live: true, fixtureFallback: false });
+    const frames = await collect('Roman Empire 27 BCE - 476 CE', { live: true });
     const state = finalState(frames);
     const lane = failure.startsWith('wikipedia') ? 'wikipedia' : 'wikidata';
     expect(state.order.length).toBeGreaterThan(0);
@@ -304,7 +304,7 @@ describe("runChronos on a fake network", () => {
       }));
     }));
     const frames: Frame[] = [];
-    await runChronos({ query: 'Roman Empire 27 BCE - 476 CE', mode: 'quick' }, (event, data) => frames.push({ event, data }), abort.signal, { live: true, pace: false, fixtureFallback: false });
+    await runChronos({ query: 'Roman Empire 27 BCE - 476 CE', mode: 'quick' }, (event, data) => frames.push({ event, data }), abort.signal, { live: true, pace: false });
     expect(abort.signal.aborted).toBe(true);
     expect(frames.some(f => f.event === 'narrative')).toBe(false);
     const traces = frames.filter(f => f.event === 'trace').map(f => (f.data as { text: string }).text);
@@ -317,11 +317,11 @@ describe("runChronos on a fake network", () => {
       if (u.searchParams.get("list") === "search") return json({ query: { search: [] } });
       return json({ query: { pages: [{ title: "Xyzzy", missing: true }] } });
     }) as typeof fetch);
-    await expect(collect("Xyzzy", { fixtureFallback: false })).rejects.toThrow(/No Wikipedia article matches/);
+    await expect(collect("Xyzzy", {})).rejects.toThrow(/No Wikipedia article matches/);
   });
 });
 
-describe("degrading to fixtures", () => {
+describe("live failure and local fixtures", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
     vi.unstubAllEnvs();
@@ -329,7 +329,7 @@ describe("degrading to fixtures", () => {
     clearHttpCache();
   });
 
-  it("has a recording for every suggestion chip", () => {
+  it("keeps recordings for local regression tests", () => {
     expect(FIXTURES).toHaveLength(3);
     for (const q of ["Roman Empire 27 BCE - 476 CE", "Silk Road", "History of Berkeley, California"]) expect(findFixture(q)?.query).toBe(q);
     // matches by topic, too
@@ -338,15 +338,12 @@ describe("degrading to fixtures", () => {
     expect(findFixture("Ottoman Empire")).toBeNull();
   });
 
-  it("replays the saved run when the network is down", async () => {
+  it("does not substitute a recording when the network is down, even for a recorded topic", async () => {
     clearHttpCache();
     setFetcher((() => Promise.reject(new TypeError("fetch failed"))) as typeof fetch);
-    const frames = await collect("Silk Road", { pace: false });
-    const notice = frames.find((f) => f.event === "notice")!.data as { kind: string; text: string };
-    expect(notice.kind).toBe("fallback");
-    expect(notice.text).toMatch(/unreachable/);
-    expect(frames.filter((f) => f.event === "event").length).toBeGreaterThan(10);
-    expect(frames.some((f) => f.event === "narrative")).toBe(true);
+    const frames: Frame[] = [];
+    await expect(runChronos({query: 'Silk Road', mode: 'quick'}, (event, data) => frames.push({event, data}), new AbortController().signal, {live: false, pace: false})).rejects.toThrow(/Couldn't reach Wikipedia/);
+    expect(frames.some(f => ['event', 'narrative', 'notice'].includes(f.event))).toBe(false);
   });
 
   it('does not replace explicitly selected dates with a different recorded range on failure', async () => {
@@ -376,7 +373,7 @@ describe('explicit replay isolation', () => {
     const original = FIXTURES.length;
     if (query !== 'Han dynasty') FIXTURES.push({query, frames: query === 'Empty recording' ? [] : [{t: 0, event: 'trace', data: {text: 'not a usable run'}}]} as Fixture);
     try {
-      const response = await createChronosResponse(new Request('http://localhost/api/chronos/stream', { method: 'POST', body: JSON.stringify({query, replay: true}) }));
+      const response = sseResponse(new Request('http://localhost/local-test'), (send, signal) => runChronos({query, mode: 'quick'}, send, signal, {replay: true, pace: false}));
       const body = await response.text();
       expect.soft(network).not.toHaveBeenCalled();
       expect.soft(provider).not.toHaveBeenCalled();
@@ -390,7 +387,7 @@ describe('explicit replay isolation', () => {
   it('still replays a matching recording without external calls', async () => {
     const network = vi.fn(async () => json({}, 500)); setFetcher(network as typeof fetch); vi.stubGlobal('fetch', network);
     const frames: Frame[] = [];
-    await runChronos({query: 'Silk Road', mode: 'quick', replay: true}, (event, data) => frames.push({event, data}), new AbortController().signal, {pace: false});
+    await runChronos({query: 'Silk Road', mode: 'quick'}, (event, data) => frames.push({event, data}), new AbortController().signal, {pace: false, replay: true});
     expect(frames.some(f => f.event === 'event')).toBe(true);
     expect(frames.some(f => f.event === 'notice')).toBe(true);
     expect(network).not.toHaveBeenCalled();

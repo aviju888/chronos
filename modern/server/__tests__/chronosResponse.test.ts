@@ -23,11 +23,18 @@ describe('Chronos response', () => {
   });
   it('sanitizes to 200 characters and defaults to quick', async () => {
     await (await createChronosResponse(request({query: '  ' + 'x'.repeat(230) + '  ', mode:'invalid'}))).text();
-    expect(pipeline.mock.calls[0][0]).toEqual({query:'x'.repeat(200), mode:'quick', replay:false});
+    expect(pipeline.mock.calls[0][0]).toEqual({query:'x'.repeat(200), mode:'quick'});
   });
-  it.each([true, false, 'true', 1, {}, null])('uses strict boolean replay (%j)', async replay => {
-    await (await createChronosResponse(request({query:'Silk Road', mode:'deep', replay}))).text();
-    expect(pipeline.mock.calls[0][0]).toEqual({query:'Silk Road', mode:'deep', replay:replay === true});
+  it('rejects public replay before any research starts, including localhost-shaped URLs', async () => {
+    const response = await createChronosResponse(request({query: 'Silk Road', replay: true}));
+    expect(response.status).toBe(400);
+    expect(await response.text()).toContain('only available in local tests');
+    expect(pipeline).not.toHaveBeenCalled();
+  });
+  it.each([false, 'true', 1, {}, null])('never lets untrusted flags disable live research (%j)', async replay => {
+    await (await createChronosResponse(request({query:'Silk Road', mode:'deep', replay, live:false, fixtureFallback:true}))).text();
+    expect(pipeline.mock.calls[0][0]).toEqual({query:'Silk Road', mode:'deep'});
+    expect(pipeline.mock.calls[0][3]).toEqual({live:true});
   });
   it('preserves ordered frame names/data and owns terminal done', async () => {
     const names = ['intent','task','trace','event','merge','eras','narrative','notice'];
@@ -69,7 +76,7 @@ describe('Chronos response', () => {
 
 it('passes selected dates as structured input', async () => {
   await (await createChronosResponse(request({query:'Rome',range:{start:-27,end:476}}))).text();
-  expect(pipeline.mock.calls[0][0]).toEqual({query:'Rome',mode:'quick',replay:false,range:{start:-27,end:476}});
+  expect(pipeline.mock.calls[0][0]).toEqual({query:'Rome',mode:'quick',range:{start:-27,end:476}});
 });
 it.each([{start:0,end:476},{start:476,end:-27},{start:1},null,'1-2'])('rejects invalid range before starting research (%j)', async range => {
   expect((await createChronosResponse(request({query:'Rome',range}))).status).toBe(400);

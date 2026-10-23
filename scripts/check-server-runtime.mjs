@@ -20,13 +20,16 @@ try {
   assert.equal((await api.fetch(new Request('http://chronos.test/api/chronos/stream'))).status, 405);
   assert.equal((await api.fetch(request({}))).status, 400);
   assert.equal((await api.fetch(request({query:'Rome',range:{start:0,end:100}}))).status, 400);
-  // Recording path guarantees no external model or Wikimedia calls.
-  const response = await api.fetch(request({query:'Roman Empire 27 BCE - 476 CE',mode:'quick',replay:true}));
+  assert.equal((await api.fetch(request({query:'Silk Road', replay:true}))).status, 400);
+  // Explicit local harness: recordings are not reachable through the public handler.
+  const {runChronos} = await import(pathToFileURL(path.join(output, 'modern/lib/chronos/pipeline.js')).href);
+  const {sseResponse} = await import(pathToFileURL(path.join(output, 'modern/lib/sse.js')).href);
+  const response = sseResponse(request({}), (send, signal) => runChronos({query:'Roman Empire 27 BCE - 476 CE',mode:'quick'}, send, signal, {replay:true, pace:false}));
   assert.equal(response.status, 200);
   const frames = await response.text();
   assert.ok(frames.includes('event: intent') && frames.includes('event: event') && frames.includes('event: done'));
   assert.ok(!frames.includes('event: error'));
-  console.log('Native Node API: import, validation and recorded SSE replay PASS');
+  console.log('Native Node API: import, live-only API validation and isolated local fixture SSE PASS');
 } finally {
   rmSync(output, {recursive:true, force:true});
 }

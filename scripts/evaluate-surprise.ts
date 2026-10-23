@@ -26,7 +26,7 @@ async function check(topic: typeof catalog[number]) {
   try {
     await runChronos({query, range:topic.range, mode:'quick'}, (event, data) => {
       state = reducer(state, {type:'frame', event, data, at:Date.now()});
-    }, AbortSignal.timeout(90000), {live:true, pace:false, fixtureFallback:false});
+    }, AbortSignal.timeout(90000), {live:true, pace:false});
   } catch (err) { error = String(err); }
   // Do not turn an upstream quota response into hundreds of further requests.
   if (/429|rate limit/i.test(error ?? '') || state.traces.some(t => /429|rate limit/i.test(t.text))) rateLimited = true;

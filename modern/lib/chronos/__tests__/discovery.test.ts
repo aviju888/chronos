@@ -18,8 +18,17 @@ it('derives progress only from received evidence', () => {
   expect(progressLabel({...resolved,status:'done',stopped:true})).toBe('Stopped early');
   expect(progressLabel({...resolved,status:'error'})).toBe('Investigation interrupted');
 });
-it('suggests real event topics and places without duplicating the topic', () => {
-  expect(relatedTopics('Rome',[{title:'Rome',weight:1,location:{name:'Rome'}},{title:'Actium',weight:5,location:{name:'Greece'}},{title:'Actium',weight:2}] as any)).toEqual(['Actium','Greece']);
+it('omits unsupported sentences and unvalidated topics from exploration', () => {
+  expect(relatedTopics('Ike no Taiga', [
+    {title:'He married an artist and tea house proprietor',weight:5},
+    {title:'Stayed briefly at Taiga’s home', wikipediaTitle:'Gyokuran',weight:3},
+  ] as any)).toEqual([]);
+});
+it('only suggests distinct validated topics named by the evidence', () => {
+  const candidate = READY_SURPRISE_TOPICS[0];
+  const events = [{wikipediaTitle:candidate.topic},{location:{name:candidate.topic}},{title:READY_SURPRISE_TOPICS[1].topic}] as any;
+  expect(relatedTopics('Another topic', events)).toEqual([candidate]);
+  expect(relatedTopics(candidate.topic.toUpperCase(), events)).toEqual([]);
 });
 
 it('keeps the curated catalog unique, valid and parseable with explicit dates', () => {
