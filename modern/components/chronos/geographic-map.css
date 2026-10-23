@@ -2,7 +2,7 @@
 .chronos-geographic-map .leaflet-container { width: 100%; height: clamp(260px, 30vw, 410px); border-radius: 8px; font-family: inherit; background: #e9e8e3; }
 .chronos-geographic-map .leaflet-control-attribution { font-size: 9px; max-width: 90%; }
 .chronos-geographic-map .leaflet-control-attribution a { color: #4b545a; }
-.chronos-geo-tools { display: flex; flex-wrap: wrap; gap: 4px; position: absolute; top: 8px; left: 8px; right: 8px; z-index: 800; pointer-events: none; }
+.chronos-geo-tools { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
 .chronos-geo-tools button { pointer-events: auto; min-height: 36px; min-width: 36px; padding: 0 10px; background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 1px 3px #0002; font-size: 12px; }
 .chronos-geo-tools button:hover { background: var(--hover); }
 .chronos-geo-tools button:focus-visible, .chronos-geo-events button:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
